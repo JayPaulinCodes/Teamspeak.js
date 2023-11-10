@@ -1,3 +1,6 @@
 package-lock.json
 node_modules
 lib
+docs/json
+docs/markdown
+docs/standard
