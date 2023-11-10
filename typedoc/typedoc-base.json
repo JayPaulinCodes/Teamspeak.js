@@ -1,0 +1,8 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "name": "Teamspeak.js",
+    "entryPoints": [ "../src/index.ts" ],
+    "exclude": [ "../**/*+.spec.ts" ],
+    "excludeExternals": true,
+    "includeVersion": true
+}

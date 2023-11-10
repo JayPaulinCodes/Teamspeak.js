@@ -1,0 +1,43 @@
+{
+  "name": "teamspeak.js",
+  "version": "0.1.0",
+  "description": "A package for connecting and interacting with Teamspeak3 servers using Server Query",
+  "authors": [
+    "SparrowStudios",
+    "Jacob Paulin"
+  ],
+  "license": "Mozilla Public License Version 2.0",
+  "main": "index.js",
+  "homepage": "https://github.com/JayPaulinCodes/Teamspeak.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JayPaulinCodes/Teamspeak.js.git"
+  },
+  "scripts": {
+    "prep": "npm run build && npm run docs-all",
+    "build": "tsc",
+    "poc-no-build": "node poc/index.js",
+    "poc": "npm run build && node poc/index.js",
+    "docs-all": "npm run docs-standard && npm run docs-markdown && npm run docs-json",
+    "docs-standard": "typedoc --options typedoc/typedoc-standard.json",
+    "docs-markdown": "typedoc --options typedoc/typedoc-markdown.json",
+    "docs-json": "typedoc --options typedoc/typedoc-json.json"
+  },
+  "keywords": [
+    "ts",
+    "ts3",
+    "TS3",
+    "Teamspeak",
+    "Teamspeak3",
+    "Teamspeak3 Server Query",
+    "Server Query"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "typedoc": "^0.25.3",
+    "typedoc-github-wiki-theme": "^1.1.0",
+    "typedoc-plugin-coverage": "^2.2.0",
+    "typedoc-plugin-markdown": "^3.17.1",
+    "typescript": "^5.2.2"
+  }
+}

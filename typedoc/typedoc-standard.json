@@ -1,0 +1,8 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "extends": [ "../typedoc/typedoc-base.json" ],
+    "out": "../docs/standard",
+    "navigationLinks": {
+        "SparrowStudios Discord": "https://discord.com/FTYjcbkzFn",
+    }
+}
