@@ -23,6 +23,7 @@ import { QueryCommand } from "../QueryCommand";
 export class ServerNotifyRegisterCommand extends QueryCommand {
     private static readonly baseCommand = "servernotifyregister";
 
+    // ADD DOCS
     constructor(event: string, id?: number | string) {
         const options = { ["event"]: event }
         if (id !== undefined) { options["id"] = id; }

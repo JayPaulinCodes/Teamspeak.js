@@ -12,10 +12,13 @@ import { IQueueItem } from "./interfaces/IQueueItem";
 import { QueryCommandOptions } from "./queryCommands/typings/QueryCommandOptions";
 import { HelpCommand } from "./queryCommands/commands/HelpCommand";
 import { QueryCommand } from "./queryCommands/QueryCommand";
+import { QueryCommandParser } from "./queryCommands/parser/QueryCommandParser";
+import { QueryClient } from "../client/QueryClient";
 
 export class WebSocketManager extends EventEmitter {
     private static initialIgnoreLines = 2
     readonly options: IWebSocketManagerOptions;
+    private queryClient: QueryClient;
     private webSocket: IQueryProtocol;
     private connected: boolean = false;
     private ignoreInitLines: number = WebSocketManager.initialIgnoreLines;
@@ -46,8 +49,10 @@ export class WebSocketManager extends EventEmitter {
      */
     private lastCommandTimestamp: number = Date.now();
     
-    constructor(options: IWebSocketManagerOptions) {
+    constructor(queryClient: QueryClient, options: IWebSocketManagerOptions) {
         super(); 
+
+        this.queryClient = queryClient;
 
         this.options = options;
 
@@ -157,6 +162,87 @@ export class WebSocketManager extends EventEmitter {
             } else if (data.startsWith("notify")) {
                 // Check if the data from the socket is related to a subscribed event
                 this.debug(data, "WebSocketManager.receive.notify");
+
+                const notifyEvent = data.slice(0, data.indexOf(" "));
+                const notifyDataRaw = data.slice(data.indexOf(" ") + 1);
+                const notifyData = QueryCommandParser.parse(notifyDataRaw);
+                
+                switch (notifyEvent) {
+                    case "notifyserveredited": 
+                        if ("virtualserverName" in notifyData) { this.queryClient.eventManager["ServerNameUpdated"].handle(notifyData); }
+                        if ("virtualserverNickname" in notifyData) { this.queryClient.eventManager["ServerNicknameUpdated"].handle(notifyData); }
+                        if ("virtualserverIconId" in notifyData) { this.queryClient.eventManager["ServerIconUpdated"].handle(notifyData); }
+                        if ("virtualserverHostbannerGfxUrl" in notifyData) { this.queryClient.eventManager["ServerHostBannerGfxUrlUpdated"].handle(notifyData); }
+                        if ("virtualserverHostbannerMode" in notifyData) { this.queryClient.eventManager["ServerHostBannerModeUpdated"].handle(notifyData); }
+                        if ("virtualserverHostbannerUrl" in notifyData) { this.queryClient.eventManager["ServerHostBannerUrlUpdated"].handle(notifyData); }
+                        if ("virtualserverHostbuttonTooltip" in notifyData) { this.queryClient.eventManager["ServerHostButtonTooltipUpdated"].handle(notifyData); }
+                        if ("virtualserverHostbuttonGfxUrl" in notifyData) { this.queryClient.eventManager["ServerHostButtonGfxUrlUpdated"].handle(notifyData); }
+                        if ("virtualserverHostbuttonUrl" in notifyData) { this.queryClient.eventManager["ServerHostButtonUrlUpdated"].handle(notifyData); }
+                        if ("virtualserverCodecEncryptionMode" in notifyData) { this.queryClient.eventManager["ServerCodecEncryptionModeUpdated"].handle(notifyData); }
+                        if ("virtualserverDefaultServerGroup" in notifyData) { this.queryClient.eventManager["ServerDefaultServerGroupUpdated"].handle(notifyData); }
+                        if ("virtualserverDefaultChannelGroup" in notifyData) { this.queryClient.eventManager["ServerDefaultChannelGroupUpdated"].handle(notifyData); }
+                        if ("virtualserverPrioritySpeakerDimmModificator" in notifyData) { this.queryClient.eventManager["ServerPrioritySpeakerDimModificatorUpdated"].handle(notifyData); }
+                        if ("virtualserverChannelTempDeleteDelayDefault" in notifyData) { this.queryClient.eventManager["ServerTempChannelDeleteDelayUpdated"].handle(notifyData); }
+                        if ("virtualserverNamePhonetic" in notifyData) { this.queryClient.eventManager["ServerPhoneticNameUpdated"].handle(notifyData); }
+                        break;
+
+                    case "notifyclientmoved": 
+                        if ("reasonid" in notifyData) { 
+                            switch (notifyData.reasonid) {
+                                case 0: this.queryClient.eventManager["ClientSwitchedChannels"].handle(notifyData); break;
+                                case 1: this.queryClient.eventManager["ClientMovedToChannel"].handle(notifyData); break;
+                                case 4: this.queryClient.eventManager["ClientKickedFromChannel"].handle(notifyData); break;
+                                default: break;
+                            }
+                        }
+                        break;
+
+                    case "notifycliententerview": 
+                        if ("reasonid" in notifyData) { 
+                            switch (notifyData.reasonid) {
+                                case 0: this.queryClient.eventManager["ClientConnected"].handle(notifyData); break;
+                                default: break;
+                            }
+                        }
+                        break;
+
+                    case "notifyclientleftview": 
+                        if ("reasonid" in notifyData) { 
+                            switch (notifyData.reasonid) {
+                                case 3: this.queryClient.eventManager["ClientConnectionDropped"].handle(notifyData); break;
+                                case 5: this.queryClient.eventManager["ClientKicked"].handle(notifyData); break;
+                                case 6: this.queryClient.eventManager["ClientBanned"].handle(notifyData); break;
+                                case 8: this.queryClient.eventManager["ClientDisconnected"].handle(notifyData); break;
+                                default: break;
+                            }
+                        }
+                        break;
+
+                    case "notifytokenused": 
+                        break;
+
+                    case "notifychannelpasswordchanged": 
+                        break;
+
+                    case "notifychanneldescriptionchanged": 
+                        break;
+
+                    case "notifychanneledited": 
+                        break;
+
+                    case "notifychannelmoved": 
+                        break;
+
+                    case "notifychanneldeleted": 
+                        break;
+
+                    case "notifychannelcreated": 
+                        break;
+
+                    case "notifytextmessage": 
+                        break;
+                }
+
             } else if (this.currentQueueItem && this.currentQueueItem.command) {
                 // Check if we have sent a command and are awaiting a response
                 this.currentQueueItem.command.setResponse(data);

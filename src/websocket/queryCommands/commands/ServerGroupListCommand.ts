@@ -1,0 +1,25 @@
+import { QueryCommand } from "../QueryCommand";
+
+/**
+ * ### WhoAmI Command
+ * 
+ * Displays detailed connection information about the server instance including uptime, 
+ * number of virtual servers online, traffic information, etc. For detailed information, 
+ * see Server Instance Properties.
+ * 
+ * Permissions: 
+ *  - b_serverinstance_info_view
+ * 
+ * Syntax:
+ *  - hostinfo
+ * 
+ * Example:
+ *  - hostinfo
+ */
+export class ServerGroupListCommand extends QueryCommand {
+    private static readonly baseCommand = "servergrouplist";
+
+    constructor() {
+        super(ServerGroupListCommand.baseCommand);
+    }
+}

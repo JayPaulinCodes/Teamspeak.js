@@ -4,7 +4,6 @@ export * from "./errors/TeamspeakJsErrorCodes";
 export * from "./errors/TeamspeakJsErrorMessages";
 
 // Utils
-// export * from "./utils/CommonFunctions";
 export * from "./utils/enums/QueryClientEvents";
 export * from "./utils/enums/QueryProtocolEvents";
 export * from "./utils/enums/SocketEvents";
@@ -18,12 +17,7 @@ export * from "./websocket/interfaces/IQueryProtocolOptions";
 export * from "./websocket/interfaces/IQueueItem";
 export * from "./websocket/interfaces/ISocketOptions";
 export * from "./websocket/interfaces/IWebSocketManagerOptions";
-export * from "./websocket/queryCommands/commands/HelpCommand";
-export * from "./websocket/queryCommands/commands/ServerNotifyRegisterCommand";
-export * from "./websocket/queryCommands/commands/ServerNotifyUnregisterCommand";
-export * from "./websocket/queryCommands/commands/LoginCommand";
-export * from "./websocket/queryCommands/commands/WhoAmICommand";
-export * from "./websocket/queryCommands/commands/VersionCommand";
+export * from "./websocket/queryCommands/commands/index";
 export * from "./websocket/queryCommands/interfaces/QueryCommandTermination";
 export * from "./websocket/queryCommands/parser/QueryCommandParser";
 export * from "./websocket/queryCommands/typings/QueryCommandOptions";

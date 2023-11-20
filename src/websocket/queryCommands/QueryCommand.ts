@@ -2,6 +2,7 @@ import { QueryCommandTermination } from "./interfaces/QueryCommandTermination";
 import { QueryCommandParser } from "./parser/QueryCommandParser";
 import { QueryCommandOptions } from "./typings/QueryCommandOptions";
 
+// ADD DOCS
 export abstract class QueryCommand {
     private rawCommand: string;
     private options: QueryCommandOptions = {};
@@ -9,6 +10,7 @@ export abstract class QueryCommand {
     private response?: any;
     private commandTermination: QueryCommandTermination | null = null;
 
+    // ADD DOCS
     constructor(rawCommand: string, options?: QueryCommandOptions, flags?: string[]) {
         this.rawCommand = rawCommand;
         this.options = options ?? {};
@@ -18,6 +20,7 @@ export abstract class QueryCommand {
     /** 
      * Initializes the Respone with default values 
      */
+    // ADD DOCS
     reset(): QueryCommand {
         this.response = undefined;
         this.commandTermination = null;
@@ -27,6 +30,7 @@ export abstract class QueryCommand {
     /**
      * Checks wether there are options used with this command
      */
+    // ADD DOCS
     hasOptions(): boolean {
         return Object.values(this.options).length > 0;
     }
@@ -34,6 +38,7 @@ export abstract class QueryCommand {
     /**
      * Checks wether there are options used with this command
      */
+    // ADD DOCS
     hasMultiOptions(): boolean {
         return Object.values(this.options).length > 0;
     }
@@ -41,10 +46,12 @@ export abstract class QueryCommand {
     /**
      * Checks wether there are flags used with this command
      */
+    // ADD DOCS
     hasFlags(): boolean {
         return this.flags.length > 0;
     }
 
+    // ADD DOCS
     hasError() {
         return (this.commandTermination !== null && 
             typeof this.commandTermination === "object" &&
@@ -52,11 +59,13 @@ export abstract class QueryCommand {
             this.commandTermination.id !== "0");
     }
 
+    // ADD DOCS
     getCommandTermination() {
         if (!this.hasError()) { return null; }
         return this.commandTermination;
     }
 
+    // ADD DOCS
     setCommandTermination(data: string) {
         this.commandTermination = <QueryCommandTermination>(QueryCommandParser.parse(data)[0]);
         return this;
@@ -65,6 +74,7 @@ export abstract class QueryCommand {
     /** 
      * Get the parsed response object which has been received from the TeamSpeak Query 
      */
+    // ADD DOCS
     getResponse() {
         return this.response;
     }
@@ -73,6 +83,7 @@ export abstract class QueryCommand {
      * Set the Line which has been received from the TeamSpeak Query
      * @param line the line which has been received from the teamSpeak query
      */
+    // ADD DOCS
     setResponse(line: string): QueryCommand {
         this.response = QueryCommandParser.parse(line);
         return this;
@@ -82,6 +93,7 @@ export abstract class QueryCommand {
      * builds the query string for options
      * @return the parsed String which is readable by the TeamSpeak Querytt
      */
+    // ADD DOCS
     buildOptions() {
         return Object.keys(this.options)
             .filter((key) => this.options[key] != null && this.options[key] != undefined)
@@ -97,6 +109,7 @@ export abstract class QueryCommand {
         return this.flags.map((flag) => QueryCommandParser.escape(flag)).join(" ");
     }
 
+    // ADD DOCS
     buildCommand() {
         let newCommand = QueryCommandParser.escape(this.rawCommand);
 

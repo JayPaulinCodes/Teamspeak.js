@@ -2,97 +2,98 @@ import { InstanceEditCommand } from "../websocket/queryCommands/commands/Instanc
 import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
 
+// ADD DOCS
 export class ServerInstance extends Base {
     /**
      * Uptime in seconds
      * 
      * Server Instance Property: INSTANCE_UPTIME
      */
-    uptime: number;
+    uptime: number | null;
     
     /**
      * Current server date and time as UTC timestamp
      * 
      * Server Instance Property: HOST_TIMESTAMP_UTC
      */
-    hostTimestampUTC: number;
+    hostTimestampUTC: number | null;
     
     /**
      * Number of virtual servers running
      * 
      * Server Instance Property: VIRTUALSERVERS_RUNNING_TOTAL
      */
-    virtualServersRunning: number;
+    virtualServersRunning: number | null;
     
     /**
      * Current bandwidth used for outgoing file transfers (Bytes/s)
      * 
      * Server Instance Property: CONNECTION_FILETRANSFER_BANDWIDTH_SENT
      */
-    fileTransferBandwidthSent: number;
+    fileTransferBandwidthSent: number | null;
     
     /**
      * Current bandwidth used for incoming file transfers (Bytes/s)
      * 
      * Server Instance Property: CONNECTION_FILETRANSFER_BANDWIDTH_RECEIVED
      */
-    fileTransferBandwidthReceived: number;
+    fileTransferBandwidthReceived: number | null;
     
     /**
      * Total amount of packets sent
      * 
      * Server Instance Property: CONNECTION_PACKETS_SENT_TOTAL
      */
-    packetsSent: number;
+    packetsSent: number | null;
     
     /**
      * Total amount of packets received
      * 
      * Server Instance Property: CONNECTION_PACKETS_RECEIVED_TOTAL
      */
-    packetsReceived: number;
+    packetsReceived: number | null;
     
     /**
      * Total amount of bytes sent
      * 
      * Server Instance Property: CONNECTION_BYTES_SENT_TOTAL
      */
-    bytesSent: number;
+    bytesSent: number | null;
     
     /**
      * Total amount of bytes received
      * 
      * Server Instance Property: CONNECTION_BYTES_RECEIVED_TOTAL
      */
-    bytesReceived: number;
+    bytesReceived: number | null;
     
     /**
      * Average bandwidth used for outgoing data in the last second (Bytes/s)
      * 
      * Server Instance Property: CONNCONNECTION_BANDWIDTH_SENT_LAST_SECOND_TOTALECTION_BYTES_RECEIVED_TOTAL
      */
-    bandwidthSentLastSecond: number;
+    bandwidthSentLastSecond: number | null;
     
     /**
      * Average bandwidth used for incoming data in the last second (Bytes/s)
      * 
      * Server Instance Property: CONNECTION_BANDWIDTH_RECEIVED_LAST_SECOND_TOTAL
      */
-    bandwidthReceivedLastSecond: number;
+    bandwidthReceivedLastSecond: number | null;
     
     /**
      * Average bandwidth used for outgoing data in the last minute (Bytes/s)
      * 
      * Server Instance Property: CONNECTION_BANDWIDTH_SENT_LAST_MINUTE_TOTAL
      */
-    bandwidthSentLastMinute: number;
+    bandwidthSentLastMinute: number | null;
     
     /**
      * Average bandwidth used for incoming data in the last minute (Bytes/s)
      * 
      * Server Instance Property: CONNECTION_BANDWIDTH_RECEIVED_LAST_MINUTE_TOTAL
      */
-    bandwidthReceivedLastMinute: number;
+    bandwidthReceivedLastMinute: number | null;
     
     /**
      * Database revision number
@@ -162,21 +163,21 @@ export class ServerInstance extends Base {
      * 
      * Server Instance Property: VIRTUALSERVERS_TOTAL_MAXCLIENTS
      */
-    totalMaxclients: number;
+    totalMaxclients: number | null;
     
     /**
      * Number of clients online on all virtual servers
      * 
      * Server Instance Property: VIRTUALSERVERS_TOTAL_CLIENTS_ONLINE
      */
-    totalClientsOnline: number;
+    totalClientsOnline: number | null;
     
     /**
      * Number of channels on all virtual servers
      * 
      * Server Instance Property: VIRTUALSERVERS_TOTAL_CHANNELS_ONLINE
      */
-    totalChannelsOnline: number;
+    totalChannelsOnline: number | null;
     
     /**
      * Max number of commands allowed in seconds
@@ -198,7 +199,29 @@ export class ServerInstance extends Base {
      * Server Instance Property: SERVERINSTANCE_SERVERQUERY_FLOOD_BAN_TIME
      */
     serverQueryBanTime: number | null;
+    
+    /**
+     * Time in seconds used for automatic bans triggered by the ServerQuery flood protection
+     * 
+     * Server Instance Property: SERVERINSTANCE_PERMISSION_VERSION
+     */
+    permissionsVersion: number | null;
+    
+    /**
+     * Time in seconds used for automatic bans triggered by the ServerQuery flood protection
+     * 
+     * Server Instance Property: SERVERINSTANCE_PENDING_CONNECTIONS_PER_IP
+     */
+    pendingConnectionsPerIp: number | null;
+    
+    /**
+     * Time in seconds used for automatic bans triggered by the ServerQuery flood protection
+     * 
+     * Server Instance Property: SERVERINSTANCE_SERVERQUERY_MAX_CONNECTIONS_PER_IP
+     */
+    serverQueryMaxConnectionsPerIp: number | null;
 
+    // ADD DOCS
     constructor(queryClient: QueryClient, data: any) {
         super(queryClient)
 
@@ -206,19 +229,19 @@ export class ServerInstance extends Base {
     }
 
     protected patch(data: any) {
-        this.uptime = data.instanceUptime;
-        this.hostTimestampUTC = data.hostTimestampUtc;
-        this.virtualServersRunning = data.virtualserversRunningTotal;
-        this.fileTransferBandwidthSent = data.connectionFiletransferBandwidthSent;
-        this.fileTransferBandwidthReceived = data.connectionFiletransferBandwidthReceived;
-        this.packetsSent = data.connectionPacketsSentTotal;
-        this.packetsReceived = data.connectionPacketsReceivedTotal;
-        this.bytesSent = data.connectionBytesSentTotal;
-        this.bytesReceived = data.connectionBytesReceivedTotal;
-        this.bandwidthSentLastSecond = data.connectionBandwidthSentLastSecondTotal;
-        this.bandwidthReceivedLastSecond = data.connectionBandwidthReceivedLastSecondTotal;
-        this.bandwidthSentLastMinute = data.connectionBandwidthSentLastMinuteTotal;
-        this.bandwidthReceivedLastMinute = data.connectionBandwidthReceivedLastMinuteTotal;
+        this.uptime = ("instanceUptime" in data) ? data.instanceUptime : null;
+        this.hostTimestampUTC = ("hostTimestampUtc" in data) ? data.hostTimestampUtc : null;
+        this.virtualServersRunning = ("virtualserversRunningTotal" in data) ? data.virtualserversRunningTotal : null;
+        this.fileTransferBandwidthSent = ("connectionFiletransferBandwidthSent" in data) ? data.connectionFiletransferBandwidthSent : null;
+        this.fileTransferBandwidthReceived = ("connectionFiletransferBandwidthReceived" in data) ? data.connectionFiletransferBandwidthReceived : null;
+        this.packetsSent = ("connectionPacketsSentTotal" in data) ? data.connectionPacketsSentTotal : null;
+        this.packetsReceived = ("connectionPacketsReceivedTotal" in data) ? data.connectionPacketsReceivedTotal : null;
+        this.bytesSent = ("connectionBytesSentTotal" in data) ? data.connectionBytesSentTotal : null;
+        this.bytesReceived = ("connectionBytesReceivedTotal" in data) ? data.connectionBytesReceivedTotal : null;
+        this.bandwidthSentLastSecond = ("connectionBandwidthSentLastSecondTotal" in data) ? data.connectionBandwidthSentLastSecondTotal : null;
+        this.bandwidthReceivedLastSecond = ("connectionBandwidthReceivedLastSecondTotal" in data) ? data.connectionBandwidthReceivedLastSecondTotal : null;
+        this.bandwidthSentLastMinute = ("connectionBandwidthSentLastMinuteTotal" in data) ? data.connectionBandwidthSentLastMinuteTotal : null;
+        this.bandwidthReceivedLastMinute = ("connectionBandwidthReceivedLastMinuteTotal" in data) ? data.connectionBandwidthReceivedLastMinuteTotal : null;
         this.databaseVersion = ("serverinstanceDatabaseVersion" in data) ? data.serverinstanceDatabaseVersion : null;
         this.serverQueryGuestGroup = ("serverinstanceGuestServerqueryGroup" in data) ? data.serverinstanceGuestServerqueryGroup : null;
         this.serverAdminTemplateGroup = ("serverinstanceTemplateServeradminGroup" in data) ? data.serverinstanceTemplateServeradminGroup : null;
@@ -228,18 +251,132 @@ export class ServerInstance extends Base {
         this.serverDefaultTemplateGroup = ("serverinstanceTemplateServerdefaultGroup" in data) ? data.serverinstanceTemplateServerdefaultGroup : null;
         this.channelDefaultTemplateGroup = ("serverinstanceTemplateChanneldefaultGroup" in data) ? data.serverinstanceTemplateChanneldefaultGroup : null;
         this.channelAdminTemplateGroup = ("serverinstanceTemplateChanneladminGroup" in data) ? data.serverinstanceTemplateChanneladminGroup : null;
-        this.totalMaxclients = data.virtualserversTotalMaxclients;
-        this.totalClientsOnline = data.virtualserversTotalClientsOnline;
-        this.totalChannelsOnline = data.virtualserversTotalChannelsOnline;
+        this.totalMaxclients = ("virtualserversTotalMaxclients" in data) ? data.virtualserversTotalMaxclients : null;
+        this.totalClientsOnline = ("virtualserversTotalClientsOnline" in data) ? data.virtualserversTotalClientsOnline : null;
+        this.totalChannelsOnline = ("virtualserversTotalChannelsOnline" in data) ? data.virtualserversTotalChannelsOnline : null;
         this.serverQueryFloodCommands = ("serverinstanceServerqueryFloodCommands" in data) ? data.serverinstanceServerqueryFloodCommands : null;
         this.serverQueryFloodTime = ("serverinstanceServerqueryFloodTime" in data) ? data.serverinstanceServerqueryFloodTime : null;
         this.serverQueryBanTime = ("serverinstanceServerqueryBanTime" in data) ? data.serverinstanceServerqueryBanTime : null;
+        this.permissionsVersion = ("serverinstancePermissionsVersion" in data) ? data.serverinstancePermissionsVersion : null;
+        this.pendingConnectionsPerIp = ("serverinstancePendingConnectionsPerIp" in data) ? data.serverinstancePendingConnectionsPerIp : null;
+        this.serverQueryMaxConnectionsPerIp = ("serverinstanceServerqueryMaxConnectionsPerIp" in data) ? data.serverinstanceServerqueryMaxConnectionsPerIp : null;
     }
 
+    // ADD DOCS
     setServerQueryGuestGroup(groupId: number) {
         this.queryClient.execute(new InstanceEditCommand("serverinstance_guest_serverquery_group", groupId))
             .then(() => {
                 this.serverQueryGuestGroup = groupId;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setServerAdminTemplateGroup(groupId: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_template_serveradmin_group", groupId))
+            .then(() => {
+                this.serverAdminTemplateGroup = groupId;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setFileTransferPort(port: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_filetransfer_port", port))
+            .then(() => {
+                this.fileTransferPort = port;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setMaxDownloadBandwidth(bytes: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_max_download_total_bandwidth", bytes))
+            .then(() => {
+                this.maxDownloadBandwidth = bytes;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setMaxUploadBandwidth(bytes: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_max_upload_total_bandwidth", bytes))
+            .then(() => {
+                this.maxUploadBandwidth = bytes;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setServerDefaultTemplateGroup(groupId: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_template_serverdefault_group", groupId))
+            .then(() => {
+                this.serverDefaultTemplateGroup = groupId;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setChannelDefaultTemplateGroup(groupId: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_template_channeldefault_group", groupId))
+            .then(() => {
+                this.channelDefaultTemplateGroup = groupId;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setChannelAdminTemplateGroup(groupId: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_template_channeladmin_group", groupId))
+            .then(() => {
+                this.channelAdminTemplateGroup = groupId;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setServerQueryFloodCommands(commands: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_serverquery_flood_commands", commands))
+            .then(() => {
+                this.serverQueryFloodCommands = commands;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setServerQueryFloodTime(time: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_serverquery_flood_time", time))
+            .then(() => {
+                this.serverQueryFloodTime = time;
+            })
+            .catch((error) => {
+                throw error;
+            });
+    }
+
+    // ADD DOCS
+    setServerQueryFloodBanTime(banTime: number) {
+        this.queryClient.execute(new InstanceEditCommand("serverinstance_serverquery_flood_ban_time", banTime))
+            .then(() => {
+                this.serverQueryBanTime = banTime;
             })
             .catch((error) => {
                 throw error;

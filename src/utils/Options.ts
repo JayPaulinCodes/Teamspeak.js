@@ -9,6 +9,7 @@ import { IClientOptions } from "client/interfaces/IClientOptions";
  */
 export class Options {
     
+    // ADD DOCS
     static buildSocketOptions(options?: Partial<ISocketOptions>): ISocketOptions {
         return {
             host: "127.0.0.1",
@@ -18,6 +19,7 @@ export class Options {
         }
     }
     
+    // ADD DOCS
     static buildQueryProtocolOptions(options?: Partial<IQueryProtocolOptions>): IQueryProtocolOptions {
         return {
             protocol: QueryProtocol.RAW,
@@ -26,6 +28,7 @@ export class Options {
         }
     }
     
+    // ADD DOCS
     static buildWebSocketManagerOptions(options?: Partial<IWebSocketManagerOptions>): IWebSocketManagerOptions {
         var newOptions = {
             socketOptions: Options.buildSocketOptions(),
@@ -42,6 +45,7 @@ export class Options {
         return newOptions;
     }
     
+    // ADD DOCS
     static buildClientOptions(options?: Partial<IClientOptions>): IClientOptions {
         var newOptions = {
             webSocketManagerOptions: Options.buildWebSocketManagerOptions(),

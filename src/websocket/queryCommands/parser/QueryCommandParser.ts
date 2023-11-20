@@ -1,3 +1,4 @@
+// ADD DOCS
 export class QueryCommandParser {
     private static readonly snakeCaseIdentifier = "_";
 
@@ -219,8 +220,8 @@ export class QueryCommandParser {
         virtualserverHostmessage: QueryCommandParser.parseString,
         virtualserverHostmessageMode: QueryCommandParser.parseNumber,
         virtualserverFilebase: QueryCommandParser.parseString,
-        virtualserverDefaultServerGroup: QueryCommandParser.parseString,
-        virtualserverDefaultChannelGroup: QueryCommandParser.parseString,
+        virtualserverDefaultServerGroup: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
+        virtualserverDefaultChannelGroup: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         virtualserverFlagPassword: QueryCommandParser.parseBoolean,
         virtualserverDefaultChannelAdminGroup: QueryCommandParser.parseString,
         virtualserverMaxDownloadTotalBandwidth: QueryCommandParser.parseNumber,
@@ -324,8 +325,8 @@ export class QueryCommandParser {
         clientIsRecording: QueryCommandParser.parseBoolean,
         clientIsChannelCommander: QueryCommandParser.parseBoolean,
         clientUniqueIdentifier: QueryCommandParser.parseString,
-        clientServergroups: QueryCommandParser.parseStringArray,
-        clientChannelGroupId: QueryCommandParser.parseString,
+        clientServergroups: QueryCommandParser.parseNumberArray, // Was string array - QueryCommandParser.parseStringArray
+        clientChannelGroupId: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         clientChannelGroupInheritedChannelId: QueryCommandParser.parseString,
         clientVersion: QueryCommandParser.parseString,
         clientPlatform: QueryCommandParser.parseString,
@@ -364,7 +365,7 @@ export class QueryCommandParser {
         clientSignedBadges: QueryCommandParser.parseString,
         clientLastip: QueryCommandParser.parseString,
         cid: QueryCommandParser.parseString,
-        pid: QueryCommandParser.parseString,
+        pid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         cpid: QueryCommandParser.parseString,
         order: QueryCommandParser.parseNumber,
         channelOrder: QueryCommandParser.parseNumber,
@@ -380,7 +381,7 @@ export class QueryCommandParser {
         channelCodec: QueryCommandParser.parseNumber,
         channelCodecQuality: QueryCommandParser.parseNumber,
         channelNeededTalkPower: QueryCommandParser.parseNumber,
-        channelIconId: QueryCommandParser.parseString,
+        channelIconId: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         totalClientsFamily: QueryCommandParser.parseNumber,
         channelMaxclients: QueryCommandParser.parseNumber,
         channelMaxfamilyclients: QueryCommandParser.parseNumber,
@@ -400,9 +401,9 @@ export class QueryCommandParser {
         channelBannerGfxUrl: QueryCommandParser.parseString,
         channelBannerMode: QueryCommandParser.parseNumber,
         secondsEmpty: QueryCommandParser.parseNumber,
-        cgid: QueryCommandParser.parseString,
-        sgid: QueryCommandParser.parseString,
-        permid: QueryCommandParser.parseString,
+        cgid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
+        sgid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
+        permid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         permvalue: QueryCommandParser.parseNumber,
         permnegated: QueryCommandParser.parseBoolean,
         permskip: QueryCommandParser.parseBoolean,
@@ -414,7 +415,7 @@ export class QueryCommandParser {
         v: QueryCommandParser.parseNumber,
         n: QueryCommandParser.parseNumber,
         s: QueryCommandParser.parseNumber,
-        reasonid: QueryCommandParser.parseString,
+        reasonid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         reasonmsg: QueryCommandParser.parseString,
         ctid: QueryCommandParser.parseString,
         cfid: QueryCommandParser.parseString,
@@ -456,12 +457,13 @@ export class QueryCommandParser {
         serverinstancePendingConnectionsPerIp: QueryCommandParser.parseNumber,
         serverinstancePermissionsVersion: QueryCommandParser.parseNumber,
         serverinstanceServerqueryFloodBanTime: QueryCommandParser.parseNumber,
+        serverinstanceServerqueryBanTime: QueryCommandParser.parseNumber,
         serverinstanceServerqueryFloodCommands: QueryCommandParser.parseNumber,
         serverinstanceServerqueryFloodTime: QueryCommandParser.parseNumber,
-        serverinstanceTemplateChanneladminGroup: QueryCommandParser.parseString,
-        serverinstanceTemplateChanneldefaultGroup: QueryCommandParser.parseString,
+        serverinstanceTemplateChanneladminGroup: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
+        serverinstanceTemplateChanneldefaultGroup: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         serverinstanceTemplateServeradminGroup: QueryCommandParser.parseNumber,
-        serverinstanceTemplateServerdefaultGroup: QueryCommandParser.parseString,
+        serverinstanceTemplateServerdefaultGroup: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         msgid: QueryCommandParser.parseString,
         timestamp: QueryCommandParser.parseNumber,
         cluid: QueryCommandParser.parseString,

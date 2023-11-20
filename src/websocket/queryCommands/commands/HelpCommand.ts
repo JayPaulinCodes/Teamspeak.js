@@ -17,6 +17,7 @@ import { QueryCommand } from "../QueryCommand";
 export class HelpCommand extends QueryCommand {
     private static readonly baseCommand = "help";
 
+    // ADD DOCS
     constructor(command: string) {
         super(HelpCommand.baseCommand, undefined, [ command ]);
     }

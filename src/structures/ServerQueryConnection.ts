@@ -2,6 +2,7 @@ import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
 import { VirtualServerStatus } from "./enums/VirtualServerStatus"
 
+// ADD DOCS
 export class ServerQueryConnection extends Base {
     virtualserverStatus: VirtualServerStatus;
     virtualserverId: number;
@@ -15,6 +16,7 @@ export class ServerQueryConnection extends Base {
     clientUniqueIdentifier: string | null;
     clientOriginServerId: number | null;
 
+    // ADD DOCS
     constructor(queryClient: QueryClient, data: any) {
         super(queryClient)
 

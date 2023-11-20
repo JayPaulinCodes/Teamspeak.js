@@ -1,3 +1,4 @@
+// ADD DOCS
 export enum VirtualServerStatus {
     Online = "online",
     Offline = "offline",

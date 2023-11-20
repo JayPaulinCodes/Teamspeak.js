@@ -33,6 +33,7 @@ export class InstanceEditCommand extends QueryCommand {
         "serverinstance_serverquery_flood_ban_time"
     ]
 
+    // ADD DOCS
     constructor(key: string, value: number) {
         if (!InstanceEditCommand.allowedKeys.includes(key)) {
             throw new TeamspeakJsError(TeamspeakJsErrorCodes.InstanceEditNotApprovedKey, key);

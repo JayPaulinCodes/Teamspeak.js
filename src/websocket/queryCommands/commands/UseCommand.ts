@@ -23,6 +23,7 @@ import { QueryCommand } from "../QueryCommand";
 export class UseCommand extends QueryCommand {
     private static readonly baseCommand = "use";
 
+    // ADD DOCS
     constructor(sid?: number, port?: number, virtual: boolean = false) {
         if (sid !== undefined) {
             super(UseCommand.baseCommand, { ["sid"]: sid }, virtual ? [ "-virtual" ] : undefined);

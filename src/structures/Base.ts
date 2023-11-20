@@ -7,10 +7,12 @@ export abstract class Base {
         this.queryClient = queryClient;
     }
     
+    // ADD DOCS
     clone() {
         return Object.assign(Object.create(this), this);
     }
 
+    // ADD DOCS
     toJSON() {
         return JSON.stringify(this);
     }

@@ -18,6 +18,7 @@ import { QueryCommand } from "../QueryCommand";
 export class LoginCommand extends QueryCommand {
     private static readonly baseCommand = "login";
 
+    // ADD DOCS
     constructor(username: string, password: string) {
         super(LoginCommand.baseCommand, {
             ["client_login_name"]: username,
