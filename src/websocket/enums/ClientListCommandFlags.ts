@@ -7,5 +7,5 @@ export enum ClientListCommandFlags {
     INCLUED_INFO_DATA,
     INCLUED_COUNTRY_DATA,
     INCLUED_IP,
-    INCLUED_BADGES_DATA,
+    INCLUED_BADGES_DATA
 }

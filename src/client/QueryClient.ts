@@ -123,10 +123,10 @@ export class QueryClient extends EventEmitter {
                             this.serverDatabaseIdMap[`id_${client.serverId}`] = client.databaseId;
                         }
                     });
-                  
+
                     this.isReady = true;
 
-                    super.emit(QueryClientEvents.Ready)
+                    super.emit(QueryClientEvents.Ready);
                 })
                 .catch(err => super.emit(QueryClientEvents.Error, err));
         });
