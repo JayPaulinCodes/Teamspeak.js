@@ -1,11 +1,11 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "name": "Teamspeak.js",
-    "entryPoints": ["../src/index.ts"],
+    "entryPoints": ["./src/index.ts"],
     "exclude": ["../**/*+.spec.ts"],
     "excludeExternals": true,
     "includeVersion": true,
-    "out": "../docs/standard",
+    "out": "./gen-docs/standard",
     "navigationLinks": {
         "SparrowStudios Discord": "https://discord.com/FTYjcbkzFn"
     }

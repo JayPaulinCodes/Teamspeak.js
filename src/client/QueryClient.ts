@@ -109,7 +109,7 @@ export class QueryClient extends EventEmitter {
             executions.push(
                 ...this.context.events.map(_event => this.prioritize().registerEvent(_event.event, _event.id))
             );
-            this.debug(JSON.stringify(this.context.events));
+
             // executions.push(this.prioritize().version())
 
             this.webSocketManager.pauseQueue(false);
@@ -442,28 +442,28 @@ export class QueryClient extends EventEmitter {
         };
     }
 
-    private debug(data: string, type: string = "Client") {
-        super.emit(QueryClientEvents.Debug, type, data);
-    }
+
+
+
 
     // Actual useable stuff now
 
     // ADD DOCS
-    async getServerQueryConnectionInfo(): Promise<ServerQueryConnection> {
+    public async getServerQueryConnectionInfo(): Promise<ServerQueryConnection> {
         return this.execute<ServerQueryConnection>(new WhoAmICommand()).then(data => {
             return new ServerQueryConnection(this, data);
         });
     }
 
     // ADD DOCS
-    async getServerVersionInfo(): Promise<ServerVersionInformation> {
+    public async getServerVersionInfo(): Promise<ServerVersionInformation> {
         return this.execute<ServerVersionInformation>(new VersionCommand()).then(data => {
             return new ServerVersionInformation(this, data);
         });
     }
 
     // ADD DOCS
-    async getServerInstace(): Promise<ServerInstance> {
+    public async getServerInstace(): Promise<ServerInstance> {
         // Because Teamspeak is a bitch and has 2 commands to gather server instance info,
         // run them back to back and compile the data
         return this.execute<ServerInstance>(new HostInfoCommand()).then(hostData => {
@@ -474,21 +474,21 @@ export class QueryClient extends EventEmitter {
     }
 
     // ADD DOCS
-    async getClientByServerId(clientServerId: number): Promise<Client> {
+    public async getClientByServerId(clientServerId: number): Promise<Client> {
         return this.execute<Client>(new ClientInfoCommand(clientServerId)).then(data => {
             return new Client(this, data);
         });
     }
 
     // ADD DOCS
-    async getClientByDbId(clientDbId: number): Promise<Client> {
+    public async getClientByDbId(clientDbId: number): Promise<Client> {
         return this.execute<Client>(new ClientDbInfoCommand(clientDbId)).then(data => {
             return new Client(this, data);
         });
     }
 
     // ADD DOCS
-    async getAllClients(flags: ClientListCommandFlags[] = []): Promise<Client[]> {
+    public async getAllClients(flags: ClientListCommandFlags[] = []): Promise<Client[]> {
         return this.execute<Client[]>(new ClientListCommand(flags)).then(data => {
             const result: Client[] = [];
             for (let i = 0; i < data.length; i++) {
@@ -500,20 +500,20 @@ export class QueryClient extends EventEmitter {
     }
 
     // ADD DOCS
-    async getServerGroups(): Promise<ServerGroup[]> {
+    public async getServerGroups(): Promise<ServerGroup[]> {
         return this.execute<any[]>(new ServerGroupListCommand()).then(data => {
             return data.map(elem => new ServerGroup(this, elem));
         });
     }
 
     // ADD DOCS
-    async getServerGroupById(serverGroupId: number): Promise<ServerGroup | undefined> {
+    public async getServerGroupById(serverGroupId: number): Promise<ServerGroup | undefined> {
         const allGroups = await this.getServerGroups();
         return allGroups.find(group => group.id === serverGroupId);
     }
 
     // ADD DOCS
-    async getServerGroupByIds(serverGroupIds: number[]): Promise<ServerGroup[] | undefined> {
+    public async getServerGroupByIds(serverGroupIds: number[]): Promise<ServerGroup[] | undefined> {
         const allGroups = await this.getServerGroups();
         if (serverGroupIds === undefined) {
             return undefined;
@@ -522,14 +522,14 @@ export class QueryClient extends EventEmitter {
     }
 
     // ADD DOCS
-    async getServerGroupPerms(serverGroupId: number): Promise<Permission[]> {
+    public async getServerGroupPerms(serverGroupId: number): Promise<Permission[]> {
         return this.execute<any[]>(new ServerGroupPermListCommand(serverGroupId)).then(data => {
             return data.map(elem => new Permission(this, elem));
         });
     }
 
     // ADD DOCS
-    async getChannelById(channelId: number): Promise<Channel> {
+    public async getChannelById(channelId: number): Promise<Channel> {
         return this.execute<Channel>(new ChannelInfoCommand(channelId)).then(data => {
             return new Channel(this, { ...data, id: channelId });
         });
