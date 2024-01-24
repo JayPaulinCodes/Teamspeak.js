@@ -2,17 +2,17 @@ import { QueryCommand } from "../QueryCommand";
 
 /**
  * ### InstanceInfo Command
- * 
- * Displays the server instance configuration including database 
- * revision number, the file transfer port, default group IDs, 
+ *
+ * Displays the server instance configuration including database
+ * revision number, the file transfer port, default group IDs,
  * etc. For detailed information, see Server Instance Properties.
- * 
- * Permissions: 
+ *
+ * Permissions:
  *  - b_serverinstance_info_view
- * 
+ *
  * Syntax:
  *  - instanceinfo
- * 
+ *
  * Example:
  *  - instanceinfo
  */

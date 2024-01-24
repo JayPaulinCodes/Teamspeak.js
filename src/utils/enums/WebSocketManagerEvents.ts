@@ -18,13 +18,13 @@ export enum WebSocketManagerEvents {
 
     /**
      * Forwarded from the {@link QueryProtocolEvents | query protocol event}
-     * @param {string} data 
+     * @param {string} data
      */
     Data = "data",
 
     /**
      * Forwarded from the {@link QueryProtocolEvents | query protocol event}
-     * @param {Error} error 
+     * @param {Error} error
      */
     Error = "error",
 
@@ -43,5 +43,5 @@ export enum WebSocketManagerEvents {
     /**
      * Emited when the server query throws a flooding error
      */
-    Flooding = "flooding",
+    Flooding = "flooding"
 }

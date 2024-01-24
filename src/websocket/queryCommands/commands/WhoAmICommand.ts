@@ -2,15 +2,15 @@ import { QueryCommand } from "../QueryCommand";
 
 /**
  * ### WhoAmI Command
- * 
+ *
  * Displays information about your current ServerQuery connection including your loginname, etc.
- * 
- * Permissions: 
+ *
+ * Permissions:
  *  - b_serverinstance_help_view
- * 
+ *
  * Syntax:
  *  - whoami
- * 
+ *
  * Example:
  *  - whoami
  */

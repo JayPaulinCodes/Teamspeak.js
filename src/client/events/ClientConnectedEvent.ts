@@ -3,7 +3,7 @@ import { Event } from "./Event";
 
 // ADD DOCS
 export class ClientConnectedEvent extends Event {
-    async handle(data) {
+    override async handle(data: any) {
         const queryClient = this.queryClient;
 
         const client = await queryClient.getClientByServerId(data.clid);

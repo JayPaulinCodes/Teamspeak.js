@@ -2,16 +2,16 @@ import { QueryCommand } from "../QueryCommand";
 
 /**
  * ### ChannelInfo Command
- * 
- * Displays detailed configuration information about a channel including ID, 
+ *
+ * Displays detailed configuration information about a channel including ID,
  * topic, description, etc. For detailed information, see Channel Properties.
- * 
- * Permissions: 
+ *
+ * Permissions:
  *  - b_channel_info_view
- * 
+ *
  * Syntax:
  *  - channelinfo cid={channelID}
- * 
+ *
  * Example:
  *  - channelinfo cid=1
  */

@@ -17,8 +17,8 @@ export abstract class QueryCommand {
         this.flags = flags ?? [];
     }
 
-    /** 
-     * Initializes the Respone with default values 
+    /**
+     * Initializes the Respone with default values
      */
     // ADD DOCS
     reset(): QueryCommand {
@@ -53,26 +53,30 @@ export abstract class QueryCommand {
 
     // ADD DOCS
     hasError() {
-        return (this.commandTermination !== null && 
+        return (
+            this.commandTermination !== null &&
             typeof this.commandTermination === "object" &&
             typeof this.commandTermination.id === "string" &&
-            this.commandTermination.id !== "0");
+            this.commandTermination.id !== "0"
+        );
     }
 
     // ADD DOCS
     getCommandTermination() {
-        if (!this.hasError()) { return null; }
+        if (!this.hasError()) {
+            return null;
+        }
         return this.commandTermination;
     }
 
     // ADD DOCS
     setCommandTermination(data: string) {
-        this.commandTermination = <QueryCommandTermination>(QueryCommandParser.parse(data)[0]);
+        this.commandTermination = <QueryCommandTermination>QueryCommandParser.parse(data)[0];
         return this;
     }
 
-    /** 
-     * Get the parsed response object which has been received from the TeamSpeak Query 
+    /**
+     * Get the parsed response object which has been received from the TeamSpeak Query
      */
     // ADD DOCS
     getResponse() {
@@ -95,26 +99,32 @@ export abstract class QueryCommand {
      */
     // ADD DOCS
     buildOptions() {
-        return Object.keys(this.options)
-            .filter((key) => this.options[key] != null && this.options[key] != undefined)
-            // .filter((key) => typeof this.options[key] !== "number" || !isNaN(this.options[key]))
-            .map((key) => QueryCommandParser.escapeKeyValue(key, this.options[key]))
-            .join(" ");
+        return (
+            Object.keys(this.options)
+                .filter(key => this.options[key] != null && this.options[key] != undefined)
+                // .filter((key) => typeof this.options[key] !== "number" || !isNaN(this.options[key]))
+                .map(key => QueryCommandParser.escapeKeyValue(key, this.options[key]))
+                .join(" ")
+        );
     }
 
     /**
      * Builds the query string for flags
      */
     buildFlags(): string {
-        return this.flags.map((flag) => QueryCommandParser.escape(flag)).join(" ");
+        return this.flags.map(flag => QueryCommandParser.escape(flag)).join(" ");
     }
 
     // ADD DOCS
     buildCommand() {
         let newCommand = QueryCommandParser.escape(this.rawCommand);
 
-        if (this.hasFlags()) { newCommand += ` ${this.buildFlags()}`; }
-        if (this.hasOptions()) { newCommand += ` ${this.buildOptions()}`; }
+        if (this.hasFlags()) {
+            newCommand += ` ${this.buildFlags()}`;
+        }
+        if (this.hasOptions()) {
+            newCommand += ` ${this.buildOptions()}`;
+        }
 
         return newCommand;
     }

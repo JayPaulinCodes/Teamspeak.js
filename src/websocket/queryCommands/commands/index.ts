@@ -1,6 +1,7 @@
 export * from "./ChannelInfoCommand";
 export * from "./ClientDbInfoCommand";
 export * from "./ClientInfoCommand";
+export * from "./ClientListCommand";
 export * from "./HelpCommand";
 export * from "./HostInfoCommand";
 export * from "./InstanceEditCommand";

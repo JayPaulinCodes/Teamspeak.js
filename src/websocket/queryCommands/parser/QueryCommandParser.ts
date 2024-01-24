@@ -7,14 +7,14 @@ export class QueryCommandParser {
      * @param {string} str The string to convert
      * @returns {string} The converted string
      */
-    static toCamelCase(str: string) {
+    static toCamelCase(str: string): string {
         let nextCharUpperCase = false;
 
         // Split the string to characters
         const stringChars = str.split("");
 
         // Convert the characters to their new case
-        const convertedChars = stringChars.map((char) => {
+        const convertedChars = stringChars.map((char: string) => {
             if (char === QueryCommandParser.snakeCaseIdentifier) {
                 nextCharUpperCase = true;
                 return "";
@@ -35,14 +35,16 @@ export class QueryCommandParser {
      * @param {string} str The string to convert
      * @returns {string} The converted string
      */
-    static toSnakeCase(str: string) {
+    static toSnakeCase(str: string): string {
         // Split the string to characters
         const stringChars = str.split("");
 
         // Convert the characters to their new case
-        const convertedChars = stringChars.map((char) => {
+        const convertedChars = stringChars.map(char => {
             const lower = char.toLowerCase();
-            if (char !== lower) { return `${QueryCommandParser.snakeCaseIdentifier}${lower}`; }
+            if (char !== lower) {
+                return `${QueryCommandParser.snakeCaseIdentifier}${lower}`;
+            }
             return char;
         });
 
@@ -50,7 +52,7 @@ export class QueryCommandParser {
         return convertedChars.join("");
     }
 
-    /** 
+    /**
      * Teamspeak has a list of chars that need to be escaped to use,
      * this will take the inputed string and ensure that those chars
      * are escaped
@@ -68,7 +70,7 @@ export class QueryCommandParser {
             .replace(/ /g, "\\s");
     }
 
-    /** 
+    /**
      * Teamspeak has a list of chars that need to be escaped to use,
      * this will take revert those escaped chars
      */
@@ -90,8 +92,13 @@ export class QueryCommandParser {
      * @param k the key which should get looked up
      * @param v the value which should get parsed
      */
-    static parseValue(key: string, value: string | undefined) {
-        if (value === undefined) { return undefined; }
+    static parseValue(
+        key: string,
+        value: string | undefined
+    ): boolean | string | string[] | number | number[] | undefined {
+        if (value === undefined) {
+            return undefined;
+        }
 
         if (Object.keys(QueryCommandParser.CommandIdentifiers).includes(key)) {
             return QueryCommandParser.CommandIdentifiers[key](value);
@@ -113,7 +120,7 @@ export class QueryCommandParser {
      * @param value string to parse
      */
     static parseStringArray(value: string) {
-        return value.split(",").map((v) => QueryCommandParser.parseString(v));
+        return value.split(",").map(v => QueryCommandParser.parseString(v));
     }
 
     /**
@@ -129,7 +136,7 @@ export class QueryCommandParser {
      * @param value string to parse
      */
     static parseNumberArray(value: string) {
-        return value.split(",").map((v) => QueryCommandParser.parseNumber(v));
+        return value.split(",").map(v => QueryCommandParser.parseNumber(v));
     }
 
     /**
@@ -150,16 +157,17 @@ export class QueryCommandParser {
      */
     static parse(raw: string) {
         const resultArray = raw
-        .split("|")
-        .map((entry) => {
-            const res = {};
-            entry.split(" ").forEach((str) => {
-                const { key, value } = QueryCommandParser.getKeyValue(str);
-                res[key] = QueryCommandParser.parseValue(key, value);
-            });
-            return res;
-        })
-        .map((entry, _, original) => ({ ...original[0], ...entry }));
+            .split("|")
+            .map(entry => {
+                const res: any = {};
+                entry.split(" ").forEach(str => {
+                    const { key, value } = QueryCommandParser.getKeyValue(str);
+                    // res[Symbol(key)] = QueryCommandParser.parseValue(key, value);
+                    res[key] = QueryCommandParser.parseValue(key, value);
+                });
+                return res;
+            })
+            .map((entry, _, original) => ({ ...original[0], ...entry }));
 
         if (resultArray.length === 1) {
             return resultArray[0];
@@ -176,11 +184,14 @@ export class QueryCommandParser {
      */
     static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[]): string {
         key = QueryCommandParser.toSnakeCase(key);
-        if (typeof value === "boolean") { value = value ? "1" : "0"; }
-        else if (typeof value === "number") { value = `${value}`; }
+        if (typeof value === "boolean") {
+            value = value ? "1" : "0";
+        } else if (typeof value === "number") {
+            value = `${value}`;
+        }
         if (Array.isArray(value)) {
             return value
-                .map((v) => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v)}`)
+                .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
                 .join("|");
         } else {
             return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
@@ -191,17 +202,19 @@ export class QueryCommandParser {
      * retrieves the key value pair from a string
      * @param str the key value pair to unescape eg foo=bar
      */
-    static getKeyValue(str: string): { key: string; value: string | undefined; } {
+    static getKeyValue(str: string): { key: string; value: string | undefined } {
         const index = str.indexOf("=");
-        if (index === -1) { return { key: QueryCommandParser.toCamelCase(str), value: undefined }; }
+        if (index === -1) {
+            return { key: QueryCommandParser.toCamelCase(str), value: undefined };
+        }
         const value = str.substring(index + 1);
         return {
             key: QueryCommandParser.toCamelCase(str.substring(0, index)),
-            value: value === "" ? undefined : value,
+            value: value === "" ? undefined : value
         };
     }
 
-    static readonly CommandIdentifiers = {
+    static readonly CommandIdentifiers: { [key: string]: Function } = {
         sid: QueryCommandParser.parseString,
         serverId: QueryCommandParser.parseString,
         virtualserverNickname: QueryCommandParser.parseString,
@@ -304,7 +317,7 @@ export class QueryCommandParser {
         connectionBandwidthReceivedLastMinuteTotal: QueryCommandParser.parseNumber,
         connectionPacketlossTotal: QueryCommandParser.parseNumber,
         connectionPing: QueryCommandParser.parseNumber,
-        clid: QueryCommandParser.parseString,
+        clid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         clientId: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         cldbid: QueryCommandParser.parseString,
         clientDatabaseId: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
@@ -527,6 +540,6 @@ export class QueryCommandParser {
         scope: QueryCommandParser.parseString,
         timeLeft: QueryCommandParser.parseNumber,
         createdAt: QueryCommandParser.parseNumber,
-        expiresAt: QueryCommandParser.parseNumber,
-    }
+        expiresAt: QueryCommandParser.parseNumber
+    };
 }

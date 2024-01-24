@@ -5,7 +5,7 @@ import { Socket } from "node:net";
  */
 export enum SocketEvents {
     /**
-     * Emitted once the socket is fully closed. The argument hadError is a boolean 
+     * Emitted once the socket is fully closed. The argument hadError is a boolean
      * which says if the socket was closed due to a transmission error.
      * @param {boolean} hadError true if the socket had a transmission error.
      * @see https://nodejs.org/api/net.html#event-close_1
@@ -19,9 +19,9 @@ export enum SocketEvents {
     Connect = "connect",
 
     /**
-     * Emitted when data is received. The argument data will be a Buffer or String. 
+     * Emitted when data is received. The argument data will be a Buffer or String.
      * Encoding of data is set by socket.setEncoding().
-     * 
+     *
      * The data will be lost if there is no listener when a Socket emits a 'data' event.
      * @param {Buffer | string} data
      * @see https://nodejs.org/api/net.html#event-data
@@ -37,11 +37,11 @@ export enum SocketEvents {
     /**
      * Emitted when the other end of the socket signals the end of transmission, thus ending
      * the readable side of the socket.
-     * 
-     * By default (allowHalfOpen is false) the socket will send an end of transmission packet 
-     * back and destroy its file descriptor once it has written out its pending write queue. 
-     * However, if allowHalfOpen is set to true, the socket will not automatically end() its 
-     * writable side, allowing the user to write arbitrary amounts of data. The user must call 
+     *
+     * By default (allowHalfOpen is false) the socket will send an end of transmission packet
+     * back and destroy its file descriptor once it has written out its pending write queue.
+     * However, if allowHalfOpen is set to true, the socket will not automatically end() its
+     * writable side, allowing the user to write arbitrary amounts of data. The user must call
      * end() explicitly to close the connection (i.e. sending a FIN packet back).
      * @see https://nodejs.org/api/net.html#event-end
      */
@@ -49,7 +49,7 @@ export enum SocketEvents {
 
     /**
      * Emitted when an error occurs. The 'close' event will be called directly following this event.
-     * @param {Error} error 
+     * @param {Error} error
      * @see https://nodejs.org/api/net.html#event-error_1
      */
     Error = "error",
@@ -66,7 +66,7 @@ export enum SocketEvents {
 
     /**
      * Emitted when a socket is ready to be used.
-     * 
+     *
      * Triggered immediately after 'connect'.
      * @see https://nodejs.org/api/net.html#event-ready
      */
@@ -74,9 +74,9 @@ export enum SocketEvents {
 
     /**
      * Emitted if the socket times out from inactivity. \
-     * This is only to notify that the socket has been idle. 
+     * This is only to notify that the socket has been idle.
      * The user must manually close the connection.
      * @see https://nodejs.org/api/net.html#event-timeout
      */
-    Timeout = "timeout",
+    Timeout = "timeout"
 }

@@ -18,13 +18,13 @@ export enum QueryProtocolEvents {
 
     /**
      * Forwarded from the {@link SocketEvents | socket event}
-     * @param {string} data 
+     * @param {string} data
      */
     Data = "data",
 
     /**
      * Forwarded from the {@link SocketEvents | socket event}
-     * @param {Error} error 
+     * @param {Error} error
      */
     Error = "error",
 
@@ -33,5 +33,5 @@ export enum QueryProtocolEvents {
      * @param {string | undefined} type
      * @param {string | undefined} data
      */
-    Debug = "debug",
+    Debug = "debug"
 }

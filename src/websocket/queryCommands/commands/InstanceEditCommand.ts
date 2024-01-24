@@ -4,16 +4,16 @@ import { QueryCommand } from "../QueryCommand";
 
 /**
  * ### InstanceEdit Command
- * 
- * Changes the server instance configuration using given properties. 
+ *
+ * Changes the server instance configuration using given properties.
  * For detailed information, see Server Instance Properties.
- * 
- * Permissions: 
+ *
+ * Permissions:
  *  - b_serverinstance_modify_settings
- * 
+ *
  * Syntax:
  *  - instanceedit [instance_properties…]
- * 
+ *
  * Example:
  *  - instanceedit serverinstance_filetransfer_port=1337
  */
@@ -31,7 +31,7 @@ export class InstanceEditCommand extends QueryCommand {
         "serverinstance_serverquery_flood_commands",
         "serverinstance_serverquery_flood_time",
         "serverinstance_serverquery_flood_ban_time"
-    ]
+    ];
 
     // ADD DOCS
     constructor(key: string, value: number) {

@@ -3,13 +3,13 @@ import { Event } from "./Event";
 
 // ADD DOCS
 export class ClientMovedToChannelEvent extends Event {
-    async handle(data) {
+    override async handle(data: any) {
         const queryClient = this.queryClient;
 
         const movingClient = await queryClient.getClientByServerId(data.clid);
         const invokingClient = await queryClient.getClientByServerId(data.invokerid);
         const channel = await queryClient.getChannelById(data.ctid);
-
+        
         queryClient.emit(QueryClientEvents.ClientMovedToChannel, movingClient, channel, invokingClient);
     }
 }

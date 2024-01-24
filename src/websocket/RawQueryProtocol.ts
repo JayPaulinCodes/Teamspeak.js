@@ -21,13 +21,13 @@ export class RawQueryProtocol extends EventEmitter implements IQueryProtocol {
         this.socket = connect({
             host: socketOptions.host,
             port: socketOptions.port,
-            localAddress: socketOptions.localAddress,
+            localAddress: socketOptions.localAddress
         });
 
         // Configure encoding
         this.socket.setEncoding("utf8");
 
-        // Set the timeout to our ready timeout, 
+        // Set the timeout to our ready timeout,
         // this is reset once we receive the ready event
         this.socket.setTimeout(socketOptions.readyTimeout);
 
@@ -63,7 +63,6 @@ export class RawQueryProtocol extends EventEmitter implements IQueryProtocol {
     }
 
     private attachEvents() {
-
         // Socket close event
         this.socket.on(SocketEvents.Close, (hadError: boolean) => {
             // Forward the event adding the chunk to it
@@ -89,7 +88,9 @@ export class RawQueryProtocol extends EventEmitter implements IQueryProtocol {
             this.chunk = lines.pop() || "";
 
             // For each of the lines in the chunk, forward the event
-            lines.forEach(line => { this.emit(QueryProtocolEvents.Data, line); });
+            lines.forEach(line => {
+                this.emit(QueryProtocolEvents.Data, line);
+            });
         });
 
         // Socket error event

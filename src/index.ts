@@ -11,6 +11,7 @@ export * from "./utils/enums/WebSocketManagerEvents";
 export * from "./utils/Options";
 
 // WebSocket
+export * from "./websocket/enums/ClientListCommandFlags";
 export * from "./websocket/enums/QueryProtocol";
 export * from "./websocket/interfaces/IQueryProtocol";
 export * from "./websocket/interfaces/IQueryProtocolOptions";

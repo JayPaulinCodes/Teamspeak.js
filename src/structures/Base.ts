@@ -6,7 +6,7 @@ export abstract class Base {
     constructor(queryClient: QueryClient) {
         this.queryClient = queryClient;
     }
-    
+
     // ADD DOCS
     clone() {
         return Object.assign(Object.create(this), this);
@@ -17,5 +17,7 @@ export abstract class Base {
         return JSON.stringify(this);
     }
 
-    protected patch(data: object) { data = data; };
+    protected patch(data: object) {
+        data = data;
+    }
 }

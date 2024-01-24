@@ -1,29 +1,29 @@
 import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
-import { VirtualServerStatus } from "./enums/VirtualServerStatus"
+import { VirtualServerStatus } from "./enums/VirtualServerStatus";
 
 // ADD DOCS
 export class ServerQueryConnection extends Base {
-    virtualserverStatus: VirtualServerStatus;
-    virtualserverId: number;
-    virtualserverUniqueIdentifier: string;
-    virtualserverPort: number;
-    clientId: number | null;
-    clientChannelId: number | null;
-    clientNickname: string;
-    clientDatabaseId: number | null;
-    clientLoginName: string | null;
-    clientUniqueIdentifier: string | null;
-    clientOriginServerId: number | null;
+    virtualserverStatus: VirtualServerStatus | null = null;
+    virtualserverId: number | null = null;
+    virtualserverUniqueIdentifier: string | null = null;
+    virtualserverPort: number | null = null;
+    clientId: number | null = null;
+    clientChannelId: number | null = null;
+    clientNickname: string | null = null;
+    clientDatabaseId: number | null = null;
+    clientLoginName: string | null = null;
+    clientUniqueIdentifier: string | null = null;
+    clientOriginServerId: number | null = null;
 
     // ADD DOCS
     constructor(queryClient: QueryClient, data: any) {
-        super(queryClient)
+        super(queryClient);
 
         this.patch(data);
     }
 
-    protected patch(data: any) {
+    protected override patch(data: any) {
         this.virtualserverStatus = data.virtualserverStatus as VirtualServerStatus;
         this.virtualserverId = data.virtualserverId;
         this.virtualserverUniqueIdentifier = data.virtualserverUniqueIdentifier;

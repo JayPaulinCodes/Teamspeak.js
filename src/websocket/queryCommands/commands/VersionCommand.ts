@@ -2,15 +2,15 @@ import { QueryCommand } from "../QueryCommand";
 
 /**
  * ### Version Command
- * 
+ *
  * Displays the servers version information including platform and build number.
- * 
- * Permissions: 
+ *
+ * Permissions:
  *  - b_serverinstance_version_view
- * 
+ *
  * Syntax:
  *  - version
- * 
+ *
  * Example:
  *  - version
  */

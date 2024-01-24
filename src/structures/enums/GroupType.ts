@@ -1,26 +1,26 @@
 export enum GroupType {
-    /** 
-     * Server group permission 
+    /**
+     * Server group permission
      */
     ServerGroup = 0,
 
-    /** 
-     * Client specific permission 
+    /**
+     * Client specific permission
      */
     GlobalClient = 1,
 
-    /** 
-     * Channel specific permission 
+    /**
+     * Channel specific permission
      */
     Channel = 2,
 
-    /** 
-     * Channel group permission 
+    /**
+     * Channel group permission
      */
     ChannelGroup = 3,
 
-    /** 
-     * Channel-client specific permission 
+    /**
+     * Channel-client specific permission
      */
     ChannelClient = 4
 }

@@ -4,5 +4,5 @@ export enum VirtualServerStatus {
     Offline = "offline",
     BootingUp = "booting up",
     ShuttingDown = "shutting down",
-    VirtualOnline = "virtual online",
+    VirtualOnline = "virtual online"
 }
