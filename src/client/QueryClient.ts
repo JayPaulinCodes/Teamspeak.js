@@ -36,17 +36,21 @@ import {
 
 // ADD DOCS
 export class QueryClient extends EventEmitter {
+    
+    // ADD DOCS
     readonly options: IClientOptions;
-    eventManager: EventManager;
+    
+    // ADD DOCS
+    readonly eventManager: EventManager;
+    
     private priorizeNextCommand: boolean = false;
     private webSocketManager: WebSocketManager;
+    private serverDatabaseIdMap: Record<string, number> = {};
     private context: Context = {
         selectType: SelectType.NONE,
         selected: 0,
         events: []
     };
-    serverDatabaseIdMap: Record<string, number> = {};
-    private isReady: boolean = false;
 
     // ADD DOCS
     constructor(options: Partial<IClientOptions>) {
@@ -68,7 +72,7 @@ export class QueryClient extends EventEmitter {
     }
 
     // ADD DOCS
-    attachEvents() {
+    private attachEvents() {
         // Ready event
         this.webSocketManager.on(WebSocketManagerEvents.Ready, () => {
             const executions: Promise<any>[] = [];
@@ -123,8 +127,6 @@ export class QueryClient extends EventEmitter {
                             this.serverDatabaseIdMap[`id_${client.serverId}`] = client.databaseId;
                         }
                     });
-
-                    this.isReady = true;
 
                     super.emit(QueryClientEvents.Ready);
                 })
@@ -265,47 +267,13 @@ export class QueryClient extends EventEmitter {
         this.webSocketManager.on("textmessage", data => super.emit(QueryClientEvents.Debug, "textmessage", data));
     }
 
-    // ADD DOCS
-    connect(): Promise<QueryClient> {
-        return new Promise((fulfill, reject) => {
-            const removeListeners = () => {
-                this.removeListener("ready", readyCallback);
-                this.removeListener("error", errorCallback);
-                this.removeListener("close", closeCallback);
-            };
-
-            const readyCallback = () => {
-                removeListeners();
-                fulfill(this);
-            };
-            const errorCallback = (error: Error) => {
-                removeListeners();
-                this.forceQuit();
-                reject(error);
-            };
-            const closeCallback = (error?: Error) => {
-                removeListeners();
-                if (error instanceof Error) {
-                    return reject(error);
-                }
-                reject(new Error("TeamSpeak Server prematurely closed the connection"));
-            };
-
-            this.once("ready", readyCallback);
-            this.once("error", errorCallback);
-            this.once("close", closeCallback);
-
-            this.webSocketManager.connect();
-        });
-    }
-
     /**
      * Authenticates with the TeamSpeak 3 Server instance using given ServerQuery login credentials.
      * @param username the username which you want to login with
      * @param password the password you want to login with
      */
     // ADD DOCS
-    login(username: string, password: string) {
+    private login(username: string, password: string) {
         return this.execute(new LoginCommand(username, password))
             .then(this.updateContextResolve({ login: { username, password } }))
             .catch(this.updateContextReject({ login: undefined }));
@@ -317,7 +285,7 @@ export class QueryClient extends EventEmitter {
      * @param id the channel id, only required when subscribing to the "channel" event
      */
     // ADD DOCS
-    registerEvent(event: string, id?: string) {
+    private registerEvent(event: string, id?: string) {
         return this.execute(new ServerNotifyRegisterCommand(event, id)).then(
             this.updateContextResolve({ events: [{ event, id }] })
         );
@@ -327,7 +295,7 @@ export class QueryClient extends EventEmitter {
      * Subscribes to an Event.
      */
     // ADD DOCS
-    unregisterEvent() {
+    private unregisterEvent() {
         return this.execute(new ServerNotifyUnregisterCommand()).then(this.updateContextResolve({ events: [] }));
     }
 
@@ -347,37 +315,12 @@ export class QueryClient extends EventEmitter {
     }
 
     /**
-     * Forcefully closes the socket connection
-     */
-    // ADD DOCS
-    forceQuit() {
-        return this.webSocketManager.forceQuit();
-    }
-
-    /**
      * Priorizes the next command, this commands will be first in execution
      */
     // ADD DOCS
-    prioritize() {
+    private prioritize() {
         this.priorizeNextCommand = true;
         return this;
-    }
-
-    /**
-     * Sends a raw command to the TeamSpeak Server.
-     * @param {...any} args the command which should get executed on the teamspeak server
-     * @example
-     * ts3.execute("clientlist", ["-ip"])
-     * ts3.execute("use", [9987], { clientnickname: "test" })
-     */
-    // ADD DOCS
-    execute<T>(command: QueryCommand): Promise<T> {
-        if (this.priorizeNextCommand) {
-            this.priorizeNextCommand = false;
-            return <any>this.webSocketManager.execute(command, true);
-        } else {
-            return <any>this.webSocketManager.execute(command);
-        }
     }
 
     /**
@@ -386,7 +329,7 @@ export class QueryClient extends EventEmitter {
      * @param clientNickname set nickname when selecting a server
      */
     // ADD DOCS
-    useByPort(port: number, clientNickname?: string) {
+    private useByPort(port: number, clientNickname?: string) {
         return this.execute(new UseCommand(undefined, port, true))
             .then(
                 this.updateContextResolve({
@@ -442,6 +385,78 @@ export class QueryClient extends EventEmitter {
         };
     }
 
+    public tryGetDatabaseId(serverId: number): number | null {
+        return this.serverDatabaseIdMap[`id_${serverId}`] ?? null;
+    }
+
+    public updateDatabaseId(serverId: number, databaseId: number | null): void {
+        if (databaseId === null) { 
+            delete this.serverDatabaseIdMap[`id_${serverId}`];
+            return;
+        }
+
+        this.serverDatabaseIdMap[`id_${serverId}`] = databaseId;
+        return;
+    }
+    
+    // ADD DOCS
+    public connect(): Promise<QueryClient> {
+        return new Promise((fulfill, reject) => {
+            const removeListeners = () => {
+                this.removeListener("ready", readyCallback);
+                this.removeListener("error", errorCallback);
+                this.removeListener("close", closeCallback);
+            };
+
+            const readyCallback = () => {
+                removeListeners();
+                fulfill(this);
+            };
+            const errorCallback = (error: Error) => {
+                removeListeners();
+                this.forceQuit();
+                reject(error);
+            };
+            const closeCallback = (error?: Error) => {
+                removeListeners();
+                if (error instanceof Error) {
+                    return reject(error);
+                }
+                reject(new Error("TeamSpeak Server prematurely closed the connection"));
+            };
+
+            this.once("ready", readyCallback);
+            this.once("error", errorCallback);
+            this.once("close", closeCallback);
+
+            this.webSocketManager.connect();
+        });
+    }
+
+    /**
+     * Forcefully closes the socket connection
+     */
+    // ADD DOCS
+    public forceQuit(): void {
+        return this.webSocketManager.forceQuit();
+    }
+
+    /**
+     * Sends a raw command to the TeamSpeak Server.
+     * @param {...any} args the command which should get executed on the teamspeak server
+     * @example
+     * ts3.execute("clientlist", ["-ip"])
+     * ts3.execute("use", [9987], { clientnickname: "test" })
+     */
+    // ADD DOCS
+    public execute<T>(command: QueryCommand): Promise<T> {
+        if (this.priorizeNextCommand) {
+            this.priorizeNextCommand = false;
+            return <any>this.webSocketManager.execute(command, true);
+        } else {
+            return <any>this.webSocketManager.execute(command);
+        }
+    }
 
 
 

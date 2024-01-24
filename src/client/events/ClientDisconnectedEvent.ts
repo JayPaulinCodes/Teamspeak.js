@@ -6,7 +6,9 @@ export class ClientDisconnectedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const client = await queryClient.getClientByDbId(this.queryClient.serverDatabaseIdMap[`id_${data.clid}`]);
+        const dbId: number | null = this.queryClient.tryGetDatabaseId(data.clid);
+        if (dbId === null) return;
+        const client = await queryClient.getClientByDbId(dbId);
         const channel = await queryClient.getChannelById(data.cfid);
         const reason = data.reasonmsg;
 

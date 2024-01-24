@@ -10,7 +10,7 @@ export class ClientConnectedEvent extends Event {
         const channel = await queryClient.getChannelById(data.ctid);
 
         if (client.databaseId !== null) {
-            queryClient.serverDatabaseIdMap[`id_${data.clid}`] = client.databaseId;
+            queryClient.updateDatabaseId(data.clid, client.databaseId);
         }
 
         queryClient.emit(QueryClientEvents.ClientConnected, client, channel);

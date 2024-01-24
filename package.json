@@ -18,8 +18,8 @@
         "lint": "prettier --check .",
         "format": "prettier --write .",
         "prep": "npm run build && npm run docs",
-        "poc": "npm run build && node poc/index.js",
-        "poc-no-build": "node poc/index.js",
+        "poc": "npm run build && node devPoc/index.js",
+        "poc-no-build": "node devPoc/index.js",
         "docs": "typedoc --options typedoc.json"
     },
     "keywords": [
