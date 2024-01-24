@@ -1,7 +1,16 @@
-name: Project Build
+name: CI Build
 
 on:
-  - push
+  push:
+    branches:
+      - "master"
+      - "develop"
+      - "feature/**"
+  pull_request:
+    branches:
+      - "master"
+      - "develop"
+      - "feature/**"
 
 jobs:
   build:
@@ -10,12 +19,14 @@ jobs:
       - Linux
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
       
-      # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
 
-      - run: npm ci
+      - name: Build Project
+        run: npm ci
