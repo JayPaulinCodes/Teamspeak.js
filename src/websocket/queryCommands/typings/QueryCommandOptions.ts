@@ -1,3 +1,3 @@
-export type QueryCommandOptions = {
-    [key: string]: boolean | string | string[] | number | number[];
-};
+import { QueryOptionType } from "./QueryOptionType";
+
+export type QueryCommandOptions = { [key: string]: QueryOptionType; };

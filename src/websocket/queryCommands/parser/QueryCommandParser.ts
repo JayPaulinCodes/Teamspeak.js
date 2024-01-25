@@ -1,3 +1,5 @@
+import { ComplexQueryOption } from "../typings/ComplexQueryOption";
+
 // ADD DOCS
 export class QueryCommandParser {
     private static readonly snakeCaseIdentifier = "_";
@@ -182,7 +184,30 @@ export class QueryCommandParser {
      * @param {string|string[]} value the value or an array of values
      * @return the parsed String which is readable by the TeamSpeak Query
      */
-    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | Record<string, string | number>[][]): string {
+    static origEscapeKeyValue(key: string, value: boolean | string | string[] | number | number[]): string {
+        key = QueryCommandParser.toSnakeCase(key);
+        if (typeof value === "boolean") {
+            value = value ? "1" : "0";
+        } else if (typeof value === "number") {
+            value = `${value}`;
+        }
+        if (Array.isArray(value)) {
+            return value
+                .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
+                .join("|");
+        } else {
+            return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
+        }
+    }
+
+    /**
+     * escapes a key value pair
+     * @param {string} key the key used
+     * @param {string|string[]} value the value or an array of values
+     * @return the parsed String which is readable by the TeamSpeak Query
+     */
+    // HACK: This entire function is basically a hack it feels, there has to be a better way to process this but hey, it works
+    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | ComplexQueryOption): string {
         const valueType = Array.isArray(value) ? Array.isArray(value[0]) ? typeof value[0][0] + "[]" : typeof value : typeof value;
         key = QueryCommandParser.toSnakeCase(key);
 
@@ -209,15 +234,15 @@ export class QueryCommandParser {
                     .join("|");
 
             case "object[]": 
-                const objValue: Record<string, string | number>[][] = <Record<string, string | number>[][]> value;     
+                const objValue: ComplexQueryOption = <ComplexQueryOption> value;    
                 return objValue
                     .map(elem => elem
-                        .map(_elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
+                        .map(_elem => `${QueryCommandParser.escape(_elem.key.toString())}=${QueryCommandParser.escape(_elem.value.toString())}`)
                         .join(" "))
                     .join("|");
 
             default:
-                // HACK: Fix the bellow to use a proper tsjs error
+                // TODO: Fix the bellow to use a proper tsjs error
                 throw Error("Oh shit, something went horibly wrong...");
         }
 
