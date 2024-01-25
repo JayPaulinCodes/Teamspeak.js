@@ -9,6 +9,8 @@ const errorKeys = [
     "WebSocketNonExistant",
 
     // Command Errors
+    "MissingArguments",
+    "MissingOptionalArguments",
     "InstanceEditNotApprovedKey"
 ];
 

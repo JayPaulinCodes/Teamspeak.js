@@ -12,6 +12,10 @@ export const TeamspeakJsErrorMessages = {
     [TeamspeakJsErrorCodes.WebSocketNonExistant]: "The websocket was not defined.",
 
     // Command Errors
+    [TeamspeakJsErrorCodes.MissingArguments]: (requiredArgs: string[]) =>
+        `Missing arguments, you must specify the following arguments: ${requiredArgs.join(", ")}`,
+    [TeamspeakJsErrorCodes.MissingOptionalArguments]: (requiredArgs: string[]) =>
+        `Missing arguments, you must specify at least one of the following arguments: ${requiredArgs.join(", ")}`,
     [TeamspeakJsErrorCodes.InstanceEditNotApprovedKey]: (key: string) =>
         `Key '${key}' is not in the approved list of editable keys.`
 };
