@@ -182,20 +182,87 @@ export class QueryCommandParser {
      * @param {string|string[]} value the value or an array of values
      * @return the parsed String which is readable by the TeamSpeak Query
      */
-    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[]): string {
+    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | Record<string, string | number>[][]): string {
+        const valueType = Array.isArray(value) ? Array.isArray(value[0]) ? typeof value[0][0] + "[]" : typeof value : typeof value;
         key = QueryCommandParser.toSnakeCase(key);
-        if (typeof value === "boolean") {
-            value = value ? "1" : "0";
-        } else if (typeof value === "number") {
-            value = `${value}`;
+
+        switch(valueType) {
+            case "string": 
+            case "number": 
+                value = `${value}`;
+                return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
+                
+            case "boolean": 
+                value = value ? "1" : "0";
+                return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
+
+            case "string[]": 
+                const strValue: string[] = <string[]> value;     
+                return strValue
+                    .map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
+                    .join("|");
+
+            case "number[]":
+                const numValue: number[] = <number[]> value;     
+                return numValue
+                    .map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
+                    .join("|");
+
+            case "object[]": 
+                const objValue: Record<string, string | number>[][] = <Record<string, string | number>[][]> value;     
+                return objValue
+                    .map(elem => elem
+                        .map(_elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
+                        .join(" "))
+                    .join("|");
+
+            default:
+                // HACK: Fix the bellow to use a proper tsjs error
+                throw Error("Oh shit, something went horibly wrong...");
         }
-        if (Array.isArray(value)) {
-            return value
-                .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
-                .join("|");
-        } else {
-            return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
-        }
+
+        // return value
+        // .map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
+        // .join("|");
+        // if (valueType === "boolean") {
+        // } else if (valueType === "number") {
+           
+        // }
+        
+        // if (Array.isArray(value) && typeof value[0] === "object" && typeof value !== "string" && typeof value !== "number") {
+        //     return value
+        //         .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
+        //         .join("|");
+        // }
+
+        // // HACK: Fix the bellow to use a proper tsjs error and not detect blank string
+        // if (key === "") {
+        //     throw Error("No key provided");
+        // }
+
+        // if (!Array.isArray(value)) {
+        //     return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
+        // }
+
+        // return value
+        //     .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
+        //     .join("|");
+
+        // if (typeof value[0] === "string" || typeof value[0] === "number") {
+
+            
+        //     return value
+        //         .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
+        //         .join("|");
+        // } else if (typeof value[0] === "object") {
+            
+        // }
+
+        // if (key === undefined) {
+        //     return value
+        //         .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
+        //         .join("|");
+        // }
     }
 
     /**
