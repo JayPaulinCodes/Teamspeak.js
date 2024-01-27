@@ -1,4 +1,4 @@
-import { ComplexQueryOption } from "../typings/ComplexQueryOption";
+import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
 
 // ADD DOCS
 export class QueryCommandParser {
@@ -207,7 +207,7 @@ export class QueryCommandParser {
      * @return the parsed String which is readable by the TeamSpeak Query
      */
     // HACK: This entire function is basically a hack it feels, there has to be a better way to process this but hey, it works
-    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | ComplexQueryOption): string {
+    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | ComplexQueryOptionElem[][]): string {
         const valueType = Array.isArray(value) ? Array.isArray(value[0]) ? typeof value[0][0] + "[]" : typeof value : typeof value;
         key = QueryCommandParser.toSnakeCase(key);
 
@@ -234,7 +234,7 @@ export class QueryCommandParser {
                     .join("|");
 
             case "object[]": 
-                const objValue: ComplexQueryOption = <ComplexQueryOption> value;    
+                const objValue: ComplexQueryOptionElem[][] = <ComplexQueryOptionElem[][]> value;    
                 return objValue
                     .map(elem => elem
                         .map(_elem => `${QueryCommandParser.escape(_elem.key.toString())}=${QueryCommandParser.escape(_elem.value.toString())}`)
@@ -245,49 +245,6 @@ export class QueryCommandParser {
                 // TODO: Fix the bellow to use a proper tsjs error
                 throw Error("Oh shit, something went horibly wrong...");
         }
-
-        // return value
-        // .map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
-        // .join("|");
-        // if (valueType === "boolean") {
-        // } else if (valueType === "number") {
-           
-        // }
-        
-        // if (Array.isArray(value) && typeof value[0] === "object" && typeof value !== "string" && typeof value !== "number") {
-        //     return value
-        //         .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
-        //         .join("|");
-        // }
-
-        // // HACK: Fix the bellow to use a proper tsjs error and not detect blank string
-        // if (key === "") {
-        //     throw Error("No key provided");
-        // }
-
-        // if (!Array.isArray(value)) {
-        //     return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
-        // }
-
-        // return value
-        //     .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
-        //     .join("|");
-
-        // if (typeof value[0] === "string" || typeof value[0] === "number") {
-
-            
-        //     return value
-        //         .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
-        //         .join("|");
-        // } else if (typeof value[0] === "object") {
-            
-        // }
-
-        // if (key === undefined) {
-        //     return value
-        //         .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
-        //         .join("|");
-        // }
     }
 
     /**
