@@ -36,13 +36,12 @@ import {
 
 // ADD DOCS
 export class QueryClient extends EventEmitter {
-    
     // ADD DOCS
     readonly options: IClientOptions;
-    
+
     // ADD DOCS
     readonly eventManager: EventManager;
-    
+
     private priorizeNextCommand: boolean = false;
     private webSocketManager: WebSocketManager;
     private serverDatabaseIdMap: Record<string, number> = {};
@@ -390,7 +389,7 @@ export class QueryClient extends EventEmitter {
     }
 
     public updateDatabaseId(serverId: number, databaseId: number | null): void {
-        if (databaseId === null) { 
+        if (databaseId === null) {
             delete this.serverDatabaseIdMap[`id_${serverId}`];
             return;
         }
@@ -398,7 +397,7 @@ export class QueryClient extends EventEmitter {
         this.serverDatabaseIdMap[`id_${serverId}`] = databaseId;
         return;
     }
-    
+
     // ADD DOCS
     public connect(): Promise<QueryClient> {
         return new Promise((fulfill, reject) => {
@@ -457,9 +456,6 @@ export class QueryClient extends EventEmitter {
             return <any>this.webSocketManager.execute(command);
         }
     }
-
-
-
 
     // Actual useable stuff now
 
