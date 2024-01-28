@@ -2,9 +2,9 @@ import { QueryCommand } from "../QueryCommand";
 import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
 
 /**
- * ### ChannelAddPerm Command
+ * ### ChannelGroupAddPerm Command
  *
- * Adds a set of specified permissions to a channel.
+ * Adds a set of specified permissions to a channel group.
  * Multiple permissions can be added by providing the two
  * parameters of each permission. A permission can be specified
  * by permid or permsid.
@@ -15,18 +15,18 @@ import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
  *  - i_permission_modify_power
  *
  * Syntax:
- *  - channeladdperm cid={channelID} [permid={permID}…] [permsid={permName}…] permvalue={permValue}...
+ *  - channelgroupaddperm cgid={groupID} [permid={permID}…] [permsid={permName}…] permvalue={permValue}…
  *
  * Example:
- *  - channeladdperm cid=16 permid=17276 permvalue=50|permid=21415 permvalue=20
+ *  - channelgroupaddperm cgid=13 permid=17276 permvalue=50|permid=21415 permvalue=20
  */
-export class ChannelAddPermCommand extends QueryCommand {
-    private static readonly baseCommand = "channeladdperm";
+export class ChannelGroupAddPermCommand extends QueryCommand {
+    private static readonly baseCommand = "channelgroupaddperm";
     private static readonly firstItemAllowedKeys = ["permid", "permsid"];
     private static readonly secondItemAllowedKeys = ["permvalue"];
 
     // ADD DOCS
-    constructor(channelId: number, permissions: ComplexQueryOptionElem[][]) {
+    constructor(groupId: number, permissions: ComplexQueryOptionElem[][]) {
         const scannedPerms: ComplexQueryOptionElem[][] = [];
 
         if (permissions.length < 1) {
@@ -37,14 +37,14 @@ export class ChannelAddPermCommand extends QueryCommand {
         permissions.forEach(elem => {
             if (elem.length !== 2) {
                 if (
-                    ChannelAddPermCommand.firstItemAllowedKeys.includes(elem[0].key) &&
-                    ChannelAddPermCommand.secondItemAllowedKeys.includes(elem[1].key)
+                    ChannelGroupAddPermCommand.firstItemAllowedKeys.includes(elem[0].key) &&
+                    ChannelGroupAddPermCommand.secondItemAllowedKeys.includes(elem[1].key)
                 ) {
                     scannedPerms.push(elem);
                 }
             }
         });
 
-        super(ChannelAddPermCommand.baseCommand, { cid: channelId, __complex: scannedPerms });
+        super(ChannelGroupAddPermCommand.baseCommand, { cgid: groupId, __complex: scannedPerms });
     }
 }

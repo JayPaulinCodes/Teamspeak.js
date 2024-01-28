@@ -8,8 +8,8 @@ import { QueryCommandOptions } from "../typings/QueryCommandOptions";
 /**
  * ### BanClient Command
  *
- * Bans the client specified with ID clid from the server. 
- * Please note that this will create two separate ban rules 
+ * Bans the client specified with ID clid from the server.
+ * Please note that this will create two separate ban rules
  * for the targeted clients IP address and his unique identifier.
  *
  * Permissions:
@@ -27,10 +27,14 @@ export class BanClientCommand extends QueryCommand {
 
     // ADD DOCS
     constructor(serverId: number, reason: string | undefined = undefined, duration: number | undefined = undefined) {
-        let args: QueryCommandOptions = {}
+        let args: QueryCommandOptions = {};
         args["clid"] = serverId;
-        if (reason !== undefined) { args["banreason"] = reason; }
-        if (duration !== undefined) { args["time"] = duration; }
+        if (reason !== undefined) {
+            args["banreason"] = reason;
+        }
+        if (duration !== undefined) {
+            args["time"] = duration;
+        }
 
         super(BanClientCommand.baseCommand, args);
     }

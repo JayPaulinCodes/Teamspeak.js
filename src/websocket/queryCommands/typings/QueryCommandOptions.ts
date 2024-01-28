@@ -1,3 +1,3 @@
 import { QueryOptionType } from "./QueryOptionType";
 
-export type QueryCommandOptions = { [key: string]: QueryOptionType; };
+export type QueryCommandOptions = { [key: string]: QueryOptionType };

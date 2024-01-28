@@ -207,38 +207,52 @@ export class QueryCommandParser {
      * @return the parsed String which is readable by the TeamSpeak Query
      */
     // HACK: This entire function is basically a hack it feels, there has to be a better way to process this but hey, it works
-    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | ComplexQueryOptionElem[][]): string {
-        const valueType = Array.isArray(value) ? Array.isArray(value[0]) ? typeof value[0][0] + "[]" : typeof value : typeof value;
+    static escapeKeyValue(
+        key: string,
+        value: boolean | string | string[] | number | number[] | ComplexQueryOptionElem[][]
+    ): string {
+        const valueType = Array.isArray(value)
+            ? Array.isArray(value[0])
+                ? typeof value[0][0] + "[]"
+                : typeof value
+            : typeof value;
         key = QueryCommandParser.toSnakeCase(key);
 
-        switch(valueType) {
-            case "string": 
-            case "number": 
+        switch (valueType) {
+            case "string":
+            case "number":
                 value = `${value}`;
                 return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
-                
-            case "boolean": 
+
+            case "boolean":
                 value = value ? "1" : "0";
                 return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
 
-            case "string[]": 
-                const strValue: string[] = <string[]> value;     
+            case "string[]":
+                const strValue: string[] = <string[]>value;
                 return strValue
                     .map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
                     .join("|");
 
             case "number[]":
-                const numValue: number[] = <number[]> value;     
+                const numValue: number[] = <number[]>value;
                 return numValue
                     .map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
                     .join("|");
 
-            case "object[]": 
-                const objValue: ComplexQueryOptionElem[][] = <ComplexQueryOptionElem[][]> value;    
+            case "object[]":
+                const objValue: ComplexQueryOptionElem[][] = <ComplexQueryOptionElem[][]>value;
                 return objValue
-                    .map(elem => elem
-                        .map(_elem => `${QueryCommandParser.escape(_elem.key.toString())}=${QueryCommandParser.escape(_elem.value.toString())}`)
-                        .join(" "))
+                    .map(elem =>
+                        elem
+                            .map(
+                                _elem =>
+                                    `${QueryCommandParser.escape(_elem.key.toString())}=${QueryCommandParser.escape(
+                                        _elem.value.toString()
+                                    )}`
+                            )
+                            .join(" ")
+                    )
                     .join("|");
 
             default:

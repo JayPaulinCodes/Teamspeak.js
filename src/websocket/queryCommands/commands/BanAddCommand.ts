@@ -8,8 +8,8 @@ import { QueryCommandOptions } from "../typings/QueryCommandOptions";
 /**
  * ### BanAdd Command
  *
- * Adds a new ban rule on the selected virtual server. 
- * All parameters are optional but at least one of the following 
+ * Adds a new ban rule on the selected virtual server.
+ * All parameters are optional but at least one of the following
  * must be set: ip, name, or uid.
  *
  * Permissions:
@@ -27,15 +27,25 @@ export class BanAddCommand extends QueryCommand {
     // ADD DOCS
     constructor(options: BanAddCommandOptions) {
         if (options.ip === undefined && options.name === undefined && options.uniqueId === undefined) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.MissingOptionalArguments, [ "ip", "name", "uniqueId" ]);
+            throw new TeamspeakJsError(TeamspeakJsErrorCodes.MissingOptionalArguments, ["ip", "name", "uniqueId"]);
         }
 
-        let args: QueryCommandOptions = {}
-        if (options.ip !== undefined) { args["ip"] = options.ip; }
-        if (options.name !== undefined) { args["name"] = options.name; }
-        if (options.uniqueId !== undefined) { args["uid"] = options.uniqueId; }
-        if (options.duration !== undefined) { args["time"] = options.duration; }
-        if (options.reason !== undefined) { args["banreason"] = options.reason; }
+        let args: QueryCommandOptions = {};
+        if (options.ip !== undefined) {
+            args["ip"] = options.ip;
+        }
+        if (options.name !== undefined) {
+            args["name"] = options.name;
+        }
+        if (options.uniqueId !== undefined) {
+            args["uid"] = options.uniqueId;
+        }
+        if (options.duration !== undefined) {
+            args["time"] = options.duration;
+        }
+        if (options.reason !== undefined) {
+            args["banreason"] = options.reason;
+        }
 
         super(BanAddCommand.baseCommand, args);
     }

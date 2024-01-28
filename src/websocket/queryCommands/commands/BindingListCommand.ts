@@ -4,8 +4,8 @@ import { QueryCommand } from "../QueryCommand";
 /**
  * ### BindingList Command
  *
- * Displays a list of IP addresses used by the server 
- * instance on multi-homed machines. If no subsystem is 
+ * Displays a list of IP addresses used by the server
+ * instance on multi-homed machines. If no subsystem is
  * specified, "voice" is used by default.
  *
  * Permissions:
