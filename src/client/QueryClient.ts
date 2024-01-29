@@ -1,22 +1,24 @@
-import { EventEmitter } from "node:events";
-import { IClientOptions } from "./interfaces/IClientOptions";
-import { WebSocketManager } from "../websocket/WebSocketManager";
-import { WebSocketManagerEvents } from "../utils/enums/WebSocketManagerEvents";
-import { QueryProtocol } from "../websocket/enums/QueryProtocol";
-import { SelectType } from "./enums/SelectType";
-import { Context } from "./typings/Context";
-import { Options } from "../utils/Options";
-import { ServerQueryConnection } from "../structures/ServerQueryConnection";
-import { ServerVersionInformation } from "../structures/ServerVersionInformation";
-import { ServerInstance } from "../structures/ServerInstance";
-import { EventManager } from "./events/EventManager";
+/* eslint no-fallthrough: "off" */
+
+import { Channel } from "../structures/Channel";
 import { Client } from "../structures/Client";
+import { ClientListCommandFlags } from "../websocket/enums/ClientListCommandFlags";
+import { Context } from "./typings/Context";
+import { EventEmitter } from "node:events";
+import { EventManager } from "./events/EventManager";
+import { IClientOptions } from "./interfaces/IClientOptions";
+import { Options } from "../utils/Options";
 import { Permission } from "../structures/Permission";
-import { ServerGroup } from "../structures/ServerGroup";
 import { QueryClientEvents } from "../utils/enums/QueryClientEvents";
 import { QueryCommand } from "../websocket/queryCommands/QueryCommand";
-import { Channel } from "../structures/Channel";
-import { ClientListCommandFlags } from "../websocket/enums/ClientListCommandFlags";
+import { QueryProtocol } from "../websocket/enums/QueryProtocol";
+import { SelectType } from "./enums/SelectType";
+import { ServerGroup } from "../structures/ServerGroup";
+import { ServerInstance } from "../structures/ServerInstance";
+import { ServerQueryConnection } from "../structures/ServerQueryConnection";
+import { ServerVersionInformation } from "../structures/ServerVersionInformation";
+import { WebSocketManager } from "../websocket/WebSocketManager";
+import { WebSocketManagerEvents } from "../utils/enums/WebSocketManagerEvents";
 import {
     ChannelInfoCommand,
     ClientDbInfoCommand,

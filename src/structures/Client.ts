@@ -1,5 +1,5 @@
-import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
+import { QueryClient } from "../client/QueryClient";
 import { ServerGroup } from "./ServerGroup";
 
 // ADD DOCS
@@ -85,7 +85,7 @@ export class Client extends Base {
             return this.serverGroups;
         }
 
-        var groups: ServerGroup[] | undefined = undefined;
+        let groups: ServerGroup[] | undefined = undefined;
         if (this.serverGroups.length > 0) {
             if (typeof this.serverGroups[0] === "number") {
                 groups = await this.queryClient.getServerGroupByIds(<number[]>this.serverGroups);

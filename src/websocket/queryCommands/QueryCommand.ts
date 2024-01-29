@@ -1,6 +1,6 @@
-import { QueryCommandTermination } from "./interfaces/QueryCommandTermination";
-import { QueryCommandParser } from "./parser/QueryCommandParser";
 import { QueryCommandOptions } from "./typings/QueryCommandOptions";
+import { QueryCommandParser } from "./parser/QueryCommandParser";
+import { QueryCommandTermination } from "./interfaces/QueryCommandTermination";
 
 // ADD DOCS
 export abstract class QueryCommand {
@@ -101,7 +101,7 @@ export abstract class QueryCommand {
     buildOptions() {
         return (
             Object.keys(this.options)
-                .filter(key => this.options[key] != null && this.options[key] != undefined)
+                .filter(key => this.options[key] !== null && this.options[key] !== undefined)
                 // .filter((key) => typeof this.options[key] !== "number" || !isNaN(this.options[key]))
                 .map(key => QueryCommandParser.escapeKeyValue(key, this.options[key]))
                 .join(" ")

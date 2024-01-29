@@ -1,5 +1,5 @@
-import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
+import { QueryClient } from "../client/QueryClient";
 
 // ADD DOCS
 export class Channel extends Base {

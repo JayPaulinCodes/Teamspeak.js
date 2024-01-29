@@ -1,6 +1,6 @@
+import { Base } from "./Base";
 import { InstanceEditCommand } from "../websocket/queryCommands/commands/InstanceEditCommand";
 import { QueryClient } from "../client/QueryClient";
-import { Base } from "./Base";
 
 // ADD DOCS
 export class ServerInstance extends Base {

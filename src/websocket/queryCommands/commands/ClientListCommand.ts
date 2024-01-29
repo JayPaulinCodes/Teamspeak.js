@@ -1,5 +1,5 @@
-import { QueryCommand } from "../QueryCommand";
 import { ClientListCommandFlags } from "../../enums/ClientListCommandFlags";
+import { QueryCommand } from "../QueryCommand";
 
 /**
  * ### ClientList Command

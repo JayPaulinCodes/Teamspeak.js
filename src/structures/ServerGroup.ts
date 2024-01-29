@@ -1,7 +1,7 @@
-import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
-import { Permission } from "./Permission";
 import { GroupType } from "./enums/GroupType";
+import { Permission } from "./Permission";
+import { QueryClient } from "../client/QueryClient";
 
 // ADD DOCS
 export class ServerGroup extends Base {
@@ -42,7 +42,7 @@ export class ServerGroup extends Base {
             return this.permissions;
         }
 
-        var perms: Permission[] = [];
+        let perms: Permission[] = [];
 
         if (this.queryClient === null || this.queryClient === undefined) {
             return perms;

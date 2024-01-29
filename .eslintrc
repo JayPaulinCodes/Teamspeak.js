@@ -1,0 +1,51 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [ "@typescript-eslint" ],
+    "extends": [
+        // "eslint:recommended",
+        // "plugin:@typescript-eslint/eslint-recommended",
+        // "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+        "line-comment-position": [
+            "error", 
+            { 
+                "position": "above"
+            }
+        ],
+        "sort-imports": [
+            "error", 
+            { 
+                "ignoreCase": false,
+                "ignoreDeclarationSort": false,
+                "ignoreMemberSort": false,
+                "memberSyntaxSortOrder": [ "none", "all", "single", "multiple" ],
+                "allowSeparatedGroups": false
+            }
+        ],
+        "no-duplicate-imports": "error",
+        "no-useless-rename": "error",
+        "no-var": "error",
+        "constructor-super": "error",
+        "getter-return": "error",
+        "no-class-assign": "error",
+        "no-const-assign": "error",
+        "no-debugger": "error",
+        "camelcase": "error",
+        "eqeqeq": "error",
+        "no-bitwise": "error",
+        "no-extra-boolean-cast": "error",
+        "prefer-const": "error",
+        
+        "no-await-in-loop": "off",
+
+        "array-callback-return": "warn",
+        "for-direction": "warn",
+        "no-compare-neg-zero": "warn",
+        "no-cond-assign": "warn",
+        "no-constant-condition": "warn",
+        "no-fallthrough": "warn",
+        "use-isnan": "warn"
+    }
+}

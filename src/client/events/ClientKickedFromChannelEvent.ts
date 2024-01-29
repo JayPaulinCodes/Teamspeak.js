@@ -1,6 +1,5 @@
-import { CodecEncryptionMode } from "../../structures/enums/CodecEncryptionMode";
-import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
 import { Event } from "./Event";
+import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
 
 // ADD DOCS
 export class ClientKickedFromChannelEvent extends Event {

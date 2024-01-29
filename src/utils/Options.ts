@@ -1,8 +1,8 @@
+import { IClientOptions } from "client/interfaces/IClientOptions";
 import { IQueryProtocolOptions } from "websocket/interfaces/IQueryProtocolOptions";
 import { ISocketOptions } from "../websocket/interfaces/ISocketOptions";
 import { IWebSocketManagerOptions } from "../websocket/interfaces/IWebSocketManagerOptions";
 import { QueryProtocol } from "../websocket/enums/QueryProtocol";
-import { IClientOptions } from "client/interfaces/IClientOptions";
 
 /**
  * Utility class to aid in the constructing of varrious options
@@ -29,7 +29,7 @@ export class Options {
 
     // ADD DOCS
     static buildWebSocketManagerOptions(options?: Partial<IWebSocketManagerOptions>): IWebSocketManagerOptions {
-        var newOptions = {
+        const newOptions = {
             socketOptions: Options.buildSocketOptions(),
             queryProtocolOptions: Options.buildQueryProtocolOptions(),
             autoConnect: false,
@@ -46,7 +46,7 @@ export class Options {
 
     // ADD DOCS
     static buildClientOptions(options?: Partial<IClientOptions>): IClientOptions {
-        var newOptions = {
+        const newOptions = {
             webSocketManagerOptions: Options.buildWebSocketManagerOptions(),
             ...options
         };
