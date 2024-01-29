@@ -1,0 +1,28 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [ "@typescript-eslint" ],
+    "extends": [
+        // "eslint:recommended",
+        // "plugin:@typescript-eslint/eslint-recommended",
+        // "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+        "no-duplicate-imports": "error",
+        "no-useless-rename": "error",
+        "sort-imports": "error",
+        "no-var": "error",
+        "constructor-super": "error",
+        "getter-return": "error",
+        "no-class-assign": "error",
+        "no-const-assign": "error",
+        
+        "no-await-in-loop": "off",
+
+        "array-callback-return": "warn",
+        "for-direction": "warn",
+        "no-compare-neg-zero": "warn",
+        "no-cond-assign": "warn",
+        "no-constant-condition": "warn"
+    }
+}
