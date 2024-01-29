@@ -1,23 +1,29 @@
 import { QueryClient } from "../client/QueryClient";
+import { TsIdentifier } from "./typings/TsIdentifier";
 
 export abstract class Base {
-    queryClient: QueryClient;
+    public readonly queryClient: QueryClient;
+    // abstract uniqueId: TsIdentifier;
 
     constructor(queryClient: QueryClient) {
         this.queryClient = queryClient;
     }
 
-    // ADD DOCS
-    clone() {
-        return Object.assign(Object.create(this), this);
-    }
+    // public _new(queryClient: QueryClient, data: any): Base {
+    //     queryClient = queryClient;
+    //     data = data;
+    //     throw new Error("Not Implemented");
+    // }
 
     // ADD DOCS
     toJSON() {
         return JSON.stringify(this);
     }
 
-    protected patch(data: object) {
-        data = data;
+    // ADD DOCS
+    public _clone() {
+        return Object.assign(Object.create(this), this);
     }
+
+    public abstract _patch(data: object, fromQuery: boolean): void;
 }

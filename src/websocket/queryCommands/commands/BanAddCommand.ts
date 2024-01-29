@@ -1,8 +1,8 @@
 import { QueryCommand } from "../QueryCommand";
 import { ClientListCommandFlags } from "../../enums/ClientListCommandFlags";
 import BanAddCommandOptions from "../interfaces/BanAddCommandOptions";
-import { TeamspeakJsErrorCodes } from "errors/TeamspeakJsErrorCodes";
-import { TeamspeakJsError } from "errors/TeamspeakJsError";
+import { TeamspeakJsErrorCodes } from "../../../errors/TeamspeakJsErrorCodes";
+import { TeamspeakJsError } from "../../../errors/TeamspeakJsError";
 import { QueryCommandOptions } from "../typings/QueryCommandOptions";
 
 /**

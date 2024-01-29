@@ -14,13 +14,16 @@
         "url": "git+https://github.com/SparrowStudios/Teamspeak.js.git"
     },
     "scripts": {
-        "build": "tsc",
         "lint": "prettier --check .",
         "format": "prettier --write .",
-        "prep": "npm run build && npm run docs",
-        "poc": "npm run build && node devPoc/index.js",
-        "poc-no-build": "node devPoc/index.js",
-        "docs": "typedoc --options typedoc.json"
+        "clean-install-dev": "npm ci",
+        "clean-install-prod": "npm ci --omit=dev",
+        "prebuild": "npm run clean-install-prod",
+        "build": "tsc",
+        "prebuild-dev": "npm run clean-install-dev",
+        "build-dev": "tsc",
+        "poc": "npm run build-dev && node devPoc/index.js",
+        "poc-no-build": "node devPoc/index.js"
     },
     "keywords": [
         "ts",
@@ -31,6 +34,9 @@
         "Teamspeak3 Server Query",
         "Server Query"
     ],
+    "dependencies": {
+        "@discordjs/collection": "^2.0.0"
+    },
     "devDependencies": {
         "@types/node": "^20.9.0",
         "prettier": "^3.1.0",
@@ -39,5 +45,8 @@
         "typedoc-plugin-coverage": "^2.2.0",
         "typedoc-plugin-markdown": "^3.17.1",
         "typescript": "^5.2.2"
+    },
+    "engines": {
+        "node": ">=18"
     }
 }

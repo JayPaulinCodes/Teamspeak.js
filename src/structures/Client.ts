@@ -1,46 +1,52 @@
 import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
 import { ServerGroup } from "./ServerGroup";
+import { TsIdentifier } from "./typings/TsIdentifier";
 
 // ADD DOCS
 export class Client extends Base {
-    uniqueId: string | null = null;
-    databaseId: number | null = null;
-    myTeamspeakId: string | null = null;
-    ip: string | null = null;
-    serverId: number | null = null;
+    /**
+     * Primary Identifier
+     */
+    public uniqueId: TsIdentifier;
+    public serverId: number | null = null;
+    public databaseId?: number;
+    public myTeamspeakId?: string;
+    public ip?: string;
 
-    created: number | null = null;
-    idleTime: number | null = null;
-    lastConnected: number | null = null;
-    totalConnections: number | null = null;
-    connectedTime: number | null = null;
+    public created: number | null = null;
+    public idleTime: number | null = null;
+    public lastConnected: number | null = null;
+    public totalConnections: number | null = null;
+    public connectedTime: number | null = null;
 
-    nickname: string | null = null;
-    description: string | undefined | null = null;
-    isAway: boolean | null = null;
-    awayMessage: string | undefined | null = null;
-    isTalking: boolean | null = null;
-    inputMuted: boolean | null = null;
-    outputMuted: boolean | null = null;
-    isRecording: boolean | null = null;
-    channelGroupId: number | null = null;
-    serverGroups: ServerGroup[] | number[] | null = null;
+    public nickname: string | null = null;
+    public description: string | undefined | null = null;
+    public isAway: boolean | null = null;
+    public awayMessage: string | undefined | null = null;
+    public isTalking: boolean | null = null;
+    public inputMuted: boolean | null = null;
+    public outputMuted: boolean | null = null;
+    public isRecording: boolean | null = null;
+    public channelGroupId: number | null = null;
+    public serverGroups: ServerGroup[] | number[] | null = null;
 
-    version: string | null = null;
-    platform: string | null = null;
-    cid: number | null = null;
+    public version: string | null = null;
+    public platform: string | null = null;
+    public cid: number | null = null;
 
     private hasResolvedServerGroups = false;
 
     // ADD DOCS
-    constructor(queryClient: QueryClient, data: any) {
+    constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
 
-        this.patch(data);
+        this.uniqueId = data[fromQuery ? "clientUniqueIdentifier" : "uniqueId"];
+        
+        this._patch(data, fromQuery);
     }
 
-    protected override patch(data: any) {
+    public _patch(data: any, fromQuery: boolean = true) {
         this.uniqueId = "clientUniqueIdentifier" in data ? data.clientUniqueIdentifier : null;
         this.databaseId = "clientDatabaseId" in data ? data.clientDatabaseId : null;
         this.myTeamspeakId = "clientMyteamspeakId" in data ? data.clientMyteamspeakId : null;
