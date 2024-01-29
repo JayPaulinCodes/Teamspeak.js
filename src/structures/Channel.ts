@@ -1,6 +1,5 @@
-import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
-import BasePatch from "./interfaces/BasePatch";
+import { QueryClient } from "../client/QueryClient";
 import { TsIdentifier } from "./typings/TsIdentifier";
 
 // ADD DOCS

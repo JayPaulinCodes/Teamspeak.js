@@ -1,5 +1,4 @@
 import { QueryCommand } from "../QueryCommand";
-import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
 
 /**
  * ### ChannelFind Command

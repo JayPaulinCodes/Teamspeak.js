@@ -1,5 +1,5 @@
-import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
+import { QueryClient } from "../client/QueryClient";
 import { VirtualServerStatus } from "./enums/VirtualServerStatus";
 
 // ADD DOCS

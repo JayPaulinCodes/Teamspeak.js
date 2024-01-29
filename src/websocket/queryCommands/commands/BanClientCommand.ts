@@ -23,7 +23,7 @@ export class BanClientCommand extends QueryCommand {
 
     // ADD DOCS
     constructor(serverId: number, reason: string | undefined = undefined, duration: number | undefined = undefined) {
-        let args: QueryCommandOptions = {};
+        const args: QueryCommandOptions = {};
         args["clid"] = serverId;
         if (reason !== undefined) {
             args["banreason"] = reason;

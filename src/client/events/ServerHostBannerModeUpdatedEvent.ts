@@ -1,6 +1,6 @@
+import { Event } from "./Event";
 import { HostBannerMode } from "../../structures/enums/HostBannerMode";
 import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
-import { Event } from "./Event";
 
 // ADD DOCS
 export class ServerHostBannerModeUpdatedEvent extends Event {

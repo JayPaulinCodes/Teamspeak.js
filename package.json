@@ -14,8 +14,10 @@
         "url": "git+https://github.com/SparrowStudios/Teamspeak.js.git"
     },
     "scripts": {
-        "lint": "prettier --check .",
-        "format": "prettier --write .",
+        "lint": "eslint ./src --ext .ts",
+        "lint-fix": "eslint ./src --fix --ext .ts",
+        "format-check": "prettier --check ./src",
+        "format": "prettier --write ./src",
         "clean-install-dev": "npm ci",
         "clean-install-prod": "npm ci --omit=dev",
         "prebuild": "npm run clean-install-prod",
@@ -39,6 +41,10 @@
     },
     "devDependencies": {
         "@types/node": "^20.9.0",
+        "@typescript-eslint/eslint-plugin": "^6.19.1",
+        "@typescript-eslint/parser": "^6.19.1",
+        "eslint": "^8.56.0",
+        "eslint-plugin-unused-imports": "^3.0.0",
         "prettier": "^3.1.0",
         "typedoc": "^0.25.3",
         "typedoc-github-wiki-theme": "^1.1.0",

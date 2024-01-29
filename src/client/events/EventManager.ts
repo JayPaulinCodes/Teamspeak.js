@@ -1,6 +1,6 @@
 import * as Events from "./index";
-import { QueryClient } from "../QueryClient";
 import { Event } from "./Event";
+import { QueryClient } from "../QueryClient";
 
 // ADD DOCS
 export class EventManager {

@@ -1,7 +1,6 @@
-import { QueryClient } from "../client/QueryClient";
 import { Base } from "./Base";
-import { GroupType } from "./enums/GroupType";
 import { PermissionSid } from "./enums/PermissionSid";
+import { QueryClient } from "../client/QueryClient";
 
 // ADD DOCS
 export class Permission extends Base {

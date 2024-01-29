@@ -1,3 +1,5 @@
+/* eslint line-comment-position: "off" */
+
 import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
 
 // ADD DOCS
