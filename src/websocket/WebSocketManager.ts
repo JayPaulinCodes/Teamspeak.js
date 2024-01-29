@@ -1,19 +1,16 @@
 import { EventEmitter } from "node:events";
-import { IWebSocketManagerOptions } from "./interfaces/IWebSocketManagerOptions";
-import { ISocketOptions } from "./interfaces/ISocketOptions";
 import { IQueryProtocol } from "./interfaces/IQueryProtocol";
-import { QueryProtocol } from "./enums/QueryProtocol";
-import { TeamspeakJsError } from "../errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "../errors/TeamspeakJsErrorCodes";
-import { RawQueryProtocol } from "./RawQueryProtocol";
-import { QueryProtocolEvents } from "../utils/enums/QueryProtocolEvents";
-import { WebSocketManagerEvents } from "../utils/enums/WebSocketManagerEvents";
 import { IQueueItem } from "./interfaces/IQueueItem";
-import { QueryCommandOptions } from "./queryCommands/typings/QueryCommandOptions";
-import { HelpCommand } from "./queryCommands/commands/HelpCommand";
+import { IWebSocketManagerOptions } from "./interfaces/IWebSocketManagerOptions";
+import { QueryClient } from "../client/QueryClient";
 import { QueryCommand } from "./queryCommands/QueryCommand";
 import { QueryCommandParser } from "./queryCommands/parser/QueryCommandParser";
-import { QueryClient } from "../client/QueryClient";
+import { QueryProtocol } from "./enums/QueryProtocol";
+import { QueryProtocolEvents } from "../utils/enums/QueryProtocolEvents";
+import { RawQueryProtocol } from "./RawQueryProtocol";
+import { TeamspeakJsError } from "../errors/TeamspeakJsError";
+import { TeamspeakJsErrorCodes } from "../errors/TeamspeakJsErrorCodes";
+import { WebSocketManagerEvents } from "../utils/enums/WebSocketManagerEvents";
 
 export class WebSocketManager extends EventEmitter {
     private static initialIgnoreLines = 2;

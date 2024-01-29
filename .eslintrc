@@ -8,9 +8,24 @@
         // "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
+        "line-comment-position": [
+            "error", 
+            { 
+                "position": "above"
+            }
+        ],
+        "sort-imports": [
+            "error", 
+            { 
+                "ignoreCase": false,
+                "ignoreDeclarationSort": false,
+                "ignoreMemberSort": false,
+                "memberSyntaxSortOrder": [ "none", "all", "single", "multiple" ],
+                "allowSeparatedGroups": false
+            }
+        ],
         "no-duplicate-imports": "error",
         "no-useless-rename": "error",
-        "sort-imports": "error",
         "no-var": "error",
         "constructor-super": "error",
         "getter-return": "error",
@@ -31,8 +46,6 @@
         "no-cond-assign": "warn",
         "no-constant-condition": "warn",
         "no-fallthrough": "warn",
-        "use-isnan": "warn",
-
-        "line-comment-position": ["error", { "position": "above" }]
+        "use-isnan": "warn"
     }
 }

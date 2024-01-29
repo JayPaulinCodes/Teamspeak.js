@@ -1,5 +1,5 @@
-import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
 import { Event } from "./Event";
+import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
 
 // ADD DOCS
 export class ServerHostButtonIconUrlUpdatedEvent extends Event {

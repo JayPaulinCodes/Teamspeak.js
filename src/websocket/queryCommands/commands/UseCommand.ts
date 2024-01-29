@@ -29,6 +29,9 @@ export class UseCommand extends QueryCommand {
             super(UseCommand.baseCommand, { ["sid"]: sid }, virtual ? ["-virtual"] : undefined);
         } else if (port !== undefined) {
             super(UseCommand.baseCommand, { ["port"]: port }, virtual ? ["-virtual"] : undefined);
+        } else {
+            // TODO: change to tsjs error
+            throw new Error("Invalid arguments");
         }
     }
 }
