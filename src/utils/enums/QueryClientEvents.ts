@@ -1,3 +1,5 @@
+/* eslint line-comment-position: "off" */
+
 import { IQueryProtocol } from "../../websocket/interfaces/IQueryProtocol";
 
 /**

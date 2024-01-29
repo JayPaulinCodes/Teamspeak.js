@@ -1,3 +1,5 @@
+/* eslint no-fallthrough: "off" */
+
 import { EventEmitter } from "node:events";
 import { IClientOptions } from "./interfaces/IClientOptions";
 import { WebSocketManager } from "../websocket/WebSocketManager";

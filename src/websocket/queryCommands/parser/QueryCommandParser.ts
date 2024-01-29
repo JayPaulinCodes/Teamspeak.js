@@ -1,3 +1,4 @@
+/* eslint line-comment-position: "off" */
 // ADD DOCS
 export class QueryCommandParser {
     private static readonly snakeCaseIdentifier = "_";
