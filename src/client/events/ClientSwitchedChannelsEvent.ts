@@ -1,4 +1,3 @@
-import { CodecEncryptionMode } from "../../structures/enums/CodecEncryptionMode";
 import { Event } from "./Event";
 import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
 

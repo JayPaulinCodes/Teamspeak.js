@@ -4,9 +4,9 @@ import { QueryCommand } from "../QueryCommand";
 /**
  * ### ClientAddPerm Command
  *
- * Adds a set of specified permissions to a client. Multiple 
- * permissions can be added by providing the three parameters 
- * of each permission. A permission can be specified by permid 
+ * Adds a set of specified permissions to a client. Multiple
+ * permissions can be added by providing the three parameters
+ * of each permission. A permission can be specified by permid
  * or permsid.
  *
  * Permissions:

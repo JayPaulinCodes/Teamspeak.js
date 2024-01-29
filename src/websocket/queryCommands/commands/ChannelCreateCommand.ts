@@ -1,4 +1,3 @@
-import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
 import { QueryCommand } from "../QueryCommand";
 
 /**

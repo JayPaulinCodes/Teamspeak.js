@@ -1,13 +1,15 @@
 {
     "root": true,
     "parser": "@typescript-eslint/parser",
-    "plugins": [ "@typescript-eslint" ],
+    "plugins": [ "@typescript-eslint", "unused-imports" ],
     "extends": [
         // "eslint:recommended",
         // "plugin:@typescript-eslint/eslint-recommended",
         // "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
+        "unused-imports/no-unused-imports": "error",
+
         "line-comment-position": [
             "error", 
             { 
