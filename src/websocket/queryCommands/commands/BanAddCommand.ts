@@ -1,9 +1,8 @@
-import { QueryCommand } from "../QueryCommand";
-import { ClientListCommandFlags } from "../../enums/ClientListCommandFlags";
 import BanAddCommandOptions from "../interfaces/BanAddCommandOptions";
-import { TeamspeakJsErrorCodes } from "errors/TeamspeakJsErrorCodes";
-import { TeamspeakJsError } from "errors/TeamspeakJsError";
+import { QueryCommand } from "../QueryCommand";
 import { QueryCommandOptions } from "../typings/QueryCommandOptions";
+import { TeamspeakJsError } from "errors/TeamspeakJsError";
+import { TeamspeakJsErrorCodes } from "errors/TeamspeakJsErrorCodes";
 
 /**
  * ### BanAdd Command
@@ -30,7 +29,7 @@ export class BanAddCommand extends QueryCommand {
             throw new TeamspeakJsError(TeamspeakJsErrorCodes.MissingOptionalArguments, ["ip", "name", "uniqueId"]);
         }
 
-        let args: QueryCommandOptions = {};
+        const args: QueryCommandOptions = {};
         if (options.ip !== undefined) {
             args["ip"] = options.ip;
         }

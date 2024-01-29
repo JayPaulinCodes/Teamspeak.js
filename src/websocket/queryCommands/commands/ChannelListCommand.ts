@@ -1,6 +1,4 @@
 import { QueryCommand } from "../QueryCommand";
-import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
-import { ClientListCommand } from "./ClientListCommand";
 
 /**
  * ### ChannelList Command

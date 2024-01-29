@@ -1,8 +1,4 @@
 import { QueryCommand } from "../QueryCommand";
-import { ClientListCommandFlags } from "../../enums/ClientListCommandFlags";
-import BanAddCommandOptions from "../interfaces/BanAddCommandOptions";
-import { TeamspeakJsErrorCodes } from "errors/TeamspeakJsErrorCodes";
-import { TeamspeakJsError } from "errors/TeamspeakJsError";
 import { QueryCommandOptions } from "../typings/QueryCommandOptions";
 
 /**
@@ -27,7 +23,7 @@ export class BanClientCommand extends QueryCommand {
 
     // ADD DOCS
     constructor(serverId: number, reason: string | undefined = undefined, duration: number | undefined = undefined) {
-        let args: QueryCommandOptions = {};
+        const args: QueryCommandOptions = {};
         args["clid"] = serverId;
         if (reason !== undefined) {
             args["banreason"] = reason;
