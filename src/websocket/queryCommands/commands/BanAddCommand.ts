@@ -1,8 +1,8 @@
-import BanAddCommandOptions from "../interfaces/BanAddCommandOptions";
+import { BanAddCommandOptions } from "../interfaces/BanAddCommandOptions";
 import { QueryCommand } from "../QueryCommand";
 import { QueryCommandOptions } from "../typings/QueryCommandOptions";
-import { TeamspeakJsError } from "errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "errors/TeamspeakJsErrorCodes";
+import { TeamspeakJsError } from "../../../errors/TeamspeakJsError";
+import { TeamspeakJsErrorCodes } from "../../../errors/TeamspeakJsErrorCodes";
 
 /**
  * ### BanAdd Command

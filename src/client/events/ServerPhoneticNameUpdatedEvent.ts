@@ -6,7 +6,7 @@ export class ServerPhoneticNameUpdatedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const invokingClient = await queryClient.getClientByServerId(data.invokerid);
+        const invokingClient = queryClient.clients.resolve(data.invokerid);
         const newPhoneticName = data.virtualserverNamePhonetic;
 
         queryClient.emit(QueryClientEvents.ServerTempChannelDeleteDelayUpdated, invokingClient, newPhoneticName);

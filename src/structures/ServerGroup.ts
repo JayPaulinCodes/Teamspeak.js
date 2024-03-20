@@ -15,10 +15,11 @@ export class ServerGroup extends Base {
     constructor(queryClient: QueryClient, data: any) {
         super(queryClient);
 
-        this.patch(data);
+        this._patch(data);
     }
 
-    protected override patch(data: any) {
+    public _patch(data: any, fromQuery: boolean = true) {
+        fromQuery = fromQuery;
         this.id = "sgid" in data ? data.sgid : null;
         this.name = "name" in data ? data.name : null;
         this.type = "type" in data ? (data.type as GroupType) : null;
@@ -28,7 +29,7 @@ export class ServerGroup extends Base {
             this.permissions = data.permissions;
         } else if ("fetchPermissions" in data) {
             if (data.fetchPermissions === true) {
-                this.fetchPermissions();
+                // this.fetchPermissions();
             } else {
                 this.permissions = null;
             }
@@ -37,24 +38,28 @@ export class ServerGroup extends Base {
         }
     }
 
-    async fetchPermissions(refresh: boolean = false): Promise<Permission[]> {
-        if (this.permissions !== null && !refresh) {
-            return this.permissions;
-        }
+    // async fetchPermissions(refresh: boolean = false): Promise<Permission[]> {
+    //     if (this.permissions !== null && !refresh) {
+    //         return this.permissions;
+    //     }
 
-        let perms: Permission[] = [];
+    //     let perms: Permission[] = [];
 
-        if (this.queryClient === null || this.queryClient === undefined) {
-            return perms;
-        }
-        if (this.id === null || this.id === undefined) {
-            return perms;
-        }
+    //     if (this.queryClient === null || this.queryClient === undefined) {
+    //         return perms;
+    //     }
+    //     if (this.id === null || this.id === undefined) {
+    //         return perms;
+    //     }
 
-        perms = await this.queryClient.getServerGroupPerms(this.id);
+    //     perms = await this.queryClient.getServerGroupPerms(this.id);
 
-        this.permissions = perms;
+    //     this.permissions = perms;
 
-        return this.permissions;
+    //     return this.permissions;
+    // }
+
+    public override toJSON() {
+        return super.toJSON();
     }
 }

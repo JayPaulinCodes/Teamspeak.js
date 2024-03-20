@@ -442,7 +442,7 @@ export class QueryCommandParser {
         clientMyteamspeakAvatar: QueryCommandParser.parseString,
         clientSignedBadges: QueryCommandParser.parseString,
         clientLastip: QueryCommandParser.parseString,
-        cid: QueryCommandParser.parseString,
+        cid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         pid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         cpid: QueryCommandParser.parseString,
         order: QueryCommandParser.parseNumber,
@@ -495,8 +495,8 @@ export class QueryCommandParser {
         s: QueryCommandParser.parseNumber,
         reasonid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         reasonmsg: QueryCommandParser.parseString,
-        ctid: QueryCommandParser.parseString,
-        cfid: QueryCommandParser.parseString,
+        ctid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
+        cfid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         targetmode: QueryCommandParser.parseNumber,
         target: QueryCommandParser.parseNumber,
         invokerid: QueryCommandParser.parseString,

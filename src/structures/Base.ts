@@ -1,23 +1,29 @@
 import { QueryClient } from "../client/QueryClient";
+import { flatten } from "../utils/CommonFunctions";
 
 export abstract class Base {
-    queryClient: QueryClient;
+    public readonly _queryClient: QueryClient;
+    // abstract uniqueId: TsIdentifier;
 
     constructor(queryClient: QueryClient) {
-        this.queryClient = queryClient;
+        this._queryClient = queryClient;
+    }
+
+    // public _new(queryClient: QueryClient, data: any): Base {
+    //     queryClient = queryClient;
+    //     data = data;
+    //     throw new Error("Not Implemented");
+    // }
+
+    // ADD DOCS
+    public toJSON(props: { [x: string]: boolean | string } = {}) {
+        return flatten(this, props);
     }
 
     // ADD DOCS
-    clone() {
+    public _clone() {
         return Object.assign(Object.create(this), this);
     }
 
-    // ADD DOCS
-    toJSON() {
-        return JSON.stringify(this);
-    }
-
-    protected patch(data: object) {
-        data = data;
-    }
+    public abstract _patch(data: object, fromQuery: boolean): void;
 }

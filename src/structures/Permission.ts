@@ -13,13 +13,18 @@ export class Permission extends Base {
     constructor(queryClient: QueryClient, data: any) {
         super(queryClient);
 
-        this.patch(data);
+        this._patch(data);
     }
 
-    protected override patch(data: any) {
+    public _patch(data: any, fromQuery: boolean = true) {
+        fromQuery = fromQuery;
         this.sid = "permid" in data ? (data.permid as PermissionSid) : null;
         this.value = "permvalue" in data ? data.permvalue : null;
         this.negated = "permnegated" in data ? data.permnegated : null;
         this.skip = "permskip" in data ? data.permskip : null;
+    }
+
+    public override toJSON() {
+        return super.toJSON();
     }
 }

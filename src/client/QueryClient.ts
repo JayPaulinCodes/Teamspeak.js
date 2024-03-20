@@ -1,52 +1,46 @@
 /* eslint no-fallthrough: "off" */
 
-import { Channel } from "../structures/Channel";
+import { ChannelManager } from "../managers/ChannelManager";
 import { Client } from "../structures/Client";
 import { ClientListCommandFlags } from "../websocket/enums/ClientListCommandFlags";
+import { ClientManager } from "../managers/ClientManager";
 import { Context } from "./typings/Context";
 import { EventEmitter } from "node:events";
 import { EventManager } from "./events/EventManager";
 import { IClientOptions } from "./interfaces/IClientOptions";
 import { Options } from "../utils/Options";
-import { Permission } from "../structures/Permission";
 import { QueryClientEvents } from "../utils/enums/QueryClientEvents";
 import { QueryCommand } from "../websocket/queryCommands/QueryCommand";
 import { QueryProtocol } from "../websocket/enums/QueryProtocol";
 import { SelectType } from "./enums/SelectType";
-import { ServerGroup } from "../structures/ServerGroup";
-import { ServerInstance } from "../structures/ServerInstance";
-import { ServerQueryConnection } from "../structures/ServerQueryConnection";
-import { ServerVersionInformation } from "../structures/ServerVersionInformation";
+// import { TsIdentifier } from "../structures/typings/TsIdentifier";
 import { WebSocketManager } from "../websocket/WebSocketManager";
 import { WebSocketManagerEvents } from "../utils/enums/WebSocketManagerEvents";
 import {
-    ChannelInfoCommand,
-    ClientDbInfoCommand,
-    ClientInfoCommand,
     ClientListCommand,
-    HostInfoCommand,
-    InstanceInfoCommand,
     LoginCommand,
-    ServerGroupListCommand,
-    ServerGroupPermListCommand,
     ServerNotifyRegisterCommand,
     ServerNotifyUnregisterCommand,
     UseCommand,
-    VersionCommand,
-    WhoAmICommand
 } from "../websocket/queryCommands/commands/index";
 
 // ADD DOCS
 export class QueryClient extends EventEmitter {
     // ADD DOCS
-    readonly options: IClientOptions;
+    public readonly options: IClientOptions;
 
     // ADD DOCS
-    readonly eventManager: EventManager;
+    public readonly eventManager: EventManager;
+
+    // ADD DOCS
+    public channels: ChannelManager;
+
+    // ADD DOCS
+    public clients: ClientManager;
 
     private priorizeNextCommand: boolean = false;
     private webSocketManager: WebSocketManager;
-    private serverDatabaseIdMap: Record<string, number> = {};
+    // private serverDatabaseIdMap: Record<string, number> = {};
     private context: Context = {
         selectType: SelectType.NONE,
         selected: 0,
@@ -64,6 +58,9 @@ export class QueryClient extends EventEmitter {
         this.eventManager = new EventManager(this);
 
         this.webSocketManager = new WebSocketManager(this, this.options.webSocketManagerOptions);
+
+        this.channels = new ChannelManager(this);
+        this.clients = new ClientManager(this);
 
         this.attachEvents();
 
@@ -121,13 +118,8 @@ export class QueryClient extends EventEmitter {
 
             return Promise.all(executions)
                 .then(async () => {
-                    // Fill the cache incase the bot is started with users in server
-                    const clients = await this.getAllClients();
-                    clients.forEach(client => {
-                        if (client.serverId !== null && client.databaseId !== null) {
-                            this.serverDatabaseIdMap[`id_${client.serverId}`] = client.databaseId;
-                        }
-                    });
+                    await this.clients.fetch(undefined, { cache: true, force: true });
+                    await this.channels.fetch(undefined, { cache: true, force: true });
 
                     super.emit(QueryClientEvents.Ready);
                 })
@@ -386,19 +378,19 @@ export class QueryClient extends EventEmitter {
         };
     }
 
-    public tryGetDatabaseId(serverId: number): number | null {
-        return this.serverDatabaseIdMap[`id_${serverId}`] ?? null;
-    }
+    // public tryGetDatabaseId(serverId: number): number | null {
+    //     return this.serverDatabaseIdMap[`id_${serverId}`] ?? null;
+    // }
 
-    public updateDatabaseId(serverId: number, databaseId: number | null): void {
-        if (databaseId === null) {
-            delete this.serverDatabaseIdMap[`id_${serverId}`];
-            return;
-        }
+    // public updateDatabaseId(serverId: number, databaseId: number | null): void {
+    //     if (databaseId === null) {
+    //         delete this.serverDatabaseIdMap[`id_${serverId}`];
+    //         return;
+    //     }
 
-        this.serverDatabaseIdMap[`id_${serverId}`] = databaseId;
-        return;
-    }
+    //     this.serverDatabaseIdMap[`id_${serverId}`] = databaseId;
+    //     return;
+    // }
 
     // ADD DOCS
     public connect(): Promise<QueryClient> {
@@ -450,7 +442,7 @@ export class QueryClient extends EventEmitter {
      * ts3.execute("use", [9987], { clientnickname: "test" })
      */
     // ADD DOCS
-    public execute<T>(command: QueryCommand): Promise<T> {
+    public execute<T = any>(command: QueryCommand): Promise<T> {
         if (this.priorizeNextCommand) {
             this.priorizeNextCommand = false;
             return <any>this.webSocketManager.execute(command, true);
@@ -462,45 +454,45 @@ export class QueryClient extends EventEmitter {
     // Actual useable stuff now
 
     // ADD DOCS
-    public async getServerQueryConnectionInfo(): Promise<ServerQueryConnection> {
-        return this.execute<ServerQueryConnection>(new WhoAmICommand()).then(data => {
-            return new ServerQueryConnection(this, data);
-        });
-    }
+    // public async getServerQueryConnectionInfo(): Promise<ServerQueryConnection> {
+    //     return this.execute<ServerQueryConnection>(new WhoAmICommand()).then(data => {
+    //         return new ServerQueryConnection(this, data);
+    //     });
+    // }
 
-    // ADD DOCS
-    public async getServerVersionInfo(): Promise<ServerVersionInformation> {
-        return this.execute<ServerVersionInformation>(new VersionCommand()).then(data => {
-            return new ServerVersionInformation(this, data);
-        });
-    }
+    // // ADD DOCS
+    // public async getServerVersionInfo(): Promise<ServerVersionInformation> {
+    //     return this.execute<ServerVersionInformation>(new VersionCommand()).then(data => {
+    //         return new ServerVersionInformation(this, data);
+    //     });
+    // }
 
-    // ADD DOCS
-    public async getServerInstace(): Promise<ServerInstance> {
-        // Because Teamspeak is a bitch and has 2 commands to gather server instance info,
-        // run them back to back and compile the data
-        return this.execute<ServerInstance>(new HostInfoCommand()).then(hostData => {
-            return this.execute<ServerInstance>(new InstanceInfoCommand()).then(instanceData => {
-                return new ServerInstance(this, { ...hostData, ...instanceData });
-            });
-        });
-    }
+    // // ADD DOCS
+    // public async getServerInstace(): Promise<ServerInstance> {
+    //     // Because Teamspeak is a bitch and has 2 commands to gather server instance info,
+    //     // run them back to back and compile the data
+    //     return this.execute<ServerInstance>(new HostInfoCommand()).then(hostData => {
+    //         return this.execute<ServerInstance>(new InstanceInfoCommand()).then(instanceData => {
+    //             return new ServerInstance(this, { ...hostData, ...instanceData });
+    //         });
+    //     });
+    // }
 
-    // ADD DOCS
-    public async getClientByServerId(clientServerId: number): Promise<Client> {
-        return this.execute<Client>(new ClientInfoCommand(clientServerId)).then(data => {
-            return new Client(this, data);
-        });
-    }
+    // // ADD DOCS
+    // public async getClientByServerId(clientServerId: number): Promise<Client> {
+    //     return this.execute<Client>(new ClientInfoCommand(clientServerId)).then(data => {
+    //         return new Client(this, data);
+    //     });
+    // }
 
-    // ADD DOCS
-    public async getClientByDbId(clientDbId: number): Promise<Client> {
-        return this.execute<Client>(new ClientDbInfoCommand(clientDbId)).then(data => {
-            return new Client(this, data);
-        });
-    }
+    // // ADD DOCS
+    // public async getClientByDbId(clientDbId: number): Promise<Client> {
+    //     return this.execute<Client>(new ClientDbInfoCommand(clientDbId)).then(data => {
+    //         return new Client(this, data);
+    //     });
+    // }
 
-    // ADD DOCS
+    // // ADD DOCS
     public async getAllClients(flags: ClientListCommandFlags[] = []): Promise<Client[]> {
         return this.execute<Client[]>(new ClientListCommand(flags)).then(data => {
             const result: Client[] = [];
@@ -512,39 +504,39 @@ export class QueryClient extends EventEmitter {
         });
     }
 
-    // ADD DOCS
-    public async getServerGroups(): Promise<ServerGroup[]> {
-        return this.execute<any[]>(new ServerGroupListCommand()).then(data => {
-            return data.map(elem => new ServerGroup(this, elem));
-        });
-    }
+    // // ADD DOCS
+    // public async getServerGroups(): Promise<ServerGroup[]> {
+    //     return this.execute<any[]>(new ServerGroupListCommand()).then(data => {
+    //         return data.map(elem => new ServerGroup(this, elem));
+    //     });
+    // }
 
-    // ADD DOCS
-    public async getServerGroupById(serverGroupId: number): Promise<ServerGroup | undefined> {
-        const allGroups = await this.getServerGroups();
-        return allGroups.find(group => group.id === serverGroupId);
-    }
+    // // ADD DOCS
+    // public async getServerGroupById(serverGroupId: number): Promise<ServerGroup | undefined> {
+    //     const allGroups = await this.getServerGroups();
+    //     return allGroups.find(group => group.id === serverGroupId);
+    // }
 
-    // ADD DOCS
-    public async getServerGroupByIds(serverGroupIds: number[]): Promise<ServerGroup[] | undefined> {
-        const allGroups = await this.getServerGroups();
-        if (serverGroupIds === undefined) {
-            return undefined;
-        }
-        return allGroups.filter(group => group.id !== null && serverGroupIds.includes(group.id));
-    }
+    // // ADD DOCS
+    // public async getServerGroupByIds(serverGroupIds: number[]): Promise<ServerGroup[] | undefined> {
+    //     const allGroups = await this.getServerGroups();
+    //     if (serverGroupIds === undefined) {
+    //         return undefined;
+    //     }
+    //     return allGroups.filter(group => group.id !== null && serverGroupIds.includes(group.id));
+    // }
 
-    // ADD DOCS
-    public async getServerGroupPerms(serverGroupId: number): Promise<Permission[]> {
-        return this.execute<any[]>(new ServerGroupPermListCommand(serverGroupId)).then(data => {
-            return data.map(elem => new Permission(this, elem));
-        });
-    }
+    // // ADD DOCS
+    // public async getServerGroupPerms(serverGroupId: number): Promise<Permission[]> {
+    //     return this.execute<any[]>(new ServerGroupPermListCommand(serverGroupId)).then(data => {
+    //         return data.map(elem => new Permission(this, elem));
+    //     });
+    // }
 
-    // ADD DOCS
-    public async getChannelById(channelId: number): Promise<Channel> {
-        return this.execute<Channel>(new ChannelInfoCommand(channelId)).then(data => {
-            return new Channel(this, { ...data, id: channelId });
-        });
-    }
+    // // ADD DOCS
+    // public async getChannelById(channelId: number): Promise<Channel> {
+    //     return this.execute<Channel>(new ChannelInfoCommand(channelId)).then(data => {
+    //         return new Channel(this, { ...data, id: channelId });
+    //     });
+    // }
 }

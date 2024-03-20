@@ -225,10 +225,11 @@ export class ServerInstance extends Base {
     constructor(queryClient: QueryClient, data: any) {
         super(queryClient);
 
-        this.patch(data);
+        this._patch(data);
     }
 
-    protected override patch(data: any) {
+    public _patch(data: any, fromQuery: boolean = true) {
+        fromQuery = fromQuery;
         this.uptime = "instanceUptime" in data ? data.instanceUptime : null;
         this.hostTimestampUTC = "hostTimestampUtc" in data ? data.hostTimestampUtc : null;
         this.virtualServersRunning = "virtualserversRunningTotal" in data ? data.virtualserversRunningTotal : null;
@@ -289,9 +290,13 @@ export class ServerInstance extends Base {
                 : null;
     }
 
+    public override toJSON() {
+        return super.toJSON();
+    }
+
     // ADD DOCS
     setServerQueryGuestGroup(groupId: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_guest_serverquery_group", groupId))
             .then(() => {
                 this.serverQueryGuestGroup = groupId;
@@ -303,7 +308,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setServerAdminTemplateGroup(groupId: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_template_serveradmin_group", groupId))
             .then(() => {
                 this.serverAdminTemplateGroup = groupId;
@@ -315,7 +320,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setFileTransferPort(port: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_filetransfer_port", port))
             .then(() => {
                 this.fileTransferPort = port;
@@ -327,7 +332,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setMaxDownloadBandwidth(bytes: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_max_download_total_bandwidth", bytes))
             .then(() => {
                 this.maxDownloadBandwidth = bytes;
@@ -339,7 +344,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setMaxUploadBandwidth(bytes: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_max_upload_total_bandwidth", bytes))
             .then(() => {
                 this.maxUploadBandwidth = bytes;
@@ -351,7 +356,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setServerDefaultTemplateGroup(groupId: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_template_serverdefault_group", groupId))
             .then(() => {
                 this.serverDefaultTemplateGroup = groupId;
@@ -363,7 +368,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setChannelDefaultTemplateGroup(groupId: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_template_channeldefault_group", groupId))
             .then(() => {
                 this.channelDefaultTemplateGroup = groupId;
@@ -375,7 +380,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setChannelAdminTemplateGroup(groupId: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_template_channeladmin_group", groupId))
             .then(() => {
                 this.channelAdminTemplateGroup = groupId;
@@ -387,7 +392,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setServerQueryFloodCommands(commands: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_serverquery_flood_commands", commands))
             .then(() => {
                 this.serverQueryFloodCommands = commands;
@@ -399,7 +404,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setServerQueryFloodTime(time: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_serverquery_flood_time", time))
             .then(() => {
                 this.serverQueryFloodTime = time;
@@ -411,7 +416,7 @@ export class ServerInstance extends Base {
 
     // ADD DOCS
     setServerQueryFloodBanTime(banTime: number) {
-        this.queryClient
+        this._queryClient
             .execute(new InstanceEditCommand("serverinstance_serverquery_flood_ban_time", banTime))
             .then(() => {
                 this.serverQueryBanTime = banTime;

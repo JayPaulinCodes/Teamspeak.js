@@ -1,4 +1,4 @@
-import { BindingSubSystem } from "websocket/enums/BindingSubSystem";
+import { BindingSubSystem } from "../../enums/BindingSubSystem";
 import { QueryCommand } from "../QueryCommand";
 
 /**
