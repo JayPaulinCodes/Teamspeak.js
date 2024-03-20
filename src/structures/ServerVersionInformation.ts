@@ -11,12 +11,17 @@ export class ServerVersionInformation extends Base {
     constructor(queryClient: QueryClient, data: any) {
         super(queryClient);
 
-        this.patch(data);
+        this._patch(data);
     }
 
-    protected override patch(data: any) {
+    public _patch(data: any, fromQuery: boolean = true) {
+        fromQuery = fromQuery;
         this.version = data.version;
         this.build = data.build;
         this.platform = data.platform;
+    }
+
+    public override toJSON() {
+        return super.toJSON();
     }
 }

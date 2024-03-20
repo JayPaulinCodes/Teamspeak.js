@@ -6,7 +6,7 @@ export class ServerNameUpdatedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const invokingClient = await queryClient.getClientByServerId(data.invokerid);
+        const invokingClient = queryClient.clients.resolve(data.invokerid);
         const newName = data.virtualserverName;
 
         queryClient.emit(QueryClientEvents.ServerNameUpdated, invokingClient, newName);

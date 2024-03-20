@@ -17,7 +17,7 @@ import { QueryCommand } from "../QueryCommand";
  */
 // TODO: Revisit this and figure out the command's actual params
 export class ClientDbListCommand extends QueryCommand {
-    private static readonly baseCommand = "channellist";
+    private static readonly baseCommand = "clientdblist";
 
     // ADD DOCS
     constructor() {

@@ -1,7 +1,7 @@
 import { QueryClient } from "../client/QueryClient";
 
 // ADD DOCS
-export default abstract class BaseManager {
+export  abstract class BaseManager {
     // ADD DOCS
     public readonly client: QueryClient;
 

@@ -18,7 +18,7 @@ export class ClientGetDbIdFromUIdCommand extends QueryCommand {
     private static readonly baseCommand = "clientgetdbidfromuid";
 
     // ADD DOCS
-    constructor(uniqueId: number) {
+    constructor(uniqueId: string) {
         super(ClientGetDbIdFromUIdCommand.baseCommand, { cluid: uniqueId });
     }
 }

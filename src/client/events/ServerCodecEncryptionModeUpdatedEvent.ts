@@ -7,7 +7,7 @@ export class ServerCodecEncryptionModeUpdatedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const invokingClient = await queryClient.getClientByServerId(data.invokerid);
+        const invokingClient = queryClient.clients.resolve(data.invokerid);
         const newEncryptionMode = data.virtualserverCodecEncryptionMode as CodecEncryptionMode;
 
         queryClient.emit(QueryClientEvents.ServerCodecEncryptionModeUpdated, invokingClient, newEncryptionMode);

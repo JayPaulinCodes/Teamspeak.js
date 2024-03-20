@@ -20,10 +20,11 @@ export class ServerQueryConnection extends Base {
     constructor(queryClient: QueryClient, data: any) {
         super(queryClient);
 
-        this.patch(data);
+        this._patch(data);
     }
 
-    protected override patch(data: any) {
+    public _patch(data: any, fromQuery: boolean = true) {
+        fromQuery = fromQuery;
         this.virtualserverStatus = data.virtualserverStatus as VirtualServerStatus;
         this.virtualserverId = data.virtualserverId;
         this.virtualserverUniqueIdentifier = data.virtualserverUniqueIdentifier;
@@ -65,5 +66,9 @@ export class ServerQueryConnection extends Base {
         } else {
             this.clientOriginServerId = data.clientOriginServerId;
         }
+    }
+
+    public override toJSON() {
+        return super.toJSON();
     }
 }

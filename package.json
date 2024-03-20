@@ -18,13 +18,8 @@
         "lint-fix": "eslint ./src --fix --ext .ts",
         "format-check": "prettier --check ./src",
         "format": "prettier --write ./src",
-        "clean-install-dev": "npm ci",
-        "clean-install-prod": "npm ci --omit=dev",
-        "prebuild": "npm run clean-install-prod",
         "build": "tsc",
-        "prebuild-dev": "npm run clean-install-dev",
-        "build-dev": "tsc",
-        "poc": "npm run build-dev && node devPoc/index.js",
+        "poc": "npm run build && node devPoc/index.js",
         "poc-no-build": "node devPoc/index.js"
     },
     "keywords": [

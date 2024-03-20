@@ -1,11 +1,11 @@
+import { Base } from "../structures/Base";
+import { BaseManager } from "./BaseManager";
 import { Collection } from "@discordjs/collection";
 import { QueryClient } from "../client/QueryClient";
-import BaseManager from "./BaseManager";
-import { Base } from "../structures/Base";
 import { TsIdentifier } from "../structures/typings/TsIdentifier";
 
 // ADD DOCS
-export default abstract class DataManager<HeldType extends Base> extends BaseManager {
+export abstract class DataManager<HeldType extends Base> extends BaseManager {
     protected readonly holds: new (...args: any) => HeldType;
 
     constructor(client: QueryClient, holds: new (...args: any) => HeldType) {

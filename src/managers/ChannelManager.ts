@@ -1,12 +1,11 @@
+import { CachedManager } from "./CachedManager";
+import { Channel } from "../structures/Channel";
 import { Collection } from "@discordjs/collection";
 import { QueryClient } from "../client/QueryClient";
-import { Channel } from "../structures/Channel";
-import CachedManager from "./CachedManager";
-import { ChannelListCommand } from "../websocket/queryCommands/commands/ChannelListCommand";
-import { ChannelInfoCommand } from "../websocket/queryCommands/commands";
 import { TsIdentifier } from "../structures/typings/TsIdentifier";
+import { ChannelInfoCommand, ChannelListCommand } from "../websocket/queryCommands/commands";
 
-export default class ChannelManager extends CachedManager<Channel> {
+export class ChannelManager extends CachedManager<Channel> {
     constructor(client: QueryClient, prefill: Collection<TsIdentifier, Channel> | undefined = undefined) {
         super(client, Channel, prefill);
     }
@@ -56,13 +55,13 @@ export default class ChannelManager extends CachedManager<Channel> {
         return null;
     }
 
-    public async fetch(channelId: number | undefined = undefined, options: { [index: string]: any } = { cache: true, force: false }): Promise<Channel | Collection<TsIdentifier, Channel> | undefined> {
+    public async fetch(channelId: number | undefined = undefined, options: { cache: boolean, force: boolean } = { cache: true, force: false }): Promise<Channel | Collection<TsIdentifier, Channel> | undefined> {
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;
         
         // If we aren't forcing the query check try to find it in the cache
-        if (!options.force) {
-            const existingItem = channelId === undefined ? this.cache.clone() : this.cache.get(channelId);
+        if (!options.force && channelId !== undefined) {
+            const existingItem = this.cache.get(channelId);
             if (existingItem !== undefined) return existingItem;
         }
         
@@ -72,6 +71,13 @@ export default class ChannelManager extends CachedManager<Channel> {
                 return data.map(elem => new Channel(this.client, elem));
             });
 
+            for (let i = 0; i < channelsData.length; i++) {
+                const elem = channelsData[i];
+                await this.client.execute(new ChannelInfoCommand(elem.id)).then(data => {
+                    channelsData[i]._patch(data);
+                });
+            }
+
             // If we are using a cache we might as well update it it now that we have the data
             if (options.cache) {
                 channelsData.forEach(elem => this.add(elem));
@@ -79,7 +85,7 @@ export default class ChannelManager extends CachedManager<Channel> {
             }
     
             // Return the appropriate data
-            const colData = new Collection<number, Channel>();
+            const colData = new Collection<TsIdentifier, Channel>();
             channelsData.forEach(elem => colData.set(elem.id, elem));
             return colData;
         } else {

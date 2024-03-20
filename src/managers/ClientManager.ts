@@ -1,13 +1,12 @@
+import { CachedManager } from "./CachedManager";
+import { Client } from "../structures/Client";
+import { ClientListCommandFlags } from "../websocket/enums/ClientListCommandFlags";
 import { Collection } from "@discordjs/collection";
 import { QueryClient } from "../client/QueryClient";
-import { Channel } from "../structures/Channel";
-import CachedManager from "./CachedManager";
-import { ChannelListCommand } from "../websocket/queryCommands/commands/ChannelListCommand";
-import { ChannelInfoCommand } from "../websocket/queryCommands/commands";
 import { TsIdentifier } from "../structures/typings/TsIdentifier";
-import { Client } from "../structures/Client";
+import { ClientDbInfoCommand, ClientDbListCommand, ClientGetDbIdFromUIdCommand, ClientGetIdsCommand, ClientListCommand } from "../websocket/queryCommands/commands";
 
-export default class ClientManager extends CachedManager<Client> {
+export class ClientManager extends CachedManager<Client> {
     constructor(client: QueryClient, prefill: Collection<TsIdentifier, Client> | undefined = undefined) {
         super(client, Client, prefill);
     }
@@ -38,65 +37,106 @@ export default class ClientManager extends CachedManager<Client> {
             return idOrInstance;
         }
 
-        if (typeof idOrInstance === "number" || typeof idOrInstance === "string") {
-            return this.cache.get(idOrInstance) ?? null;
+        let result: Client | null = null;
+        if (typeof idOrInstance === "string") {
+            result = result ?? this.cache.get(idOrInstance) ?? null;
+            result = result ?? this.cache.find(elem => elem.myTeamspeakId === idOrInstance) ?? null;
+            return result;
+        } else if (typeof idOrInstance === "number") {
+            result = result ?? this.cache.find(elem => elem.serverId === idOrInstance) ?? null;
+            result = result ?? this.cache.find(elem => elem.databaseId === idOrInstance) ?? null;
+            return result;
         }
 
         return null;
     }
 
-    public resolveId(idOrInstance: TsIdentifier | Client): TsIdentifier | null {
+    public resolveId(idOrInstance: string | Client): string | null {
         if (idOrInstance instanceof this.holds) {
             return idOrInstance.uniqueId;
         }
 
-        if (typeof idOrInstance === "number" || typeof idOrInstance === "string") {
+        if (typeof idOrInstance === "string") {
             return idOrInstance;
         }
 
         return null;
     }
 
-    public async fetch(clientUniqueId: string | undefined = undefined, options: { [index: string]: any } = { cache: true, force: false }): Promise<Channel | Collection<TsIdentifier, Channel> | undefined> {
+    public async fetch(clientUniqueId: string | undefined = undefined, options: { cache: boolean, force: boolean } = { cache: true, force: false }): Promise<Client | Collection<TsIdentifier, Client> | undefined> {
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;
         
         // If we aren't forcing the query check try to find it in the cache
-        if (!options.force) {
-            const existingItem = channelId === undefined ? this.cache.clone() : this.cache.get(channelId);
+        if (!options.force && clientUniqueId !== undefined) {
+            const existingItem = this.cache.get(clientUniqueId);
             if (existingItem !== undefined) return existingItem;
         }
         
-        if (channelId === undefined) {
-            // Query for the channels
-            const channelsData = await this.client.execute<Channel[]>(new ChannelListCommand()).then(data => {
-                return data.map(elem => new Channel(this.client, elem));
+        if (clientUniqueId === undefined) {
+            // Query for the clients
+            const clientsData = await this.client.execute<any[]>(new ClientDbListCommand()).then(data => {
+                return data.map(elem => new Client(this.client, elem));
+            });
+
+            const onlineClients = await this.client.execute<any[]>(new ClientListCommand([ 
+                ClientListCommandFlags.INCLUDE_UNIQUE_ID,
+                ClientListCommandFlags.INLCUDE_AWAY_DATA,
+                ClientListCommandFlags.INCLUED_VOICE_DATA,
+                ClientListCommandFlags.INCLUED_TIMES_DATA,
+                ClientListCommandFlags.INCLUED_GROUPS_DATA,
+                ClientListCommandFlags.INCLUED_INFO_DATA,
+                ClientListCommandFlags.INCLUED_COUNTRY_DATA,
+                ClientListCommandFlags.INCLUED_IP,
+                ClientListCommandFlags.INCLUED_BADGES_DATA
+            ])).then(data => {
+                return data.map(elem => new Client(this.client, elem));
+            });
+
+            onlineClients.forEach(elem => {
+                const index = clientsData.findIndex(_elem => _elem.uniqueId === elem.uniqueId);
+                if (index !== -1) {
+                    clientsData[index]._patch(elem, false);
+                }
             });
 
             // If we are using a cache we might as well update it it now that we have the data
             if (options.cache) {
-                channelsData.forEach(elem => this.add(elem));
+                clientsData.forEach(elem => this.add(elem));
                 return this.cache.clone();
             }
     
             // Return the appropriate data
-            const colData = new Collection<number, Channel>();
-            channelsData.forEach(elem => colData.set(elem.id, elem));
+            const colData = new Collection<TsIdentifier, Client>();
+            clientsData.forEach(elem => colData.set(elem.uniqueId, elem));
             return colData;
         } else {
-            // Query for the channel
-            const channelData = await this.client.execute<Channel>(new ChannelInfoCommand(channelId)).then(data => {
-                return new Channel(this.client, data);
+            // Convert the unique id into a db id
+            const clientDbId = await this.client.execute(new ClientGetDbIdFromUIdCommand(clientUniqueId)).then(data => {
+                return data?.cldbid;
+            });
+
+            if (clientDbId === undefined) {
+                return undefined;
+            }
+
+            // Query for the client
+            const clientData = await this.client.execute(new ClientDbInfoCommand(clientDbId)).then(data => {
+                return new Client(this.client, data);
+            });
+
+            await this.client.execute(new ClientGetIdsCommand(clientUniqueId)).then(data => {
+                clientData._patch(data);
             });
 
             // If we are using a cache we might as well update it it now that we have the data
             if (options.cache) {
-                this.add(channelData);
-                return this.cache.get(channelId);
+                this.add(clientData);
+                return this.cache.get(clientUniqueId);
             }
     
             // Return the appropriate data
-            return channelData;
+            return clientData;
         }
     }
 }

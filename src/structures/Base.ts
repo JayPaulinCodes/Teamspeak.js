@@ -1,12 +1,12 @@
 import { QueryClient } from "../client/QueryClient";
-import { TsIdentifier } from "./typings/TsIdentifier";
+import { flatten } from "../utils/CommonFunctions";
 
 export abstract class Base {
-    public readonly queryClient: QueryClient;
+    public readonly _queryClient: QueryClient;
     // abstract uniqueId: TsIdentifier;
 
     constructor(queryClient: QueryClient) {
-        this.queryClient = queryClient;
+        this._queryClient = queryClient;
     }
 
     // public _new(queryClient: QueryClient, data: any): Base {
@@ -16,8 +16,8 @@ export abstract class Base {
     // }
 
     // ADD DOCS
-    toJSON() {
-        return JSON.stringify(this);
+    public toJSON(props: { [x: string]: boolean | string } = {}) {
+        return flatten(this, props);
     }
 
     // ADD DOCS
