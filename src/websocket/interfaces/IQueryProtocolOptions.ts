@@ -1,4 +1,4 @@
-import { QueryProtocol } from "websocket/enums/QueryProtocol";
+import { QueryProtocol } from "@teamspeak.js/websocket/enums/QueryProtocol";
 
 export interface IQueryProtocolOptions {
     protocol: QueryProtocol;

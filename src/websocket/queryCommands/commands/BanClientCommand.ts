@@ -1,5 +1,5 @@
-import { QueryCommand } from "../QueryCommand";
-import { QueryCommandOptions } from "../typings/QueryCommandOptions";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
+import { QueryCommandOptions } from "@teamspeak.js/websocket/queryCommands/typings/QueryCommandOptions";
 
 /**
  * ### BanClient Command

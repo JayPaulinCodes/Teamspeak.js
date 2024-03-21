@@ -1,5 +1,5 @@
-import { Base } from "./Base";
-import { QueryClient } from "../client/QueryClient";
+import { Base } from "@teamspeak.js/structures/Base";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class Channel extends Base {

@@ -1,6 +1,6 @@
-import { QueryCommandOptions } from "./typings/QueryCommandOptions";
-import { QueryCommandParser } from "./parser/QueryCommandParser";
-import { QueryCommandTermination } from "./interfaces/QueryCommandTermination";
+import { QueryCommandOptions } from "@teamspeak.js/websocket/queryCommands/typings/QueryCommandOptions";
+import { QueryCommandParser } from "@teamspeak.js/websocket/queryCommands/parser/QueryCommandParser";
+import { QueryCommandTermination } from "@teamspeak.js/websocket/queryCommands/interfaces/QueryCommandTermination";
 
 // ADD DOCS
 export abstract class QueryCommand {

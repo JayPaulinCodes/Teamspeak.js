@@ -1,8 +1,8 @@
-import { Base } from "../structures/Base";
-import { BaseManager } from "./BaseManager";
 import { Collection } from "@discordjs/collection";
-import { QueryClient } from "../client/QueryClient";
-import { TsIdentifier } from "../structures/typings/TsIdentifier";
+import { Base } from "@teamspeak.js/structures/Base";
+import { BaseManager } from "@teamspeak.js/managers/BaseManager";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
 
 // ADD DOCS
 export abstract class DataManager<HeldType extends Base> extends BaseManager {

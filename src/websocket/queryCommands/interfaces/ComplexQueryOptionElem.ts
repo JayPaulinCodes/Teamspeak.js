@@ -1,4 +1,4 @@
-import { QueryOptionType } from "../typings/QueryOptionType";
+import { QueryOptionType } from "@teamspeak.js/websocket/queryCommands/typings/QueryOptionType";
 
 export interface ComplexQueryOptionElem {
     key: string;

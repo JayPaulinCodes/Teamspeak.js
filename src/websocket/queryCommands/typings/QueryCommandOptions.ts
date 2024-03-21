@@ -1,3 +1,3 @@
-import { QueryOptionType } from "./QueryOptionType";
+import { QueryOptionType } from "@teamspeak.js/websocket/queryCommands/typings/QueryOptionType";
 
 export type QueryCommandOptions = { [key: string]: QueryOptionType };

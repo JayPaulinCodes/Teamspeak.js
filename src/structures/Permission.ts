@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { PermissionSid } from "./enums/PermissionSid";
-import { QueryClient } from "../client/QueryClient";
+import { Base } from "@teamspeak.js/structures/Base";
+import { PermissionSid } from "@teamspeak.js/structures/enums/PermissionSid";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class Permission extends Base {

@@ -1,10 +1,10 @@
-import { CachedManager } from "./CachedManager";
-import { Client } from "../structures/Client";
-import { ClientListCommandFlags } from "../websocket/enums/ClientListCommandFlags";
 import { Collection } from "@discordjs/collection";
-import { QueryClient } from "../client/QueryClient";
-import { TsIdentifier } from "../structures/typings/TsIdentifier";
-import { ClientDbInfoCommand, ClientDbListCommand, ClientGetDbIdFromUIdCommand, ClientGetIdsCommand, ClientListCommand } from "../websocket/queryCommands/commands";
+import { CachedManager } from "@teamspeak.js/managers/CachedManager";
+import { Client } from "@teamspeak.js/structures/Client";
+import { ClientListCommandFlags } from "@teamspeak.js/websocket/enums/ClientListCommandFlags";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
+import { ClientDbInfoCommand, ClientDbListCommand, ClientGetDbIdFromUIdCommand, ClientGetIdsCommand, ClientListCommand } from "@teamspeak.js/websocket/queryCommands/commands";
 
 export class ClientManager extends CachedManager<Client> {
     constructor(client: QueryClient, prefill: Collection<TsIdentifier, Client> | undefined = undefined) {

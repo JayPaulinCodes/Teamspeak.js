@@ -1,4 +1,4 @@
-import { IWebSocketManagerOptions } from "../../websocket/interfaces/IWebSocketManagerOptions";
+import { IWebSocketManagerOptions } from "@teamspeak.js/websocket/interfaces/IWebSocketManagerOptions";
 
 export interface IClientOptions {
     webSocketManagerOptions: IWebSocketManagerOptions;

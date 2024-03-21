@@ -1,6 +1,6 @@
 /* eslint line-comment-position: "off" */
 
-import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
+import { ComplexQueryOptionElem } from "@teamspeak.js/websocket/queryCommands/interfaces/ComplexQueryOptionElem";
 
 // ADD DOCS
 export class QueryCommandParser {

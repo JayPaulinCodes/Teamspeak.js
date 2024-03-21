@@ -1,6 +1,6 @@
-import { ActiveEvent } from "./ActiveEvent";
-import { LoginInfo } from "./LoginInfo";
-import { SelectType } from "../enums/SelectType";
+import { ActiveEvent } from "@teamspeak.js/client/interfaces/ActiveEvent";
+import { LoginInfo } from "@teamspeak.js/client/interfaces/LoginInfo";
+import { SelectType } from "@teamspeak.js/client/enums/SelectType";
 
 export interface BaseContext {
     selectType: SelectType;

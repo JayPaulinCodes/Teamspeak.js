@@ -1,12 +1,12 @@
 import EventEmitter from "node:events";
-import { IQueryProtocol } from "./interfaces/IQueryProtocol";
-import { IQueryProtocolOptions } from "./interfaces/IQueryProtocolOptions";
-import { ISocketOptions } from "./interfaces/ISocketOptions";
-import { QueryProtocolEvents } from "../utils/enums/QueryProtocolEvents";
-import { SocketEvents } from "../utils/enums/SocketEvents";
-import { TeamspeakJsError } from "../errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "../errors/TeamspeakJsErrorCodes";
 import { Socket, connect } from "node:net";
+import { IQueryProtocol } from "@teamspeak.js/websocket/interfaces/IQueryProtocol";
+import { IQueryProtocolOptions } from "@teamspeak.js/websocket/interfaces/IQueryProtocolOptions";
+import { ISocketOptions } from "@teamspeak.js/websocket/interfaces/ISocketOptions";
+import { QueryProtocolEvents } from "@teamspeak.js/utils/enums/QueryProtocolEvents";
+import { SocketEvents } from "@teamspeak.js/utils/enums/SocketEvents";
+import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
+import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
 
 export class RawQueryProtocol extends EventEmitter implements IQueryProtocol {
     readonly queryProtocolOptions: IQueryProtocolOptions;

@@ -1,6 +1,6 @@
-import { QueryCommand } from "../QueryCommand";
-import { TeamspeakJsError } from "../../../errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "../../../errors/TeamspeakJsErrorCodes";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
+import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
+import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
 
 /**
  * ### InstanceEdit Command

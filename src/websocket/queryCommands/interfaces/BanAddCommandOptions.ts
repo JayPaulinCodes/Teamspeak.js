@@ -1,4 +1,4 @@
-export  interface BanAddCommandOptions {
+export interface BanAddCommandOptions {
     ip: string | undefined;
     name: string | undefined;
     uniqueId: string | undefined;

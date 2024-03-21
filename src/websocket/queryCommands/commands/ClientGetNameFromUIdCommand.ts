@@ -1,4 +1,4 @@
-import { QueryCommand } from "../QueryCommand";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
 
 /**
  * ### ClientGetNameFromUId Command

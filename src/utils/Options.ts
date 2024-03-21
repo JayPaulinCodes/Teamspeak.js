@@ -1,8 +1,8 @@
-import { IClientOptions } from "client/interfaces/IClientOptions";
-import { IQueryProtocolOptions } from "websocket/interfaces/IQueryProtocolOptions";
-import { ISocketOptions } from "../websocket/interfaces/ISocketOptions";
-import { IWebSocketManagerOptions } from "../websocket/interfaces/IWebSocketManagerOptions";
-import { QueryProtocol } from "../websocket/enums/QueryProtocol";
+import { IClientOptions } from "@teamspeak.js/client/interfaces/IClientOptions";
+import { IQueryProtocolOptions } from "@teamspeak.js/websocket/interfaces/IQueryProtocolOptions";
+import { ISocketOptions } from "@teamspeak.js/websocket/interfaces/ISocketOptions";
+import { IWebSocketManagerOptions } from "@teamspeak.js/websocket/interfaces/IWebSocketManagerOptions";
+import { QueryProtocol } from "@teamspeak.js/websocket/enums/QueryProtocol";
 
 /**
  * Utility class to aid in the constructing of varrious options

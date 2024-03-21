@@ -1,11 +1,10 @@
-import { BanClientCommand } from "../websocket/queryCommands/commands";
-import { Base } from "./Base";
-import { Channel } from "./Channel";
-import { QueryClient } from "../client/QueryClient";
-import { ServerGroupResolvable } from "./typings/ServerGroupResolvable";
-import { TeamspeakJsError } from "../errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "../errors/TeamspeakJsErrorCodes";
-// import { ServerGroup } from "./ServerGroup";
+import { Base } from "@teamspeak.js/structures/Base";
+import { Channel } from "@teamspeak.js/structures/Channel";
+import { ServerGroupResolvable } from "@teamspeak.js/structures/typings/ServerGroupResolvable";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
+import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
+import { BanClientCommand } from "@teamspeak.js/websocket/queryCommands/commands";
 
 // ADD DOCS
 export class Client extends Base {

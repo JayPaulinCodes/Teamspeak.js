@@ -1,4 +1,4 @@
-import { TeamspeakJsErrorCodes } from "./TeamspeakJsErrorCodes";
+import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
 
 export const TeamspeakJsErrorMessages = {
     // General Errors

@@ -1,4 +1,4 @@
-import { QueryClient } from "../client/QueryClient";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export  abstract class BaseManager {

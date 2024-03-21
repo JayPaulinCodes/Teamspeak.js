@@ -1,6 +1,6 @@
-import * as Events from "./index";
-import { Event } from "./Event";
-import { QueryClient } from "../QueryClient";
+import * as Events from "@teamspeak.js/client/events/index";
+import { Event } from "@teamspeak.js/client/events/Event";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class EventManager {

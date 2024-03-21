@@ -1,9 +1,9 @@
-import { Client } from "../../structures/Client";
-import { Channel } from "../../structures/Channel";
 import { Collection } from "@discordjs/collection";
-import { Event } from "./Event";
-import { TsIdentifier } from "../../structures/typings/TsIdentifier";
-import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
+import { Event } from "@teamspeak.js/client/events/Event";
+import { Client } from "@teamspeak.js/structures/Client";
+import { Channel } from "@teamspeak.js/structures/Channel";
+import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
+import { QueryClientEvents } from "@teamspeak.js/utils/enums/QueryClientEvents";
 
 // ADD DOCS
 export class ClientSwitchedChannelsEvent extends Event {

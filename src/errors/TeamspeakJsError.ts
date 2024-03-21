@@ -1,5 +1,5 @@
-import { TeamspeakJsErrorCodes } from "./TeamspeakJsErrorCodes";
-import { TeamspeakJsErrorMessages } from "./TeamspeakJsErrorMessages";
+import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
+import { TeamspeakJsErrorMessages } from "@teamspeak.js/errors/TeamspeakJsErrorMessages";
 
 function makeErrorClass(BaseClass: any) {
     return class TeamspeakJsError extends BaseClass {

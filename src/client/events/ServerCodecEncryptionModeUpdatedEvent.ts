@@ -1,6 +1,6 @@
 import { CodecEncryptionMode } from "../../structures/enums/CodecEncryptionMode";
-import { Event } from "./Event";
-import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
+import { Event } from "@teamspeak.js/client/events/Event";
+import { QueryClientEvents } from "@teamspeak.js/utils/enums/QueryClientEvents";
 
 // ADD DOCS
 export class ServerCodecEncryptionModeUpdatedEvent extends Event {
