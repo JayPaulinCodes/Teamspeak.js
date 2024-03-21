@@ -1,5 +1,5 @@
-import { Event } from "./Event";
-import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
+import { Event } from "@teamspeak.js/client/events/Event";
+import { QueryClientEvents } from "@teamspeak.js/utils/enums/QueryClientEvents";
 
 // ADD DOCS
 export class ServerHostButtonIconUrlUpdatedEvent extends Event {

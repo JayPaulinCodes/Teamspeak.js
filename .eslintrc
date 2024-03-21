@@ -16,16 +16,16 @@
                 "position": "above"
             }
         ],
-        "sort-imports": [
-            "error", 
-            { 
-                "ignoreCase": false,
-                "ignoreDeclarationSort": false,
-                "ignoreMemberSort": false,
-                "memberSyntaxSortOrder": [ "none", "all", "single", "multiple" ],
-                "allowSeparatedGroups": false
-            }
-        ],
+        // "sort-imports": [
+        //     "warn", 
+        //     { 
+        //         "ignoreCase": false,
+        //         "ignoreDeclarationSort": false,
+        //         "ignoreMemberSort": false,
+        //         "memberSyntaxSortOrder": [ "none", "all", "single", "multiple" ],
+        //         "allowSeparatedGroups": false
+        //     }
+        // ],
         "no-duplicate-imports": "error",
         "no-useless-rename": "error",
         "no-var": "error",

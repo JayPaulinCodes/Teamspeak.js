@@ -1,5 +1,5 @@
-import { QueryClient } from "../client/QueryClient";
-import { flatten } from "../utils/CommonFunctions";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { flatten } from "@teamspeak.js/utils/CommonFunctions";
 
 export abstract class Base {
     public readonly _queryClient: QueryClient;

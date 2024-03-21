@@ -1,28 +1,27 @@
 /* eslint no-fallthrough: "off" */
 
-import { ChannelManager } from "../managers/ChannelManager";
-import { Client } from "../structures/Client";
-import { ClientListCommandFlags } from "../websocket/enums/ClientListCommandFlags";
-import { ClientManager } from "../managers/ClientManager";
-import { Context } from "./typings/Context";
 import { EventEmitter } from "node:events";
-import { EventManager } from "./events/EventManager";
-import { IClientOptions } from "./interfaces/IClientOptions";
-import { Options } from "../utils/Options";
-import { QueryClientEvents } from "../utils/enums/QueryClientEvents";
-import { QueryCommand } from "../websocket/queryCommands/QueryCommand";
-import { QueryProtocol } from "../websocket/enums/QueryProtocol";
-import { SelectType } from "./enums/SelectType";
-// import { TsIdentifier } from "../structures/typings/TsIdentifier";
-import { WebSocketManager } from "../websocket/WebSocketManager";
-import { WebSocketManagerEvents } from "../utils/enums/WebSocketManagerEvents";
+import { Context } from "@teamspeak.js/client/typings/Context";
+import { EventManager } from "@teamspeak.js/client/events/EventManager";
+import { IClientOptions } from "@teamspeak.js/client/interfaces/IClientOptions";
+import { SelectType } from "@teamspeak.js/client/enums/SelectType";
+import { ChannelManager } from "@teamspeak.js/managers/ChannelManager";
+import { ClientManager } from "@teamspeak.js/managers/ClientManager";
+import { Client } from "@teamspeak.js/structures/Client";
+import { Options } from "@teamspeak.js/utils/Options";
+import { QueryClientEvents } from "@teamspeak.js/utils/enums/QueryClientEvents";
+import { WebSocketManagerEvents } from "@teamspeak.js/utils/enums/WebSocketManagerEvents";
+import { ClientListCommandFlags } from "@teamspeak.js/websocket/enums/ClientListCommandFlags";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
+import { QueryProtocol } from "@teamspeak.js/websocket/enums/QueryProtocol";
+import { WebSocketManager } from "@teamspeak.js/websocket/WebSocketManager";
 import {
     ClientListCommand,
     LoginCommand,
     ServerNotifyRegisterCommand,
     ServerNotifyUnregisterCommand,
     UseCommand,
-} from "../websocket/queryCommands/commands/index";
+} from "@teamspeak.js/websocket/queryCommands/commands/index";
 
 // ADD DOCS
 export class QueryClient extends EventEmitter {

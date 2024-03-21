@@ -1,5 +1,5 @@
 import EventEmitter from "node:events";
-import { IQueryProtocolOptions } from "./IQueryProtocolOptions";
+import { IQueryProtocolOptions } from "@teamspeak.js/websocket/interfaces/IQueryProtocolOptions";
 
 export interface IQueryProtocol extends EventEmitter {
     readonly queryProtocolOptions: IQueryProtocolOptions;

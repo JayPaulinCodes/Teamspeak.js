@@ -1,5 +1,5 @@
-import { ComplexQueryOptionElem } from "../interfaces/ComplexQueryOptionElem";
-import { QueryCommand } from "../QueryCommand";
+import { ComplexQueryOptionElem } from "@teamspeak.js/websocket/queryCommands/interfaces/ComplexQueryOptionElem";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
 
 /**
  * ### ChannelGroupAddPerm Command

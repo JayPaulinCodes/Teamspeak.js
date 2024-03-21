@@ -1,8 +1,8 @@
-import { Base } from "../structures/Base";
 import { Collection } from "@discordjs/collection";
-import { DataManager } from "./DataManager";
-import { QueryClient } from "../client/QueryClient";
-import { TsIdentifier } from "../structures/typings/TsIdentifier";
+import { DataManager } from "@teamspeak.js/managers/DataManager";
+import { Base } from "@teamspeak.js/structures/Base";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
 
 export abstract class CachedManager<HeldType extends Base> extends DataManager<HeldType> {
     private readonly _cache: Collection<TsIdentifier, HeldType>;

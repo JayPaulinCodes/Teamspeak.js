@@ -1,9 +1,9 @@
-import { CachedManager } from "./CachedManager";
-import { Channel } from "../structures/Channel";
 import { Collection } from "@discordjs/collection";
-import { QueryClient } from "../client/QueryClient";
-import { TsIdentifier } from "../structures/typings/TsIdentifier";
-import { ChannelInfoCommand, ChannelListCommand } from "../websocket/queryCommands/commands";
+import { CachedManager } from "@teamspeak.js/managers/CachedManager";
+import { Channel } from "@teamspeak.js/structures/Channel";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
+import { ChannelInfoCommand, ChannelListCommand } from "@teamspeak.js/websocket/queryCommands/commands";
 
 export class ChannelManager extends CachedManager<Channel> {
     constructor(client: QueryClient, prefill: Collection<TsIdentifier, Channel> | undefined = undefined) {

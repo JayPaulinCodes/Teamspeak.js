@@ -16,7 +16,15 @@
         // Modules
         "module": "commonjs",
         "moduleResolution": "node",
-        "baseUrl": "./src",
+        "baseUrl": "src",
+        "paths": {
+            "@teamspeak.js/client/*": [ "client/*" ],
+            "@teamspeak.js/errors/*": [ "errors/*" ],
+            "@teamspeak.js/managers/*": [ "managers/*" ],
+            "@teamspeak.js/structures/*": [ "structures/*" ],
+            "@teamspeak.js/utils/*": [ "utils/*" ],
+            "@teamspeak.js/websocket/*": [ "websocket/*" ]
+        },
 
         // Emit
         "outDir": "./lib",

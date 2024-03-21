@@ -1,5 +1,5 @@
-import { BindingSubSystem } from "../../enums/BindingSubSystem";
-import { QueryCommand } from "../QueryCommand";
+import { BindingSubSystem } from "@teamspeak.js/websocket/enums/BindingSubSystem";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
 
 /**
  * ### BindingList Command

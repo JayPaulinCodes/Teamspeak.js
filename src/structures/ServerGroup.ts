@@ -1,7 +1,7 @@
-import { Base } from "./Base";
-import { GroupType } from "./enums/GroupType";
-import { Permission } from "./Permission";
-import { QueryClient } from "../client/QueryClient";
+import { Base } from "@teamspeak.js/structures/Base";
+import { GroupType } from "@teamspeak.js/structures/enums/GroupType";
+import { Permission } from "@teamspeak.js/structures/Permission";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class ServerGroup extends Base {

@@ -1,4 +1,4 @@
-import { QueryCommand } from "websocket/queryCommands/QueryCommand";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
 
 export interface IQueueItem {
     fulfill: (data: any) => void;

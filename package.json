@@ -18,7 +18,7 @@
         "lint-fix": "eslint ./src --fix --ext .ts",
         "format-check": "prettier --check ./src",
         "format": "prettier --write ./src",
-        "build": "tsc",
+        "build": "tsc -b && tscpaths -p tsconfig.json -s ./src -o ./lib",
         "poc": "npm run build && node devPoc/index.js",
         "poc-no-build": "node devPoc/index.js"
     },
@@ -35,6 +35,7 @@
         "@discordjs/collection": "^2.0.0"
     },
     "devDependencies": {
+        "@kintsu/tscpaths": "^0.0.10",
         "@types/node": "^20.9.0",
         "@typescript-eslint/eslint-plugin": "^6.19.1",
         "@typescript-eslint/parser": "^6.19.1",

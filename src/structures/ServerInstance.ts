@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { InstanceEditCommand } from "../websocket/queryCommands/commands/InstanceEditCommand";
-import { QueryClient } from "../client/QueryClient";
+import { Base } from "@teamspeak.js/structures/Base";
+import { InstanceEditCommand } from "@teamspeak.js/websocket/queryCommands/commands/InstanceEditCommand";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class ServerInstance extends Base {

@@ -1,6 +1,6 @@
-import { Base } from "./Base";
-import { QueryClient } from "../client/QueryClient";
-import { VirtualServerStatus } from "./enums/VirtualServerStatus";
+import { Base } from "@teamspeak.js/structures/Base";
+import { VirtualServerStatus } from "@teamspeak.js/structures/enums/VirtualServerStatus";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class ServerQueryConnection extends Base {

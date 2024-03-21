@@ -1,5 +1,5 @@
-import { ClientListCommandFlags } from "../../enums/ClientListCommandFlags";
-import { QueryCommand } from "../QueryCommand";
+import { ClientListCommandFlags } from "@teamspeak.js/websocket/enums/ClientListCommandFlags";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
 
 /**
  * ### ClientList Command

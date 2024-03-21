@@ -1,4 +1,4 @@
-import { QueryClient } from "../QueryClient";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class Event {
