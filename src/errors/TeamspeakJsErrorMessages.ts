@@ -5,6 +5,7 @@ export const TeamspeakJsErrorMessages = {
     [TeamspeakJsErrorCodes.MissingOption]: (prop: string) => `Missing option for property '${prop}'.`,
     [TeamspeakJsErrorCodes.InvalidOption]: (prop: string, expected: string, given: string) =>
         `Invalid option for property '${prop}'. Expected ${expected}, was given ${given}`,
+    [TeamspeakJsErrorCodes.ClientNotOnline]: (action: string) => `The '${action}' action cannot be completed while the target client is offline.`,
 
     // Socket Errors
     [TeamspeakJsErrorCodes.WebSocketTimeout]: "Socket timeout reached.",

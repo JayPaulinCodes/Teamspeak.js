@@ -1,7 +1,10 @@
+import { BanClientCommand } from "../websocket/queryCommands/commands";
 import { Base } from "./Base";
-import { QueryClient } from "../client/QueryClient";
 import { Channel } from "./Channel";
+import { QueryClient } from "../client/QueryClient";
 import { ServerGroupResolvable } from "./typings/ServerGroupResolvable";
+import { TeamspeakJsError } from "../errors/TeamspeakJsError";
+import { TeamspeakJsErrorCodes } from "../errors/TeamspeakJsErrorCodes";
 // import { ServerGroup } from "./ServerGroup";
 
 // ADD DOCS
@@ -24,21 +27,13 @@ export class Client extends Base {
     public currentChannelId: number | null = null;
     public channelGroupId: number | null = null;
     public serverGroups: ServerGroupResolvable[] = [];
-
-    
-    
-    
-    // public isAway: boolean | null = null;
-    // public awayMessage: string | undefined | null = null;
-    // public isTalking: boolean | null = null;
-    // public inputMuted: boolean | null = null;
-    // public outputMuted: boolean | null = null;
-    // public isRecording: boolean | null = null;
-    // public totalConnections: number | null = null;
-    // public idleTime: number | null = null;
-    // public connectedTime: number | null = null;
-
-    // private hasResolvedServerGroups = false;
+    public isAway: boolean = false;
+    public awayMessage?: string = undefined;
+    public isTalking: boolean = false;
+    public inputMuted: boolean = false;
+    public outputMuted: boolean = false;
+    public isRecording: boolean = false;
+    public isOnline: boolean = false;
 
     // ADD DOCS
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
@@ -147,40 +142,49 @@ export class Client extends Base {
             this.serverGroups = [];
         }
 
-        // this.uniqueId = "clientUniqueIdentifier" in data ? data.clientUniqueIdentifier : null;
-        // this.databaseId = "clientDatabaseId" in data ? data.clientDatabaseId : null;
-        // this.myTeamspeakId = "clientMyteamspeakId" in data ? data.clientMyteamspeakId : null;
-        // this.ip = "connectionClientIp" in data ? data.connectionClientIp : null;
-        // this.serverId = "clid" in data ? data.clid : null;
+        key = fromQuery ? "clientAway" : "isAway";
+        if (key in data) {
+            this.isAway = data[key];
+        } else {
+            this.isAway = false;
+        }
 
-        // this.created = "clientCreated" in data ? data.clientCreated : null;
-        // this.idleTime = "clientIdleTime" in data ? data.clientIdleTime : null;
-        // this.lastConnected = "clientLastconnected" in data ? data.clientLastconnected : null;
-        // this.totalConnections = "clientTotalconnections" in data ? data.clientTotalconnections : null;
-        // this.connectedTime = "connectionConnectedTime" in data ? data.connectionConnectedTime : null;
+        key = fromQuery ? "clientAwayMessage" : "awayMessage";
+        if (key in data) {
+            this.awayMessage = data[key];
+        } else {
+            this.awayMessage = undefined;
+        }
 
-        // this.nickname = "clientNickname" in data ? data.clientNickname : null;
-        // this.description = "clientDescription" in data ? data.clientDescription : null;
-        // this.isAway = "clientAway" in data ? data.clientAway : null;
-        // this.awayMessage = "clientAwayMessage" in data ? data.clientAwayMessage : null;
-        // this.isTalking = "clientIsTalker" in data ? data.clientIsTalker : null;
-        // this.inputMuted = "clientInputMuted" in data ? data.clientInputMuted : null;
-        // this.outputMuted = "clientOutputMuted" in data ? data.clientOutputMuted : null;
-        // this.isRecording = "clientIsRecording" in data ? data.clientIsRecording : null;
-        // this.channelGroupId = "clientChannelGroupId" in data ? data.clientChannelGroupId : null;
-        // this.serverGroups = "clientServergroups" in data ? data.clientServergroups : null;
+        key = fromQuery ? "clientIsTalker" : "isTalking";
+        if (key in data) {
+            this.isTalking = data[key];
+        } else {
+            this.isTalking = false;
+        }
 
-        // this.version = "clientVersion" in data ? data.clientVersion : null;
-        // this.platform = "clientPlatform" in data ? data.clientPlatform : null;
-        // this.cid = "cid" in data ? data.cid : null;
+        key = fromQuery ? "clientInputMuted" : "inputMuted";
+        if (key in data) {
+            this.inputMuted = data[key];
+        } else {
+            this.inputMuted = false;
+        }
 
-        // if ("connectionClientIp" in data) {
-        //     this.ip = data.connectionClientIp;
-        // } else if ("clientLastip" in data) {
-        //     this.ip = data.clientLastip;
-        // } else {
-        //     this.ip = null;
-        // }
+        key = fromQuery ? "clientOutputMuted" : "outputMuted";
+        if (key in data) {
+            this.outputMuted = data[key];
+        } else {
+            this.outputMuted = false;
+        }
+
+        key = fromQuery ? "clientIsRecording" : "isRecording";
+        if (key in data) {
+            this.isRecording = data[key];
+        } else {
+            this.isRecording = false;
+        }
+
+        this.isOnline = this.platform !== undefined && this.ip !== undefined;
     }
 
     public override toJSON() {
@@ -188,5 +192,14 @@ export class Client extends Base {
             ...super.toJSON(),
             currentChannel: this.currentChannel?.toJSON()
         };
+    }
+
+    public async ban(options?: { reason: string | undefined, duration: number | undefined }): Promise<void> {
+        // TODO: Add support for offline bans
+        if (!this.isOnline || this.serverId === null) {
+            throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientBan");
+        }
+
+        await this._queryClient.execute<{ banid: string }>(new BanClientCommand(this.serverId, options?.reason, options?.duration));
     }
 }

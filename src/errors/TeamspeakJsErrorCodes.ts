@@ -2,6 +2,7 @@ const errorKeys = [
     // General Errors
     "MissingOption",
     "InvalidOption",
+    "ClientNotOnline",
 
     // Socket Errors
     "WebSocketTimeout",

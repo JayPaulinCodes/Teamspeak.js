@@ -90,7 +90,7 @@ export class ClientManager extends CachedManager<Client> {
                 ClientListCommandFlags.INCLUED_IP,
                 ClientListCommandFlags.INCLUED_BADGES_DATA
             ])).then(data => {
-                return data.map(elem => new Client(this.client, elem));
+                return Array.isArray(data) ? data.map(elem => new Client(this.client, elem)) : [ data ];
             });
 
             onlineClients.forEach(elem => {

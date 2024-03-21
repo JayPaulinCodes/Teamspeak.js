@@ -7,7 +7,7 @@ export class ClientBannedEvent extends Event {
         const queryClient = this.queryClient;
 
         const client = queryClient.clients.resolve(data.clid);
-        const invokingClient = queryClient.clients.resolve(data.invokerid);
+        const invokingClient = queryClient.clients.resolve(data.invokeruid);
         const channel = queryClient.channels.resolve(data.cfid);
         const reason = data.reasonmsg;
         const bantime = data.bantime;
