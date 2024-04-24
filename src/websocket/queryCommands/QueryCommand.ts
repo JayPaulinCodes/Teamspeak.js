@@ -71,7 +71,10 @@ export abstract class QueryCommand {
 
     // ADD DOCS
     setCommandTermination(data: string) {
-        this.commandTermination = <QueryCommandTermination>QueryCommandParser.parse(data)[0];
+        const parsedData = QueryCommandParser.parse(data);
+        this.commandTermination = Array.isArray(parsedData) 
+            ? <QueryCommandTermination>parsedData[0]
+            : <QueryCommandTermination>parsedData;
         return this;
     }
 
