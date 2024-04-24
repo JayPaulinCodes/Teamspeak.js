@@ -28,6 +28,7 @@
         },
 
         // Emit
+        "declaration": true,
         "outDir": "./lib",
 
         // JS Support
