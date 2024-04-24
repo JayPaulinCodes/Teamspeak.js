@@ -59,9 +59,14 @@ jobs:
           cat ./package.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       
-      - name: Read version
-        run: |
-          echo '${{ fromJson(env.PACKAGE_JSON).version }}'
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Package project
+        run: npm pack
 
       - name: Make release
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -71,8 +76,5 @@ jobs:
           prerelease: true
           title: "${{ fromJson(env.PACKAGE_JSON).version }}"
           files: |
-            lib/*
-            LICENSE
-            README.md
-            package.json
+            devjacob-teamspeak.js-${{ fromJson(env.PACKAGE_JSON).version }}.tgz
         
