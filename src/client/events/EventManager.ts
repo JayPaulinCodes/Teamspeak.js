@@ -54,11 +54,7 @@ export class EventManager {
         this.ServerHostButtonUrlUpdated = new Events.ServerHostButtonUrlUpdatedEvent(this.queryClient);
         this.ServerHostButtonIconUrlUpdated = new Events.ServerHostButtonIconUrlUpdatedEvent(this.queryClient);
         this.ServerPhoneticNameUpdated = new Events.ServerPhoneticNameUpdatedEvent(this.queryClient);
-        this.ServerPrioritySpeakerDimModificatorUpdated = new Events.ServerPrioritySpeakerDimModificatorUpdatedEvent(
-            this.queryClient
-        );
-        this.ServerTempChannelDeleteDelayUpdated = new Events.ServerTempChannelDeleteDelayUpdatedEvent(
-            this.queryClient
-        );
+        this.ServerPrioritySpeakerDimModificatorUpdated = new Events.ServerPrioritySpeakerDimModificatorUpdatedEvent(this.queryClient);
+        this.ServerTempChannelDeleteDelayUpdated = new Events.ServerTempChannelDeleteDelayUpdatedEvent(this.queryClient);
     }
 }

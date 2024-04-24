@@ -4,7 +4,13 @@ import { Client } from "@teamspeak.js/structures/Client";
 import { ClientListCommandFlags } from "@teamspeak.js/websocket/enums/ClientListCommandFlags";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
-import { ClientDbInfoCommand, ClientDbListCommand, ClientGetDbIdFromUIdCommand, ClientGetIdsCommand, ClientListCommand } from "@teamspeak.js/websocket/queryCommands/commands";
+import {
+    ClientDbInfoCommand,
+    ClientDbListCommand,
+    ClientGetDbIdFromUIdCommand,
+    ClientGetIdsCommand,
+    ClientListCommand
+} from "@teamspeak.js/websocket/queryCommands/commands";
 
 export class ClientManager extends CachedManager<Client> {
     constructor(client: QueryClient, prefill: Collection<TsIdentifier, Client> | undefined = undefined) {
@@ -63,35 +69,32 @@ export class ClientManager extends CachedManager<Client> {
         return null;
     }
 
-    public async fetch(clientUniqueId: string | undefined = undefined, options: { cache: boolean, force: boolean } = { cache: true, force: false }): Promise<Client | Collection<TsIdentifier, Client> | undefined> {
+    public async fetch(
+        clientUniqueId: string | undefined = undefined,
+        options: { cache: boolean; force: boolean } = { cache: true, force: false }
+    ): Promise<Client | Collection<TsIdentifier, Client> | undefined> {
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;
-        
+
         // If we aren't forcing the query check try to find it in the cache
         if (!options.force && clientUniqueId !== undefined) {
             const existingItem = this.cache.get(clientUniqueId);
             if (existingItem !== undefined) return existingItem;
         }
-        
+
         if (clientUniqueId === undefined) {
             // Query for the clients
             const clientsData = await this.client.execute<any[]>(new ClientDbListCommand()).then(data => {
                 return data.map(elem => new Client(this.client, elem));
             });
 
-            const onlineClients = await this.client.execute<any[]>(new ClientListCommand([ 
-                ClientListCommandFlags.INCLUDE_UNIQUE_ID,
-                ClientListCommandFlags.INLCUDE_AWAY_DATA,
-                ClientListCommandFlags.INCLUED_VOICE_DATA,
-                ClientListCommandFlags.INCLUED_TIMES_DATA,
-                ClientListCommandFlags.INCLUED_GROUPS_DATA,
-                ClientListCommandFlags.INCLUED_INFO_DATA,
-                ClientListCommandFlags.INCLUED_COUNTRY_DATA,
-                ClientListCommandFlags.INCLUED_IP,
-                ClientListCommandFlags.INCLUED_BADGES_DATA
-            ])).then(data => {
-                return Array.isArray(data) ? data.map(elem => new Client(this.client, elem)) : [ data ];
-            });
+            const onlineClients = await this.client
+                .execute<
+                    any[]
+                >(new ClientListCommand([ClientListCommandFlags.INCLUDE_UNIQUE_ID, ClientListCommandFlags.INLCUDE_AWAY_DATA, ClientListCommandFlags.INCLUED_VOICE_DATA, ClientListCommandFlags.INCLUED_TIMES_DATA, ClientListCommandFlags.INCLUED_GROUPS_DATA, ClientListCommandFlags.INCLUED_INFO_DATA, ClientListCommandFlags.INCLUED_COUNTRY_DATA, ClientListCommandFlags.INCLUED_IP, ClientListCommandFlags.INCLUED_BADGES_DATA]))
+                .then(data => {
+                    return Array.isArray(data) ? data.map(elem => new Client(this.client, elem)) : [data];
+                });
 
             onlineClients.forEach(elem => {
                 const index = clientsData.findIndex(_elem => _elem.uniqueId === elem.uniqueId);
@@ -105,7 +108,7 @@ export class ClientManager extends CachedManager<Client> {
                 clientsData.forEach(elem => this.add(elem));
                 return this.cache.clone();
             }
-    
+
             // Return the appropriate data
             const colData = new Collection<TsIdentifier, Client>();
             clientsData.forEach(elem => colData.set(elem.uniqueId, elem));
@@ -134,7 +137,7 @@ export class ClientManager extends CachedManager<Client> {
                 this.add(clientData);
                 return this.cache.get(clientUniqueId);
             }
-    
+
             // Return the appropriate data
             return clientData;
         }

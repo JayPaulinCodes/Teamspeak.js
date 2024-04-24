@@ -1,4 +1,3 @@
-
 /**
  * Enum for the events emitted by {@link WebSocketManager} classes
  */

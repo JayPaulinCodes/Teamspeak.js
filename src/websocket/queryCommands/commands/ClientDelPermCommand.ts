@@ -3,8 +3,8 @@ import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand
 /**
  * ### ClientDelPerm Command
  *
- * Removes a set of specified permissions from a client. 
- * Multiple permissions can be removed at once. A permission 
+ * Removes a set of specified permissions from a client.
+ * Multiple permissions can be removed at once. A permission
  * can be specified by permid or permsid.
  *
  * Permissions:

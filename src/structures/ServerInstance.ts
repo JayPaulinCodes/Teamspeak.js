@@ -233,61 +233,38 @@ export class ServerInstance extends Base {
         this.uptime = "instanceUptime" in data ? data.instanceUptime : null;
         this.hostTimestampUTC = "hostTimestampUtc" in data ? data.hostTimestampUtc : null;
         this.virtualServersRunning = "virtualserversRunningTotal" in data ? data.virtualserversRunningTotal : null;
-        this.fileTransferBandwidthSent =
-            "connectionFiletransferBandwidthSent" in data ? data.connectionFiletransferBandwidthSent : null;
-        this.fileTransferBandwidthReceived =
-            "connectionFiletransferBandwidthReceived" in data ? data.connectionFiletransferBandwidthReceived : null;
+        this.fileTransferBandwidthSent = "connectionFiletransferBandwidthSent" in data ? data.connectionFiletransferBandwidthSent : null;
+        this.fileTransferBandwidthReceived = "connectionFiletransferBandwidthReceived" in data ? data.connectionFiletransferBandwidthReceived : null;
         this.packetsSent = "connectionPacketsSentTotal" in data ? data.connectionPacketsSentTotal : null;
         this.packetsReceived = "connectionPacketsReceivedTotal" in data ? data.connectionPacketsReceivedTotal : null;
         this.bytesSent = "connectionBytesSentTotal" in data ? data.connectionBytesSentTotal : null;
         this.bytesReceived = "connectionBytesReceivedTotal" in data ? data.connectionBytesReceivedTotal : null;
-        this.bandwidthSentLastSecond =
-            "connectionBandwidthSentLastSecondTotal" in data ? data.connectionBandwidthSentLastSecondTotal : null;
+        this.bandwidthSentLastSecond = "connectionBandwidthSentLastSecondTotal" in data ? data.connectionBandwidthSentLastSecondTotal : null;
         this.bandwidthReceivedLastSecond =
-            "connectionBandwidthReceivedLastSecondTotal" in data
-                ? data.connectionBandwidthReceivedLastSecondTotal
-                : null;
-        this.bandwidthSentLastMinute =
-            "connectionBandwidthSentLastMinuteTotal" in data ? data.connectionBandwidthSentLastMinuteTotal : null;
+            "connectionBandwidthReceivedLastSecondTotal" in data ? data.connectionBandwidthReceivedLastSecondTotal : null;
+        this.bandwidthSentLastMinute = "connectionBandwidthSentLastMinuteTotal" in data ? data.connectionBandwidthSentLastMinuteTotal : null;
         this.bandwidthReceivedLastMinute =
-            "connectionBandwidthReceivedLastMinuteTotal" in data
-                ? data.connectionBandwidthReceivedLastMinuteTotal
-                : null;
+            "connectionBandwidthReceivedLastMinuteTotal" in data ? data.connectionBandwidthReceivedLastMinuteTotal : null;
         this.databaseVersion = "serverinstanceDatabaseVersion" in data ? data.serverinstanceDatabaseVersion : null;
-        this.serverQueryGuestGroup =
-            "serverinstanceGuestServerqueryGroup" in data ? data.serverinstanceGuestServerqueryGroup : null;
-        this.serverAdminTemplateGroup =
-            "serverinstanceTemplateServeradminGroup" in data ? data.serverinstanceTemplateServeradminGroup : null;
+        this.serverQueryGuestGroup = "serverinstanceGuestServerqueryGroup" in data ? data.serverinstanceGuestServerqueryGroup : null;
+        this.serverAdminTemplateGroup = "serverinstanceTemplateServeradminGroup" in data ? data.serverinstanceTemplateServeradminGroup : null;
         this.fileTransferPort = "serverinstanceFiletransferPort" in data ? data.serverinstanceFiletransferPort : null;
-        this.maxDownloadBandwidth =
-            "serverinstanceMaxDownloadTotalBandwidth" in data ? data.serverinstanceMaxDownloadTotalBandwidth : null;
-        this.maxUploadBandwidth =
-            "serverinstanceMaxUploadTotalBandwidth" in data ? data.serverinstanceMaxUploadTotalBandwidth : null;
-        this.serverDefaultTemplateGroup =
-            "serverinstanceTemplateServerdefaultGroup" in data ? data.serverinstanceTemplateServerdefaultGroup : null;
+        this.maxDownloadBandwidth = "serverinstanceMaxDownloadTotalBandwidth" in data ? data.serverinstanceMaxDownloadTotalBandwidth : null;
+        this.maxUploadBandwidth = "serverinstanceMaxUploadTotalBandwidth" in data ? data.serverinstanceMaxUploadTotalBandwidth : null;
+        this.serverDefaultTemplateGroup = "serverinstanceTemplateServerdefaultGroup" in data ? data.serverinstanceTemplateServerdefaultGroup : null;
         this.channelDefaultTemplateGroup =
             "serverinstanceTemplateChanneldefaultGroup" in data ? data.serverinstanceTemplateChanneldefaultGroup : null;
-        this.channelAdminTemplateGroup =
-            "serverinstanceTemplateChanneladminGroup" in data ? data.serverinstanceTemplateChanneladminGroup : null;
+        this.channelAdminTemplateGroup = "serverinstanceTemplateChanneladminGroup" in data ? data.serverinstanceTemplateChanneladminGroup : null;
         this.totalMaxclients = "virtualserversTotalMaxclients" in data ? data.virtualserversTotalMaxclients : null;
-        this.totalClientsOnline =
-            "virtualserversTotalClientsOnline" in data ? data.virtualserversTotalClientsOnline : null;
-        this.totalChannelsOnline =
-            "virtualserversTotalChannelsOnline" in data ? data.virtualserversTotalChannelsOnline : null;
-        this.serverQueryFloodCommands =
-            "serverinstanceServerqueryFloodCommands" in data ? data.serverinstanceServerqueryFloodCommands : null;
-        this.serverQueryFloodTime =
-            "serverinstanceServerqueryFloodTime" in data ? data.serverinstanceServerqueryFloodTime : null;
-        this.serverQueryBanTime =
-            "serverinstanceServerqueryBanTime" in data ? data.serverinstanceServerqueryBanTime : null;
-        this.permissionsVersion =
-            "serverinstancePermissionsVersion" in data ? data.serverinstancePermissionsVersion : null;
-        this.pendingConnectionsPerIp =
-            "serverinstancePendingConnectionsPerIp" in data ? data.serverinstancePendingConnectionsPerIp : null;
+        this.totalClientsOnline = "virtualserversTotalClientsOnline" in data ? data.virtualserversTotalClientsOnline : null;
+        this.totalChannelsOnline = "virtualserversTotalChannelsOnline" in data ? data.virtualserversTotalChannelsOnline : null;
+        this.serverQueryFloodCommands = "serverinstanceServerqueryFloodCommands" in data ? data.serverinstanceServerqueryFloodCommands : null;
+        this.serverQueryFloodTime = "serverinstanceServerqueryFloodTime" in data ? data.serverinstanceServerqueryFloodTime : null;
+        this.serverQueryBanTime = "serverinstanceServerqueryBanTime" in data ? data.serverinstanceServerqueryBanTime : null;
+        this.permissionsVersion = "serverinstancePermissionsVersion" in data ? data.serverinstancePermissionsVersion : null;
+        this.pendingConnectionsPerIp = "serverinstancePendingConnectionsPerIp" in data ? data.serverinstancePendingConnectionsPerIp : null;
         this.serverQueryMaxConnectionsPerIp =
-            "serverinstanceServerqueryMaxConnectionsPerIp" in data
-                ? data.serverinstanceServerqueryMaxConnectionsPerIp
-                : null;
+            "serverinstanceServerqueryMaxConnectionsPerIp" in data ? data.serverinstanceServerqueryMaxConnectionsPerIp : null;
     }
 
     public override toJSON() {

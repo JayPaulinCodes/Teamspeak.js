@@ -20,7 +20,7 @@ export abstract class DataManager<HeldType extends Base> extends BaseManager {
     }
 
     public abstract resolve(idOrInstance: TsIdentifier | Object): HeldType | null;
-    
+
     public abstract resolveId(idOrInstance: TsIdentifier | HeldType): TsIdentifier | null;
 
     // public resolve(idOrInstance: TsIdentifier | Object): HeldType | null {
@@ -46,5 +46,4 @@ export abstract class DataManager<HeldType extends Base> extends BaseManager {
 
     //     return null;
     // }
-
 }

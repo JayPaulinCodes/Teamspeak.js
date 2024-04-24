@@ -1,6 +1,5 @@
 /* eslint line-comment-position: "off" */
 
-
 /**
  * Enum for the events emitted by {@link IQueryProtocol} classes
  */

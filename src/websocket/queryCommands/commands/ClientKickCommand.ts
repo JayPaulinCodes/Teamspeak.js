@@ -3,9 +3,9 @@ import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand
 /**
  * ### ClientKick Command
  *
- * Kicks one or more clients specified with clid from their currently joined 
- * channel or from the server, depending on reasonid. The reasonmsg parameter 
- * specifies a text message sent to the kicked clients. This parameter is optional 
+ * Kicks one or more clients specified with clid from their currently joined
+ * channel or from the server, depending on reasonid. The reasonmsg parameter
+ * specifies a text message sent to the kicked clients. This parameter is optional
  * and may only have a maximum of 40 characters.
  *
  * Permissions:
@@ -28,7 +28,7 @@ export class ClientKickCommand extends QueryCommand {
         const PARAMS: { [index: string]: any } = {
             clid: clientId,
             reasonid: reasonId
-        }
+        };
 
         if (reasonMessage !== undefined) {
             const trimedMsg = reasonMessage.trim();

@@ -1,4 +1,3 @@
-
 /**
  * Enum for the events emitted by the node {@link Socket} class
  */

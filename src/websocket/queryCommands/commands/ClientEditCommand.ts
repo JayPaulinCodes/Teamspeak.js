@@ -18,12 +18,11 @@ import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand
 export class ClientEditCommand extends QueryCommand {
     private static readonly baseCommand = "clientedit";
     private static readonly allowedProperties = [
-        "clientNickname",
-        "clientDefaultChannel",
-        "clientChannelGroupId",
-        "clientServerGroups",
-        "clientTalkPower",
-        "clientIsPrioritySpeaker",
+        // "clientDefaultChannel",
+        // "clientChannelGroupId",
+        // "clientServerGroups",
+        // "clientTalkPower",
+        // "clientIsPrioritySpeaker",
         "clientDescription"
     ];
 
