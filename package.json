@@ -1,6 +1,6 @@
 {
     "name": "teamspeak.js",
-    "version": "0.1.0",
+    "version": "0.1.0-beta1",
     "description": "A package for connecting and interacting with Teamspeak3 servers using Server Query",
     "author": "Jacob Paulin",
     "license": "MPL-2.0",
@@ -17,6 +17,10 @@
         "lint": "eslint ./src --ext .ts",
         "lint:fix": "eslint ./src --fix --ext .ts",
         "build": "tsc -b --force && tscpaths",
+        "prepublish:stable": "npm run build",
+        "publish:stable": "npm publish --access=public --tag stable",
+        "prepublish:beta": "npm run build",
+        "publish:beta": "npm publish --access=public --tag beta",
         "poc": "npm run build && node devPoc/index.js",
         "poc-no-build": "node devPoc/index.js"
     },
@@ -34,6 +38,7 @@
     },
     "devDependencies": {
         "@devjacob/shared-configs": "^1.0.2",
+        "@devjacob/tscpaths": "^0.1.8",
         "@types/node": "^20.9.0",
         "@typescript-eslint/eslint-plugin": "^6.19.1",
         "@typescript-eslint/parser": "^6.19.1",
