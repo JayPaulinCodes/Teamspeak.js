@@ -53,7 +53,7 @@ jobs:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Get version
+      - name: Load package.json into the env
         run: |
           echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
           cat ./package.json >> $GITHUB_ENV
@@ -62,4 +62,16 @@ jobs:
       - name: Read version
         run: |
           echo '${{ fromJson(env.PACKAGE_JSON).version }}'
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ fromJson(env.PACKAGE_JSON).version }}"
+          prerelease: true
+          title: "${{ fromJson(env.PACKAGE_JSON).version }}"
+          files: |
+            lib/*
+            LICENSE
+            README.md
+            package.json
         
