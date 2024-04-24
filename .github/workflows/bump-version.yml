@@ -1,25 +1,36 @@
 name: Version Bump
 
 on:
-    push:
-        branches:
-            - "develop"
+  push:
+    branches:
+      - "develop"
+    paths:
+      - "**"
+      - "!package.json"
 
 jobs:
-    build:
-        runs-on:
-            - self-hosted
-            - Linux
+  bump-version:
+    runs-on:
+      - self-hosted
+      - Linux
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "20.x"
-                  registry-url: "https://registry.npmjs.org"
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
 
-            - name: Bump package version
-              run: node .github/actions/bump-package-version.js
+      - name: Bump package version
+        run: node .github/actions/bump-package-version.js
+
+      - name: Push package.json
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "chore(npm): Bumped package version"
+          committer_name: GitHub Actions
+          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+          add: "package.json"
