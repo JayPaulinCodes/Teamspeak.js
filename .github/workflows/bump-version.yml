@@ -10,6 +10,7 @@ on:
 
 jobs:
   bump-version:
+    name: Bump package version
     runs-on:
       - self-hosted
       - Linux
@@ -34,3 +35,31 @@ jobs:
           committer_name: GitHub Actions
           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
           add: "package.json"
+
+  create-release:
+    name: Create release
+    runs-on:
+      - self-hosted
+      - Linux
+    needs: [ bump-version ]
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Get version
+        run: |
+          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+          cat ./package.json >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      
+      - name: Read version
+        run: |
+          echo '${{ fromJson(env.PACKAGE_JSON).version }}'
+        
