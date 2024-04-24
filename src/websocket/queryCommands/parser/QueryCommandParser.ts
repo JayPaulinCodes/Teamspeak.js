@@ -96,10 +96,7 @@ export class QueryCommandParser {
      * @param k the key which should get looked up
      * @param v the value which should get parsed
      */
-    static parseValue(
-        key: string,
-        value: string | undefined
-    ): boolean | string | string[] | number | number[] | undefined {
+    static parseValue(key: string, value: string | undefined): boolean | string | string[] | number | number[] | undefined {
         if (value === undefined) {
             return undefined;
         }
@@ -194,9 +191,7 @@ export class QueryCommandParser {
             value = `${value}`;
         }
         if (Array.isArray(value)) {
-            return value
-                .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
-                .join("|");
+            return value.map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`).join("|");
         } else {
             return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
         }
@@ -209,15 +204,8 @@ export class QueryCommandParser {
      * @return the parsed String which is readable by the TeamSpeak Query
      */
     // HACK: This entire function is basically a hack it feels, there has to be a better way to process this but hey, it works
-    static escapeKeyValue(
-        key: string,
-        value: boolean | string | string[] | number | number[] | ComplexQueryOptionElem[][]
-    ): string {
-        const valueType = Array.isArray(value)
-            ? Array.isArray(value[0])
-                ? typeof value[0][0] + "[]"
-                : typeof value
-            : typeof value;
+    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | ComplexQueryOptionElem[][]): string {
+        const valueType = Array.isArray(value) ? (Array.isArray(value[0]) ? typeof value[0][0] + "[]" : typeof value) : typeof value;
         key = QueryCommandParser.toSnakeCase(key);
 
         switch (valueType) {
@@ -232,27 +220,18 @@ export class QueryCommandParser {
 
             case "string[]":
                 const strValue: string[] = <string[]>value;
-                return strValue
-                    .map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
-                    .join("|");
+                return strValue.map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`).join("|");
 
             case "number[]":
                 const numValue: number[] = <number[]>value;
-                return numValue
-                    .map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`)
-                    .join("|");
+                return numValue.map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`).join("|");
 
             case "object[]":
                 const objValue: ComplexQueryOptionElem[][] = <ComplexQueryOptionElem[][]>value;
                 return objValue
                     .map(elem =>
                         elem
-                            .map(
-                                _elem =>
-                                    `${QueryCommandParser.escape(_elem.key.toString())}=${QueryCommandParser.escape(
-                                        _elem.value.toString()
-                                    )}`
-                            )
+                            .map(_elem => `${QueryCommandParser.escape(_elem.key.toString())}=${QueryCommandParser.escape(_elem.value.toString())}`)
                             .join(" ")
                     )
                     .join("|");

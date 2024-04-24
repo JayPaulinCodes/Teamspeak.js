@@ -10,12 +10,6 @@ export class ClientKickedFromChannelEvent extends Event {
         const invokingClient = queryClient.clients.resolve(data.invokerid);
         const channel = queryClient.channels.resolve(data.ctid);
 
-        queryClient.emit(
-            QueryClientEvents.ClientKickedFromChannel,
-            movingClient,
-            channel,
-            invokingClient,
-            data.reasonmsg
-        );
+        queryClient.emit(QueryClientEvents.ClientKickedFromChannel, movingClient, channel, invokingClient, data.reasonmsg);
     }
 }

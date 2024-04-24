@@ -63,12 +63,7 @@ export class WebSocketManager extends EventEmitter {
             case QueryProtocol.RAW:
                 return new RawQueryProtocol(options.socketOptions, options.queryProtocolOptions);
             default:
-                throw new TeamspeakJsError(
-                    TeamspeakJsErrorCodes.InvalidOption,
-                    "protocol",
-                    "'raw'",
-                    options.queryProtocolOptions?.protocol
-                );
+                throw new TeamspeakJsError(TeamspeakJsErrorCodes.InvalidOption, "protocol", "'raw'", options.queryProtocolOptions?.protocol);
         }
     }
 
@@ -141,15 +136,10 @@ export class WebSocketManager extends EventEmitter {
                     // Check if the error was a flooding error
                     if (error.id === "524") {
                         // Emit the flooding event
-                        this.emit(
-                            WebSocketManagerEvents.Flooding,
-                            this.currentQueueItem.command.getCommandTermination()
-                        );
+                        this.emit(WebSocketManagerEvents.Flooding, this.currentQueueItem.command.getCommandTermination());
 
                         // Wait the required amount of time specified in the error
-                        const match = this.currentQueueItem.command
-                            .getCommandTermination()!
-                            .extraMsg?.match(/(\d*) second/i);
+                        const match = this.currentQueueItem.command.getCommandTermination()!.extraMsg?.match(/(\d*) second/i);
                         const waitTimeout = match ? parseInt(match[1], 10) : 1;
 
                         clearTimeout(this.floodTimeout);

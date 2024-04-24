@@ -13,8 +13,10 @@ export class ClientSwitchedChannelsEvent extends Event {
         const allClients = await queryClient.clients.fetch();
         const allChannels = await queryClient.channels.fetch();
 
-        const movingClient = queryClient.clients.resolve(data.clid) ?? (<Collection<TsIdentifier, Client>>allClients).find(elem => elem.serverId === data.clid);
-        const channel = queryClient.channels.resolve(data.ctid) ?? (<Collection<TsIdentifier, Channel>>allChannels).find(elem => elem.id === data.ctid);
+        const movingClient =
+            queryClient.clients.resolve(data.clid) ?? (<Collection<TsIdentifier, Client>>allClients).find(elem => elem.serverId === data.clid);
+        const channel =
+            queryClient.channels.resolve(data.ctid) ?? (<Collection<TsIdentifier, Channel>>allChannels).find(elem => elem.id === data.ctid);
 
         queryClient.emit(QueryClientEvents.ClientSwitchedChannels, movingClient, channel);
     }

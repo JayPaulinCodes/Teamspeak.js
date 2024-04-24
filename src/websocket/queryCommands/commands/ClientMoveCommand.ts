@@ -3,9 +3,9 @@ import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand
 /**
  * ### ClientMove Command
  *
- * Moves one or more clients specified with clid to the channel 
- * with ID cid. If the target channel has a password, it needs to 
- * be specified with cpw. If the channel has no password, the 
+ * Moves one or more clients specified with clid to the channel
+ * with ID cid. If the target channel has a password, it needs to
+ * be specified with cpw. If the channel has no password, the
  * parameter can be omitted.
  *
  * Permissions:
@@ -26,7 +26,7 @@ export class ClientMoveCommand extends QueryCommand {
         const PARAMS: { [index: string]: any } = {
             clid: clientId,
             cid: channelId
-        }
+        };
 
         if (channelPassword !== undefined) {
             PARAMS["cpw"] = channelPassword;

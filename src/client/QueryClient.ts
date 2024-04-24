@@ -20,7 +20,7 @@ import {
     LoginCommand,
     ServerNotifyRegisterCommand,
     ServerNotifyUnregisterCommand,
-    UseCommand,
+    UseCommand
 } from "@teamspeak.js/websocket/queryCommands/commands/index";
 
 // ADD DOCS
@@ -74,10 +74,7 @@ export class QueryClient extends EventEmitter {
         this.webSocketManager.on(WebSocketManagerEvents.Ready, () => {
             const executions: Promise<any>[] = [];
 
-            if (
-                this.context.login &&
-                this.options.webSocketManagerOptions.queryProtocolOptions.protocol === QueryProtocol.RAW
-            ) {
+            if (this.context.login && this.options.webSocketManagerOptions.queryProtocolOptions.protocol === QueryProtocol.RAW) {
                 executions.push(this.prioritize().login(this.context.login.username, this.context.login.password));
             } else if (
                 this.options.username &&
@@ -89,27 +86,17 @@ export class QueryClient extends EventEmitter {
 
             if (this.context.selectType !== SelectType.NONE) {
                 if (this.context.selectType === SelectType.PORT) {
-                    executions.push(
-                        this.prioritize().useByPort(
-                            this.context.selected,
-                            this.context.clientNickname || this.options.nickname
-                        )
-                    );
+                    executions.push(this.prioritize().useByPort(this.context.selected, this.context.clientNickname || this.options.nickname));
                 } else if (this.context.selectType === SelectType.SID) {
                     throw Error("Not currently supported");
                 }
             } else if (this.options.webSocketManagerOptions.queryProtocolOptions.serverPort) {
                 executions.push(
-                    this.prioritize().useByPort(
-                        this.options.webSocketManagerOptions.queryProtocolOptions.serverPort,
-                        this.options.nickname
-                    )
+                    this.prioritize().useByPort(this.options.webSocketManagerOptions.queryProtocolOptions.serverPort, this.options.nickname)
                 );
             }
 
-            executions.push(
-                ...this.context.events.map(_event => this.prioritize().registerEvent(_event.event, _event.id))
-            );
+            executions.push(...this.context.events.map(_event => this.prioritize().registerEvent(_event.event, _event.id)));
 
             // executions.push(this.prioritize().version())
 
@@ -278,9 +265,7 @@ export class QueryClient extends EventEmitter {
      */
     // ADD DOCS
     private registerEvent(event: string, id?: string) {
-        return this.execute(new ServerNotifyRegisterCommand(event, id)).then(
-            this.updateContextResolve({ events: [{ event, id }] })
-        );
+        return this.execute(new ServerNotifyRegisterCommand(event, id)).then(this.updateContextResolve({ events: [{ event, id }] }));
     }
 
     /**

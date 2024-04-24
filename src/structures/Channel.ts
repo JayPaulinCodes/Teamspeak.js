@@ -38,85 +38,83 @@ export class Channel extends Base {
         if (key in data) {
             this["uniqueId"] = data[key];
         }
-        
+
         key = fromQuery ? "pid" : "parentId";
         if (key in data) {
             this["parentId"] = data[key];
         } else {
             this["parentId"] = null;
         }
-        
+
         key = fromQuery ? "channelName" : "name";
         if (key in data) {
             this["name"] = data[key];
         } else {
             this["name"] = undefined;
         }
-        
+
         key = fromQuery ? "channelDescription" : "description";
         if (key in data) {
             this["description"] = data[key];
         } else {
             this["description"] = undefined;
         }
-        
+
         key = fromQuery ? "topic" : "topic";
         if (key in data) {
             this["topic"] = data[key];
         } else {
             this["topic"] = undefined;
         }
-        
+
         key = fromQuery ? "channelOrder" : "order";
         if (key in data) {
             this["order"] = data[key];
         } else {
             this["order"] = undefined;
         }
-        
+
         key = fromQuery ? "channelIconId" : "iconId";
         if (key in data) {
             this["iconId"] = data[key];
         } else {
             this["iconId"] = undefined;
         }
-        
+
         key = fromQuery ? "channelNeededTalkPower" : "neededTalkPower";
         if (key in data) {
             this["neededTalkPower"] = data[key];
         } else {
             this["neededTalkPower"] = undefined;
         }
-        
+
         key = fromQuery ? "channelFlagPassword" : "hasPassword";
         if (key in data) {
             this["hasPassword"] = data[key];
         } else {
             this["hasPassword"] = undefined;
         }
-        
+
         key = fromQuery ? "channelPassword" : "password";
         if (key in data) {
             this["password"] = data[key];
         } else {
             this["password"] = undefined;
         }
-        
+
         key = fromQuery ? "channelMaxclients" : "maxClients";
         if (key in data) {
             this["maxClients"] = data[key];
         } else {
             this["maxClients"] = undefined;
         }
-        
+
         key = fromQuery ? "channelMaxfamilyclients" : "familyMaxClients";
         if (key in data) {
             this["familyMaxClients"] = data[key];
         } else {
             this["familyMaxClients"] = undefined;
         }
-
-
 
         // const x = {
         //     pid: "0",
@@ -159,5 +157,4 @@ export class Channel extends Base {
     public override toString() {
         return this.toJSON();
     }
-
 }

@@ -3,7 +3,7 @@ import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand
 /**
  * ### ClientDbList Command
  *
- * Displays a list of client identities known by the server 
+ * Displays a list of client identities known by the server
  * including their database ID, last nickname, etc.
  *
  * Permissions:

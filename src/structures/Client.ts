@@ -2,7 +2,15 @@ import { Base } from "@teamspeak.js/structures/Base";
 import { Channel } from "@teamspeak.js/structures/Channel";
 import { ServerGroupResolvable } from "@teamspeak.js/structures/typings/ServerGroupResolvable";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
-import { BanAddCommand, BanClientCommand, ClientDbEditCommand, ClientEditCommand, ClientKickCommand, ClientMoveCommand, ClientPokeCommand } from "@teamspeak.js/websocket/queryCommands/commands";
+import {
+    BanAddCommand,
+    BanClientCommand,
+    ClientDbEditCommand,
+    ClientEditCommand,
+    ClientKickCommand,
+    ClientMoveCommand,
+    ClientPokeCommand
+} from "@teamspeak.js/websocket/queryCommands/commands";
 import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
 import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
 import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
@@ -40,7 +48,7 @@ export class Client extends Base {
         super(queryClient);
 
         this.uniqueId = data[fromQuery ? "clientUniqueIdentifier" : "uniqueId"];
-        
+
         this._patch(data, fromQuery);
     }
 
@@ -71,7 +79,7 @@ export class Client extends Base {
         }
 
         // HACK
-        key = fromQuery ? "connectionClientIp" in data ? "connectionClientIp" : "clientLastIp" : "ip";
+        key = fromQuery ? ("connectionClientIp" in data ? "connectionClientIp" : "clientLastIp") : "ip";
         if (key in data) {
             this.ip = data[key];
         } else {
@@ -112,7 +120,7 @@ export class Client extends Base {
         } else {
             this.currentChannelId = null;
         }
-        this.connected = this.currentChannelId !== null
+        this.connected = this.currentChannelId !== null;
 
         key = fromQuery ? "clientVersion" : "version";
         if (key in data) {
@@ -198,13 +206,15 @@ export class Client extends Base {
      * Bans a client from the server
      * @param options An object containing the reason and duration
      */
-    public async ban(options?: { reason: string | undefined, duration: number | undefined }): Promise<void> {
+    public async ban(options?: { reason: string | undefined; duration: number | undefined }): Promise<void> {
         if (!this.isOnline || this.serverId === null) {
-            await this._queryClient.execute<{ banid: string }>(new BanAddCommand({
-                uniqueId: this.uniqueId,
-                reason: options?.reason, 
-                duration: options?.duration
-            }));
+            await this._queryClient.execute<{ banid: string }>(
+                new BanAddCommand({
+                    uniqueId: this.uniqueId,
+                    reason: options?.reason,
+                    duration: options?.duration
+                })
+            );
         } else {
             await this._queryClient.execute<{ banid: string }>(new BanClientCommand(this.serverId, options?.reason, options?.duration));
         }
@@ -253,14 +263,18 @@ export class Client extends Base {
     public async setDescription(description: string): Promise<void> {
         if (!this.isOnline || this.serverId === null) {
             if (this.databaseId === undefined) throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientSetDescription");
-            
-            await this._queryClient.execute(new ClientDbEditCommand(this.databaseId, {
-                clientDescription: description
-            }));
+
+            await this._queryClient.execute(
+                new ClientDbEditCommand(this.databaseId, {
+                    clientDescription: description
+                })
+            );
         } else {
-            await this._queryClient.execute(new ClientEditCommand(this.serverId, {
-                clientDescription: description
-            }));
+            await this._queryClient.execute(
+                new ClientEditCommand(this.serverId, {
+                    clientDescription: description
+                })
+            );
         }
     }
 
@@ -274,7 +288,7 @@ export class Client extends Base {
 
         // TODO: Throw a more meaningful error here
         if (resolvedChannel === null) throw new Error("AHH Cant find the channel from the provided parameter.");
-        
+
         await this._queryClient.execute(new ClientMoveCommand(this.serverId, resolvedChannel.id));
     }
 }
