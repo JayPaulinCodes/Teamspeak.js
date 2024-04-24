@@ -499,7 +499,7 @@ export class QueryCommandParser {
         cfid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         targetmode: QueryCommandParser.parseNumber,
         target: QueryCommandParser.parseNumber,
-        invokerid: QueryCommandParser.parseString,
+        invokerid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         invokername: QueryCommandParser.parseString,
         invokeruid: QueryCommandParser.parseString,
         hash: QueryCommandParser.parseString,

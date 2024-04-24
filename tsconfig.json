@@ -1,4 +1,6 @@
 {
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "include": [ "src/**/*.ts" ],
     "compilerOptions": {
         // Type Checking
         "alwaysStrict": true,
@@ -54,7 +56,5 @@
         // Command Line
 
         // Watch Options
-    },
-
-    "include": ["./src"]
+    }
 }

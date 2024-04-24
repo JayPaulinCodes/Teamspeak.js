@@ -2,9 +2,10 @@ import { Base } from "@teamspeak.js/structures/Base";
 import { Channel } from "@teamspeak.js/structures/Channel";
 import { ServerGroupResolvable } from "@teamspeak.js/structures/typings/ServerGroupResolvable";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { BanAddCommand, BanClientCommand, ClientDbEditCommand, ClientEditCommand, ClientKickCommand, ClientMoveCommand, ClientPokeCommand } from "@teamspeak.js/websocket/queryCommands/commands";
 import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
 import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
-import { BanClientCommand } from "@teamspeak.js/websocket/queryCommands/commands";
+import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
 
 // ADD DOCS
 export class Client extends Base {
@@ -193,12 +194,87 @@ export class Client extends Base {
         };
     }
 
+    /**
+     * Bans a client from the server
+     * @param options An object containing the reason and duration
+     */
     public async ban(options?: { reason: string | undefined, duration: number | undefined }): Promise<void> {
-        // TODO: Add support for offline bans
         if (!this.isOnline || this.serverId === null) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientBan");
+            await this._queryClient.execute<{ banid: string }>(new BanAddCommand({
+                uniqueId: this.uniqueId,
+                reason: options?.reason, 
+                duration: options?.duration
+            }));
+        } else {
+            await this._queryClient.execute<{ banid: string }>(new BanClientCommand(this.serverId, options?.reason, options?.duration));
         }
+    }
 
-        await this._queryClient.execute<{ banid: string }>(new BanClientCommand(this.serverId, options?.reason, options?.duration));
+    /**
+     * Kicks a client from the server
+     * @param reason (Optional) The reason to kick the client
+     */
+    public async kickFromServer(reason?: string): Promise<void> {
+        if (!this.isOnline || this.serverId === null) {
+            throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientServerKick");
+        } else {
+            await this._queryClient.execute(new ClientKickCommand(this.serverId, 5, reason));
+        }
+    }
+
+    /**
+     * Kicks a client from their current channel back to the default channel
+     * @param reason (Optional) The reason to kick the client
+     */
+    public async kickFromChannel(reason?: string): Promise<void> {
+        if (!this.isOnline || this.serverId === null) {
+            throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientChannelKick");
+        } else {
+            await this._queryClient.execute(new ClientKickCommand(this.serverId, 4, reason));
+        }
+    }
+
+    /**
+     * Pokes the client
+     * @param message The message to poke the client with
+     */
+    public async poke(message: string): Promise<void> {
+        if (!this.isOnline || this.serverId === null) {
+            throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientPoke");
+        } else {
+            await this._queryClient.execute(new ClientPokeCommand(this.serverId, message));
+        }
+    }
+
+    /**
+     * Set the description of the client
+     * @param description The client's description
+     */
+    public async setDescription(description: string): Promise<void> {
+        if (!this.isOnline || this.serverId === null) {
+            if (this.databaseId === undefined) throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientSetDescription");
+            
+            await this._queryClient.execute(new ClientDbEditCommand(this.databaseId, {
+                clientDescription: description
+            }));
+        } else {
+            await this._queryClient.execute(new ClientEditCommand(this.serverId, {
+                clientDescription: description
+            }));
+        }
+    }
+
+    /**
+     * Move the client to a specific channel
+     * @param channel The channel to move the client to
+     */
+    public async move(channel: TsIdentifier | Object): Promise<void> {
+        if (!this.isOnline || this.serverId === null) throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientMove");
+        const resolvedChannel = this._queryClient.channels.resolve(channel);
+
+        // TODO: Throw a more meaningful error here
+        if (resolvedChannel === null) throw new Error("AHH Cant find the channel from the provided parameter.");
+        
+        await this._queryClient.execute(new ClientMoveCommand(this.serverId, resolvedChannel.id));
     }
 }

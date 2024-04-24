@@ -15,6 +15,7 @@ export function flatten(obj: any, props: { [x: string]: boolean | string } = {})
   
     props = Object.assign(Object.keys(objProps).length ? objProps : {}, props);
   
+    // eslint-disable-next-line prefer-const
     for (let [prop, newProp] of Object.entries(props)) {
         if (!newProp) continue;
         newProp = newProp === true ? prop : newProp;

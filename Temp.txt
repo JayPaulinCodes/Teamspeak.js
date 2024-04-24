@@ -1,0 +1,9 @@
+Managers:
+
+- server
+    - channels
+        - clients
+    - clients
+        - serverGroups
+    - groups
+    
