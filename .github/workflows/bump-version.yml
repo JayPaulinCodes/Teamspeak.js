@@ -63,7 +63,8 @@ jobs:
         run: |
           echo '${{ fromJson(env.PACKAGE_JSON).version }}'
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Make release
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "${{ fromJson(env.PACKAGE_JSON).version }}"
