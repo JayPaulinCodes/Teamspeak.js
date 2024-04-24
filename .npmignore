@@ -1,0 +1,13 @@
+.github/
+.vscode/
+devPoc/
+node_modules/
+src/
+.DS_Store
+.editorconfig
+.eslintrc
+.gitignore
+.prettierignore
+Temp.txt
+tsconfig.json
+*.tgz
