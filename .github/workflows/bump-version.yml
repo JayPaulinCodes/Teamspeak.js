@@ -74,7 +74,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: true
-          title: "${{ fromJson(env.PACKAGE_JSON).version }}"
+          title: "v${{ fromJson(env.PACKAGE_JSON).version }}"
           files: |
             devjacob-teamspeak.js-${{ fromJson(env.PACKAGE_JSON).version }}.tgz
         
