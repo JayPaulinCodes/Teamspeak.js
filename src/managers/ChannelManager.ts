@@ -98,14 +98,15 @@ export class ChannelManager extends CachedManager<Channel> {
             return colData;
         } else {
             // Query for the channel
-            const channelData = await this.client.execute<Channel>(new ChannelInfoCommand(channelId)).then(data => {
+            const channelData = await this.client.execute<Channel>(new ChannelInfoCommand(channelId)).then((data: any) => {
+                data["cid"] = channelId;
                 return new Channel(this.client, data);
             });
+            this.client.debug("ChannelManager.fetch.channelData", channelData);
 
             // If we are using a cache we might as well update it it now that we have the data
             if (options.cache) {
                 this.add(channelData);
-                return this.cache.get(channelId);
             }
 
             // Return the appropriate data
