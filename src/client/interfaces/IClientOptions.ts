@@ -5,4 +5,6 @@ export interface IClientOptions {
     username?: string;
     password?: string;
     nickname?: string;
+    preCacheClients?: boolean;
+    preCacheChannels?: boolean;
 }
