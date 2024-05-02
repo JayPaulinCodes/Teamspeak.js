@@ -3,5 +3,5 @@ import { SelectType } from "@teamspeak.js/client/enums/SelectType";
 
 export interface SelectSidContext extends BaseContext {
     selectType: SelectType.SID;
-    selected: string;
+    selected: number;
 }

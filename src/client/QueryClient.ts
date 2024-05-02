@@ -88,7 +88,7 @@ export class QueryClient extends EventEmitter {
                 if (this.context.selectType === SelectType.PORT) {
                     executions.push(this.prioritize().useByPort(this.context.selected, this.context.clientNickname || this.options.nickname));
                 } else if (this.context.selectType === SelectType.SID) {
-                    throw Error("Not currently supported");
+                    executions.push(this.prioritize().useBySid(this.context.selected, this.context.clientNickname || this.options.nickname));
                 }
             } else if (this.options.webSocketManagerOptions.queryProtocolOptions.serverPort) {
                 executions.push(
@@ -312,6 +312,20 @@ export class QueryClient extends EventEmitter {
                 this.updateContextResolve({
                     selectType: SelectType.PORT,
                     selected: port,
+                    clientNickname,
+                    events: []
+                })
+            )
+            .catch(this.updateContextReject({ selectType: SelectType.NONE }));
+    }
+    
+    // ADD DOCS
+    private useBySid(serverId: number, clientNickname?: string) {
+        return this.execute(new UseCommand(serverId, undefined, true))
+            .then(
+                this.updateContextResolve({
+                    selectType: SelectType.SID,
+                    selected: serverId,
                     clientNickname,
                     events: []
                 })
