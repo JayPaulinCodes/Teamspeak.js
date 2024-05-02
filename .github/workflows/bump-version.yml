@@ -77,4 +77,8 @@ jobs:
           title: "v${{ fromJson(env.PACKAGE_JSON).version }}"
           files: |
             devjacob-teamspeak.js-${{ fromJson(env.PACKAGE_JSON).version }}.tgz
+            
+      - run: npm run publish:beta
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         
