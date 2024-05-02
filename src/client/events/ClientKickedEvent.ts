@@ -6,9 +6,9 @@ export class ClientKickedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const client = queryClient.clients.resolve(data.clid);
-        const invokingClient = queryClient.clients.resolve(data.invokerid);
-        const channel = queryClient.channels.resolve(data.cfid);
+        const client = await queryClient.clients.fetch(data.clid);
+        const invokingClient = await queryClient.clients.fetch(data.invokerid);
+        const channel = await queryClient.channels.fetch(data.cfid);
         const reason = data.reasonmsg;
 
         queryClient.emit(QueryClientEvents.ClientKicked, client, invokingClient, channel, reason);

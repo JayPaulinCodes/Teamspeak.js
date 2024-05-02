@@ -6,7 +6,7 @@ export class ServerHostButtonIconUrlUpdatedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const invokingClient = queryClient.clients.resolve(data.invokerid);
+        const invokingClient = await queryClient.clients.fetch(data.invokerid);
         const newIconUrl = data.virtualserverHostbuttonGfxUrl;
 
         queryClient.emit(QueryClientEvents.ServerHostButtonIconUrlUpdated, invokingClient, newIconUrl);

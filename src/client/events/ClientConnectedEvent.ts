@@ -6,8 +6,8 @@ export class ClientConnectedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const client = queryClient.clients.resolve(data.clientUniqueIdentifier);
-        const channel = queryClient.channels.resolve(data.ctid);
+        const client = await queryClient.clients.fetch(data.clientUniqueIdentifier);
+        const channel = await queryClient.channels.fetch(data.ctid);
 
         // if (client.databaseId !== null) {
         //     queryClient.updateDatabaseId(data.clid, client.databaseId);

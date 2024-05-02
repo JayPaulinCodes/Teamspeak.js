@@ -6,9 +6,9 @@ export class ClientBannedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const client = queryClient.clients.resolve(data.clid);
-        const invokingClient = queryClient.clients.resolve(data.invokeruid);
-        const channel = queryClient.channels.resolve(data.cfid);
+        const client = await queryClient.clients.fetch(data.clid);
+        const invokingClient = await queryClient.clients.fetch(data.invokeruid);
+        const channel = await queryClient.channels.fetch(data.cfid);
         const reason = data.reasonmsg;
         const bantime = data.bantime;
 
