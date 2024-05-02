@@ -10,6 +10,7 @@ import {
     ClientGetDbIdFromUIdCommand,
     ClientGetIdsCommand,
     ClientGetUIdFromClIdCommand,
+    ClientInfoCommand,
     ClientListCommand
 } from "@teamspeak.js/websocket/queryCommands/commands";
 
@@ -145,10 +146,15 @@ export class ClientManager extends CachedManager<Client> {
                 clientData._patch(data);
             });
 
+            if (clientData.serverId !== null) {
+                await this.client.execute(new ClientInfoCommand(clientData.serverId)).then(data => {
+                    clientData._patch(data);
+                });
+            }
+
             // If we are using a cache we might as well update it it now that we have the data
             if (options.cache) {
                 this.add(clientData);
-                return this.cache.get(clientUniqueId);
             }
 
             // Return the appropriate data
