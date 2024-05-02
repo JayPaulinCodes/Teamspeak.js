@@ -90,10 +90,16 @@ export class QueryClient extends EventEmitter {
                 } else if (this.context.selectType === SelectType.SID) {
                     executions.push(this.prioritize().useBySid(this.context.selected, this.context.clientNickname || this.options.nickname));
                 }
-            } else if (this.options.webSocketManagerOptions.queryProtocolOptions.serverPort) {
+            } else if (this.options.webSocketManagerOptions.queryProtocolOptions.serverPort !== undefined) {
                 executions.push(
                     this.prioritize().useByPort(this.options.webSocketManagerOptions.queryProtocolOptions.serverPort, this.options.nickname)
                 );
+            } else if (this.options.webSocketManagerOptions.queryProtocolOptions.serverId !== undefined) {
+                executions.push(
+                    this.prioritize().useBySid(this.options.webSocketManagerOptions.queryProtocolOptions.serverId, this.options.nickname)
+                );
+            } else {
+                throw Error("No server port or id specified");
             }
 
             executions.push(...this.context.events.map(_event => this.prioritize().registerEvent(_event.event, _event.id)));
