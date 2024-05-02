@@ -56,25 +56,25 @@ export class Client extends Base {
         return this.currentChannelId === null ? null : this._queryClient.channels.resolve(this.currentChannelId);
     }
 
-    public _patch(data: any, fromQuery: boolean = true) {
+    public _patch(data: any, fromQuery: boolean = true, updating: boolean = true) {
         let key = fromQuery ? "clid" : "serverId";
         if (key in data) {
             this.serverId = data[key];
-        } else {
+        } else if (!updating) {
             this.serverId = null;
         }
 
         key = fromQuery ? "clientDatabaseId" : "databaseId";
         if (key in data) {
             this.databaseId = data[key];
-        } else {
+        } else if (!updating) {
             this.databaseId = undefined;
         }
 
         key = fromQuery ? "clientMyteamspeakId" : "myTeamspeakId";
         if (key in data) {
             this.myTeamspeakId = data[key];
-        } else {
+        } else if (!updating) {
             this.myTeamspeakId = undefined;
         }
 
@@ -82,42 +82,42 @@ export class Client extends Base {
         key = fromQuery ? ("connectionClientIp" in data ? "connectionClientIp" : "clientLastIp") : "ip";
         if (key in data) {
             this.ip = data[key];
-        } else {
+        } else if (!updating) {
             this.ip = undefined;
         }
 
         key = fromQuery ? "clientCreated" : "createdTimestamp";
         if (key in data) {
             this.createdTimestamp = data[key];
-        } else {
+        } else if (!updating) {
             this.createdTimestamp = undefined;
         }
 
         key = fromQuery ? "clientLastconnected" : "lastConnectedTimestamp";
         if (key in data) {
             this.lastConnectedTimestamp = data[key];
-        } else {
+        } else if (!updating) {
             this.lastConnectedTimestamp = undefined;
         }
 
         key = fromQuery ? "clientNickname" : "nickname";
         if (key in data) {
             this.nickname = data[key];
-        } else {
+        } else if (!updating) {
             this.nickname = undefined;
         }
 
         key = fromQuery ? "clientDescription" : "description";
         if (key in data) {
             this.description = data[key];
-        } else {
+        } else if (!updating) {
             this.description = undefined;
         }
 
         key = fromQuery ? "cid" : "currentChannelId";
         if (key in data) {
             this.currentChannelId = data[key];
-        } else {
+        } else if (!updating) {
             this.currentChannelId = null;
         }
         this.connected = this.currentChannelId !== null;
@@ -125,70 +125,70 @@ export class Client extends Base {
         key = fromQuery ? "clientVersion" : "version";
         if (key in data) {
             this.version = data[key];
-        } else {
+        } else if (!updating) {
             this.version = undefined;
         }
 
         key = fromQuery ? "clientPlatform" : "platform";
         if (key in data) {
             this.platform = data[key];
-        } else {
+        } else if (!updating) {
             this.platform = undefined;
         }
 
         key = fromQuery ? "clientChannelGroupId" : "channelGroupId";
         if (key in data) {
             this.channelGroupId = data[key];
-        } else {
+        } else if (!updating) {
             this.channelGroupId = null;
         }
 
         key = fromQuery ? "clientServergroups" : "serverGroups";
         if (key in data) {
             this.serverGroups = data[key];
-        } else {
+        } else if (!updating) {
             this.serverGroups = [];
         }
 
         key = fromQuery ? "clientAway" : "isAway";
         if (key in data) {
             this.isAway = data[key];
-        } else {
+        } else if (!updating) {
             this.isAway = false;
         }
 
         key = fromQuery ? "clientAwayMessage" : "awayMessage";
         if (key in data) {
             this.awayMessage = data[key];
-        } else {
+        } else if (!updating) {
             this.awayMessage = undefined;
         }
 
         key = fromQuery ? "clientIsTalker" : "isTalking";
         if (key in data) {
             this.isTalking = data[key];
-        } else {
+        } else if (!updating) {
             this.isTalking = false;
         }
 
         key = fromQuery ? "clientInputMuted" : "inputMuted";
         if (key in data) {
             this.inputMuted = data[key];
-        } else {
+        } else if (!updating) {
             this.inputMuted = false;
         }
 
         key = fromQuery ? "clientOutputMuted" : "outputMuted";
         if (key in data) {
             this.outputMuted = data[key];
-        } else {
+        } else if (!updating) {
             this.outputMuted = false;
         }
 
         key = fromQuery ? "clientIsRecording" : "isRecording";
         if (key in data) {
             this.isRecording = data[key];
-        } else {
+        } else if (!updating) {
             this.isRecording = false;
         }
 

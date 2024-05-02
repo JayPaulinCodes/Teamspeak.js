@@ -26,14 +26,14 @@ export class Channel extends Base {
 
         this.id = data[fromQuery ? "cid" : "id"];
 
-        this._patch(data, fromQuery);
+        this._patch(data, fromQuery, false);
     }
 
     public get parent(): Channel | null {
         return this.parentId === null ? null : this._queryClient.channels.resolve(this.parentId);
     }
 
-    public _patch(data: any, fromQuery: boolean = true) {
+    public _patch(data: any, fromQuery: boolean = true, updating: boolean = true) {
         let key = fromQuery ? "channelUniqueIdentifier" : "uniqueId";
         if (key in data) {
             this["uniqueId"] = data[key];
@@ -42,77 +42,77 @@ export class Channel extends Base {
         key = fromQuery ? "pid" : "parentId";
         if (key in data) {
             this["parentId"] = data[key];
-        } else {
+        } else if (!updating) {
             this["parentId"] = null;
         }
 
         key = fromQuery ? "channelName" : "name";
         if (key in data) {
             this["name"] = data[key];
-        } else {
+        } else if (!updating) {
             this["name"] = undefined;
         }
 
         key = fromQuery ? "channelDescription" : "description";
         if (key in data) {
             this["description"] = data[key];
-        } else {
+        } else if (!updating) {
             this["description"] = undefined;
         }
 
         key = fromQuery ? "topic" : "topic";
         if (key in data) {
             this["topic"] = data[key];
-        } else {
+        } else if (!updating) {
             this["topic"] = undefined;
         }
 
         key = fromQuery ? "channelOrder" : "order";
         if (key in data) {
             this["order"] = data[key];
-        } else {
+        } else if (!updating) {
             this["order"] = undefined;
         }
 
         key = fromQuery ? "channelIconId" : "iconId";
         if (key in data) {
             this["iconId"] = data[key];
-        } else {
+        } else if (!updating) {
             this["iconId"] = undefined;
         }
 
         key = fromQuery ? "channelNeededTalkPower" : "neededTalkPower";
         if (key in data) {
             this["neededTalkPower"] = data[key];
-        } else {
+        } else if (!updating) {
             this["neededTalkPower"] = undefined;
         }
 
         key = fromQuery ? "channelFlagPassword" : "hasPassword";
         if (key in data) {
             this["hasPassword"] = data[key];
-        } else {
+        } else if (!updating) {
             this["hasPassword"] = undefined;
         }
 
         key = fromQuery ? "channelPassword" : "password";
         if (key in data) {
             this["password"] = data[key];
-        } else {
+        } else if (!updating) {
             this["password"] = undefined;
         }
 
         key = fromQuery ? "channelMaxclients" : "maxClients";
         if (key in data) {
             this["maxClients"] = data[key];
-        } else {
+        } else if (!updating) {
             this["maxClients"] = undefined;
         }
 
         key = fromQuery ? "channelMaxfamilyclients" : "familyMaxClients";
         if (key in data) {
             this["familyMaxClients"] = data[key];
-        } else {
+        } else if (!updating) {
             this["familyMaxClients"] = undefined;
         }
 
