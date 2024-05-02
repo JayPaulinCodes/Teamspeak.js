@@ -9,6 +9,7 @@ import {
     ClientDbListCommand,
     ClientGetDbIdFromUIdCommand,
     ClientGetIdsCommand,
+    ClientGetUIdFromClIdCommand,
     ClientListCommand
 } from "@teamspeak.js/websocket/queryCommands/commands";
 
@@ -70,19 +71,19 @@ export class ClientManager extends CachedManager<Client> {
     }
 
     public async fetch(
-        clientUniqueId: string | undefined = undefined,
+        clientId: string | number | undefined = undefined,
         options: { cache: boolean; force: boolean } = { cache: true, force: false }
     ): Promise<Client | Collection<TsIdentifier, Client> | undefined> {
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;
 
         // If we aren't forcing the query check try to find it in the cache
-        if (!options.force && clientUniqueId !== undefined) {
-            const existingItem = this.cache.get(clientUniqueId);
+        if (!options.force && clientId !== undefined) {
+            const existingItem = this.cache.get(clientId);
             if (existingItem !== undefined) return existingItem;
         }
 
-        if (clientUniqueId === undefined) {
+        if (clientId === undefined) {
             // Query for the clients
             const clientsData = await this.client.execute<any[]>(new ClientDbListCommand()).then(data => {
                 return data.map(elem => new Client(this.client, elem));
@@ -114,6 +115,18 @@ export class ClientManager extends CachedManager<Client> {
             clientsData.forEach(elem => colData.set(elem.uniqueId, elem));
             return colData;
         } else {
+            let clientUniqueId: string | undefined = undefined;
+            // If the id provided is a number assume it to be the server id and convert to unique id
+            if (typeof clientId === "number") {
+                await this.client.execute(new ClientGetUIdFromClIdCommand(clientId)).then(data => {
+                    clientUniqueId = data?.cluid ?? undefined;
+                });
+            }
+
+            if (clientUniqueId === undefined) {
+                return undefined;
+            }
+
             // Convert the unique id into a db id
             const clientDbId = await this.client.execute(new ClientGetDbIdFromUIdCommand(clientUniqueId)).then(data => {
                 return data?.cldbid;
