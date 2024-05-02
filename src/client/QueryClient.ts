@@ -110,8 +110,7 @@ export class QueryClient extends EventEmitter {
 
             return Promise.all(executions)
                 .then(async () => {
-                    if (this.options.preCacheClients === true) 
-                        await this.clients.fetch(undefined, { cache: true, force: true });
+                    await this.clients.fetch(undefined, { cache: true, force: true });
                     
                     if (this.options.preCacheChannels === true) 
                         await this.channels.fetch(undefined, { cache: true, force: true });

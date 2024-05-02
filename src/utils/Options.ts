@@ -48,7 +48,6 @@ export class Options {
     static buildClientOptions(options?: Partial<IClientOptions>): IClientOptions {
         const newOptions = {
             webSocketManagerOptions: Options.buildWebSocketManagerOptions(),
-            preCacheClients: false,
             preCacheChannels: false,
             ...options
         };
