@@ -59,12 +59,17 @@ export class ChannelManager extends CachedManager<Channel> {
         channelId: number | undefined = undefined,
         options: { cache: boolean; force: boolean } = { cache: true, force: false }
     ): Promise<Channel | Collection<TsIdentifier, Channel> | undefined> {
+            this.client.debug("ChannelManager.fetch", {
+                channelId,
+                options,
+            });
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;
 
         // If we aren't forcing the query check try to find it in the cache
         if (!options.force && channelId !== undefined) {
             const existingItem = this.cache.get(channelId);
+            this.client.debug("ChannelManager.fetch.existingItem", existingItem);
             if (existingItem !== undefined) return existingItem;
         }
 

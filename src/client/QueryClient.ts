@@ -264,6 +264,10 @@ export class QueryClient extends EventEmitter {
             .catch(this.updateContextReject({ login: undefined }));
     }
 
+    public debug(type: string, data: any) {
+        super.emit(QueryClientEvents.Debug, type, data)
+    }
+
     /**
      * Subscribes to an Event
      * @param event the event on which should be subscribed
