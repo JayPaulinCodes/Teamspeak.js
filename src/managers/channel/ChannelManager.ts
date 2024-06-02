@@ -1,6 +1,6 @@
 import { Collection } from "@discordjs/collection";
 import { CachedManager } from "@teamspeak.js/managers/CachedManager";
-import { Channel } from "@teamspeak.js/structures/Channel";
+import { Channel } from "@teamspeak.js/structures/classes/Channel";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
 import { ChannelInfoCommand, ChannelListCommand } from "@teamspeak.js/websocket/queryCommands/commands";

@@ -1,9 +1,16 @@
 Managers:
 
-- server
-    - channels
-        - clients
-    - clients
-        - serverGroups
-    - groups
+- virtualServer (VirtualServerManager)
+    - channel (ChannelManager)
+        - clients (ChannelClientManager)
+
+    - channelGroup (ChannelGroupManager)
+
+    - client (ClientManager)
+        - serverGroups (ClientServerGroupManager)
+        - complaints (ClientComplaintManager)
+
+    - complaint (ComplaintManager)
+    
+    - serverGroup (ServerGroupManager)
     

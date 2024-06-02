@@ -46,6 +46,9 @@ export * from "@teamspeak.js/websocket/queryCommands/commands/ClientListCommand"
 export * from "@teamspeak.js/websocket/queryCommands/commands/ClientMoveCommand";
 export * from "@teamspeak.js/websocket/queryCommands/commands/ClientPermListCommand";
 export * from "@teamspeak.js/websocket/queryCommands/commands/ClientPokeCommand";
+export * from "@teamspeak.js/websocket/queryCommands/commands/ClientSetServerQueryLoginCommand";
+export * from "@teamspeak.js/websocket/queryCommands/commands/ClientUpdateCommand";
+export * from "@teamspeak.js/websocket/queryCommands/commands/ComplainAddCommand";
 export * from "@teamspeak.js/websocket/queryCommands/commands/HelpCommand";
 export * from "@teamspeak.js/websocket/queryCommands/commands/HostInfoCommand";
 export * from "@teamspeak.js/websocket/queryCommands/commands/InstanceEditCommand";

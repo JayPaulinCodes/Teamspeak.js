@@ -1,5 +1,5 @@
-import { Base } from "@teamspeak.js/structures/Base";
-import { Channel } from "@teamspeak.js/structures/Channel";
+import { Base } from "@teamspeak.js/structures/classes/Base";
+import { Channel } from "@teamspeak.js/structures/classes/Channel";
 import { ServerGroupResolvable } from "@teamspeak.js/structures/typings/ServerGroupResolvable";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import {
@@ -220,6 +220,7 @@ export class Client extends Base {
         this._isOnline = this._platform !== undefined && this._ip !== undefined;
     }
 
+    // TODO: Update
     public override toJSON() {
         return {
             ...super.toJSON(),
