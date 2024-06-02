@@ -6,10 +6,10 @@
     "license": "MPL-2.0",
     "main": "lib/index.js",
     "prettier": "@devjacob/shared-configs/.prettierrc.json",
-    "homepage": "https://github.com/SparrowStudios/Teamspeak.js#readme",
+    "homepage": "https://github.com/JayPaulinCodes/Teamspeak.js#readme",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SparrowStudios/Teamspeak.js.git"
+        "url": "git+https://github.com/JayPaulinCodes/Teamspeak.js.git"
     },
     "scripts": {
         "format:check": "prettier src -c",
