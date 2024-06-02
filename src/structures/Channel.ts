@@ -154,7 +154,7 @@ export class Channel extends Base {
         return super.toJSON();
     }
 
-    public override toString() {
-        return this.toJSON();
+    public override toString(): string {
+        return `'${this.name}' (${this.id})`;
     }
 }

@@ -19,6 +19,7 @@ export class ClientManager extends CachedManager<Client> {
         super(client, Client, prefill);
     }
 
+
     protected add(data: Client, useCache: boolean = true): Client {
         const existingItem = this.cache.get(data.uniqueId);
 

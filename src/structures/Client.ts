@@ -78,7 +78,6 @@ export class Client extends Base {
             this.myTeamspeakId = undefined;
         }
 
-        // HACK
         key = fromQuery ? ("connectionClientIp" in data ? "connectionClientIp" : "clientLastIp") : "ip";
         if (key in data) {
             this.ip = data[key];
@@ -203,7 +202,7 @@ export class Client extends Base {
     }
 
     public override toString(): string {
-        return `${this.nickname} (${this.uniqueId} | ${this.ip})`
+        return `${this.nickname} (${this.uniqueId} | ${this.ip})`;
     }
 
     /**

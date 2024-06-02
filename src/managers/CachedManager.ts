@@ -24,4 +24,12 @@ export abstract class CachedManager<HeldType extends Base> extends DataManager<H
     }
 
     protected abstract add(data: HeldType, useCache: boolean): HeldType;
+
+    public toJSON(): Object {
+        return this._cache.map(item => item.toJSON());
+    }
+
+    public override toString(): string {
+        return JSON.stringify(this.toJSON(), undefined, 2);
+    }
 }
