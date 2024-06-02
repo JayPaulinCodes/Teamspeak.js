@@ -92,9 +92,15 @@ export class ClientManager extends CachedManager<Client> {
 
         if (clientId === undefined) {
             // Query for the clients
-            const clientsData = await this.client.execute<any[]>(new ClientDbListCommand()).then(data => {
-                return data.map(elem => new Client(this.client, elem));
-            });
+            let gotData = false;
+            let clientsData: Client[] = [];
+            do {
+                const newData = await this.client.execute<any[]>(new ClientDbListCommand()).then(data => {
+                    gotData = data.length > 0;
+                    return data.map(elem => new Client(this.client, elem));
+                });
+                clientsData = clientsData.concat(newData);
+            } while (gotData);
 
             const onlineClients = await this.client
                 .execute<
