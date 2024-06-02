@@ -202,6 +202,10 @@ export class Client extends Base {
         };
     }
 
+    public override toString(): string {
+        return `${this.nickname} (${this.uniqueId} | ${this.ip})`
+    }
+
     /**
      * Bans a client from the server
      * @param options An object containing the reason and duration
