@@ -21,7 +21,7 @@ export class ClientDbListCommand extends QueryCommand {
 
     // ADD DOCS
     constructor(offset?: number, count: boolean = false) {
-        const flags = count ? [ "count" ] : [];
+        const flags = count ? [ "-count" ] : [];
         if (offset !== undefined) {
             super(ClientDbListCommand.baseCommand, { start: offset }, flags);
         } else {
