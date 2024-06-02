@@ -203,7 +203,7 @@ export class QueryCommandParser {
      * @param {string|string[]} value the value or an array of values
      * @return the parsed String which is readable by the TeamSpeak Query
      */
-    // HACK: This entire function is basically a hack it feels, there has to be a better way to process this but hey, it works
+    // HACK: This entire function is basically a hack it feels like, there has to be a better way to process this but hey, it works
     static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | ComplexQueryOptionElem[][]): string {
         const valueType = Array.isArray(value) ? (Array.isArray(value[0]) ? typeof value[0][0] + "[]" : typeof value) : typeof value;
         key = QueryCommandParser.toSnakeCase(key);
