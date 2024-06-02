@@ -78,12 +78,12 @@ export class ClientManager extends CachedManager<Client> {
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;
 
-        // If we aren't forcing the query check try to find it in the cache
+        // If we aren't forcing the query check, try to find it in the cache
         if (!options.force && clientId !== undefined) {
             let existingItem: Client | undefined;
-            if (typeof existingItem === "string") {
+            if (typeof clientId === "string") {
                 existingItem = this.cache.get(clientId)
-            } else if (typeof existingItem === "number") {
+            } else if (typeof clientId === "number") {
                 existingItem = this.cache.find(elem => elem.serverId === clientId);
                 existingItem = existingItem ?? this.cache.find(elem => elem.databaseId === clientId);
             }
