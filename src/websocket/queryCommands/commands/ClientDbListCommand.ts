@@ -20,7 +20,11 @@ export class ClientDbListCommand extends QueryCommand {
     private static readonly baseCommand = "clientdblist";
 
     // ADD DOCS
-    constructor() {
-        super(ClientDbListCommand.baseCommand);
+    constructor(offset?: number) {
+        if (offset !== undefined) {
+            super(ClientDbListCommand.baseCommand, { start: offset });
+        } else {
+            super(ClientDbListCommand.baseCommand);
+        }
     }
 }
