@@ -20,11 +20,12 @@ export class ClientDbListCommand extends QueryCommand {
     private static readonly baseCommand = "clientdblist";
 
     // ADD DOCS
-    constructor(offset?: number) {
+    constructor(offset?: number, count: boolean = false) {
+        const flags = count ? [ "count" ] : [];
         if (offset !== undefined) {
-            super(ClientDbListCommand.baseCommand, { start: offset });
+            super(ClientDbListCommand.baseCommand, { start: offset }, flags);
         } else {
-            super(ClientDbListCommand.baseCommand);
+            super(ClientDbListCommand.baseCommand, undefined, flags);
         }
     }
 }
