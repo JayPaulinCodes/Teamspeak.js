@@ -17,6 +17,18 @@ export * from "@teamspeak.js/errors/TeamspeakJsErrorMessages";
 
 // Structures
 export * from "@teamspeak.js/structures/classes/Base";
+export * from "@teamspeak.js/structures/classes/Channel";
+export * from "@teamspeak.js/structures/classes/ChannelGroup";
+export * from "@teamspeak.js/structures/classes/Client";
+export * from "@teamspeak.js/structures/classes/Permission";
+export * from "@teamspeak.js/structures/classes/ServerGroup";
+export * from "@teamspeak.js/structures/classes/VirtualServer";
+export * from "@teamspeak.js/structures/enums/CodecEncryptionMode";
+export * from "@teamspeak.js/structures/enums/HostBannerMode";
+export * from "@teamspeak.js/structures/enums/HostMessageMode";
+export * from "@teamspeak.js/structures/enums/PermissionSid";
+export * from "@teamspeak.js/structures/interfaces/BasePatch";
+export * from "@teamspeak.js/structures/typings/TsIdentifier";
 export * from "@teamspeak.js/structures/ServerVersionInformation";
 
 // Utils
