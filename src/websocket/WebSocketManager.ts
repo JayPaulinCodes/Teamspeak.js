@@ -298,7 +298,7 @@ export class WebSocketManager extends EventEmitter {
                         if ("reasonid" in notifyData) {
                             switch (notifyData.reasonid) {
                                 case 10:
-                                    if ("cid" in notifyData && "invokerId" in notifyData) {
+                                    if ("cid" in notifyData && "invokeruid" in notifyData) {
                                         if ("channelIconId" in notifyData) {
                                             this.queryClient.eventManager["ChannelIconUpdated"].handle(notifyData);
                                         }
