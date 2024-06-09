@@ -98,8 +98,15 @@ export class ClientManager extends CachedManager<Client> {
 
                 for (let i = 0; i < newData.length; i++) {
                     const client = newData[i];
-                    if (client.databaseId !== undefined) {
-                        await this.queryClient.execute<any[]>(new QueryCommand("clientdbinfo", { cldbid: client.databaseId })).then(data => {
+                    
+                    const clientDbId = await this.queryClient.execute(new QueryCommand("clientgetdbidfromuid", { cluid: client.uniqueId })).then(data => {
+                        return data?.cldbid;
+                    });
+
+                    client._patch({ cldbid: clientDbId }, true, true);
+
+                    if (clientDbId !== undefined) {
+                        await this.queryClient.execute<any[]>(new QueryCommand("clientdbinfo", { cldbid: clientDbId })).then(data => {
                             return client._patch(data, true, true);
                         });
                     }
