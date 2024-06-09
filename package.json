@@ -1,6 +1,6 @@
 {
     "name": "@devjacob/teamspeak.js",
-    "version": "0.1.2-beta9",
+    "version": "0.1.2-beta10",
     "description": "A package for connecting and interacting with Teamspeak3 servers using Server Query",
     "author": "Jacob Paulin",
     "license": "MPL-2.0",
