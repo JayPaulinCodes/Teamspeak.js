@@ -89,13 +89,25 @@ export class ClientManager extends CachedManager<Client> {
             });
 
             let offset = 0;
-            let clientsData: Client[] = [];
+            const clientsData: Client[] = [];
             do {
                 const newData = await this.queryClient.execute<any[]>(new QueryCommand("clientdblist", { start: offset })).then(data => {
                     offset += data.length;
                     return data.map(elem => new Client(this.queryClient, elem));
                 });
-                clientsData = clientsData.concat(newData);
+
+                for (let i = 0; i < newData.length; i++) {
+                    const client = newData[i];
+                    if (client.databaseId !== undefined) {
+                        await this.queryClient.execute<any[]>(new QueryCommand("clientdbinfo", { cldbid: client.databaseId })).then(data => {
+                            return client._patch(data, true, true);
+                        });
+                    }
+
+                    clientsData.push(client);
+                }
+
+                // clientsData = clientsData.concat(newData);
             } while (offset < totalCount);
 
             const onlineClients = await this.queryClient
