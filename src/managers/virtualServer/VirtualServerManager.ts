@@ -72,7 +72,11 @@ export class VirtualServerManager extends CachedManager<VirtualServer> {
             "-short",
             "-all"
         ])).then(data => {
-            return data.map(elem => new VirtualServer(this.queryClient, elem));
+            if (Array.isArray(data)) {
+                return data.map(elem => new VirtualServer(this.queryClient, elem));
+            } else {
+                return [ new VirtualServer(this.queryClient, data) ];
+            }
         });
 
         if (id === undefined) {
