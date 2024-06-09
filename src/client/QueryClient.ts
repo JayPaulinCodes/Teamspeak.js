@@ -16,6 +16,16 @@ import { WebSocketManager } from "@teamspeak.js/websocket/WebSocketManager";
 import { VirtualServer, VirtualServerResolvable } from "@teamspeak.js/structures/classes/VirtualServer";
 import { VirtualServerManager } from "@teamspeak.js/managers/virtualServer/VirtualServerManager";
 import { ServerGroupManager } from "@teamspeak.js/managers/serverGroup/ServerGroupManager";
+import { EventFunction } from "./events/EventFunctions";
+
+
+export declare interface QueryClient {
+    addListener<Event extends keyof EventFunction>(event: Event, listener: EventFunction[Event]): this;
+    on<Event extends keyof EventFunction>(event: Event, listener: EventFunction[Event]): this;
+    once<Event extends keyof EventFunction>(event: Event, listener: EventFunction[Event]): this;
+    removeListener<Event extends keyof EventFunction>(event: Event, listener: EventFunction[Event]): this;
+    off<Event extends keyof EventFunction>(event: Event, listener: EventFunction[Event]): this;
+}
 
 // ADD DOCS
 export class QueryClient extends EventEmitter {
@@ -156,7 +166,7 @@ export class QueryClient extends EventEmitter {
             super.emit(QueryClientEvents.Error, error);
         });
 
-        this.on("newListener", (event: string) => {
+        super.on("newListener", (event: string) => {
             super.emit(QueryClientEvents.Debug, "newListener", event);
             const commands: Promise<any>[] = [];
 
@@ -403,9 +413,9 @@ export class QueryClient extends EventEmitter {
     public connect(): Promise<QueryClient> {
         return new Promise((fulfill, reject) => {
             const removeListeners = () => {
-                this.removeListener("ready", readyCallback);
-                this.removeListener("error", errorCallback);
-                this.removeListener("close", closeCallback);
+                this.removeListener(QueryClientEvents.Ready, readyCallback);
+                this.removeListener(QueryClientEvents.Error, errorCallback);
+                this.removeListener(QueryClientEvents.Close, closeCallback);
             };
 
             const readyCallback = () => {
@@ -425,9 +435,9 @@ export class QueryClient extends EventEmitter {
                 reject(new Error("TeamSpeak Server prematurely closed the connection"));
             };
 
-            this.once("ready", readyCallback);
-            this.once("error", errorCallback);
-            this.once("close", closeCallback);
+            this.once(QueryClientEvents.Ready, readyCallback);
+            this.once(QueryClientEvents.Error, errorCallback);
+            this.once(QueryClientEvents.Close, closeCallback);
 
             this.webSocketManager.connect();
         });
