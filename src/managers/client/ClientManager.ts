@@ -158,7 +158,7 @@ export class ClientManager extends CachedManager<Client> {
                 return new Client(this.queryClient, data);
             });
 
-            await this.queryClient.execute(new QueryCommand("getclientids", { cluid: clientUniqueId })).then(data => {
+            await this.queryClient.execute(new QueryCommand("clientgetids", { cluid: clientUniqueId })).then(data => {
                 clientData._patch(data);
             });
 
