@@ -25,7 +25,7 @@ export class Channel extends Base {
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
         
-        this._id = data[fromQuery ? "virtualserverId" : "id"];
+        this._id = data[fromQuery ? "cid" : "id"];
 
         this._patch(data, fromQuery);
     
