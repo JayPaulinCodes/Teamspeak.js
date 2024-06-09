@@ -3,7 +3,7 @@ import { QueryCommandParser } from "@teamspeak.js/websocket/queryCommands/parser
 import { QueryCommandTermination } from "@teamspeak.js/websocket/queryCommands/interfaces/QueryCommandTermination";
 
 // ADD DOCS
-export abstract class QueryCommand {
+export class QueryCommand {
     private rawCommand: string;
     private options: QueryCommandOptions = {};
     private flags: string[] = [];

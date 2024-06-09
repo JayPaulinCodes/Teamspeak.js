@@ -1,4 +1,4 @@
-import { Base } from "@teamspeak.js/structures/Base";
+import { Base } from "@teamspeak.js/structures/classes/Base";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS

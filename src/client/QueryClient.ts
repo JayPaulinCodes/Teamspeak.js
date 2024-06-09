@@ -5,41 +5,32 @@ import { Context } from "@teamspeak.js/client/typings/Context";
 import { EventManager } from "@teamspeak.js/client/events/EventManager";
 import { IClientOptions } from "@teamspeak.js/client/interfaces/IClientOptions";
 import { SelectType } from "@teamspeak.js/client/enums/SelectType";
-import { ChannelManager } from "@teamspeak.js/managers/ChannelManager";
-import { ClientManager } from "@teamspeak.js/managers/ClientManager";
-import { Client } from "@teamspeak.js/structures/Client";
+import { ChannelManager } from "@teamspeak.js/managers/channel/ChannelManager";
+import { ClientManager } from "@teamspeak.js/managers/client/ClientManager";
 import { Options } from "@teamspeak.js/utils/Options";
 import { QueryClientEvents } from "@teamspeak.js/utils/enums/QueryClientEvents";
 import { WebSocketManagerEvents } from "@teamspeak.js/utils/enums/WebSocketManagerEvents";
-import { ClientListCommandFlags } from "@teamspeak.js/websocket/enums/ClientListCommandFlags";
 import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
 import { QueryProtocol } from "@teamspeak.js/websocket/enums/QueryProtocol";
 import { WebSocketManager } from "@teamspeak.js/websocket/WebSocketManager";
-import {
-    ClientListCommand,
-    LoginCommand,
-    ServerNotifyRegisterCommand,
-    ServerNotifyUnregisterCommand,
-    UseCommand
-} from "@teamspeak.js/websocket/queryCommands/commands/index";
+import { VirtualServer, VirtualServerResolvable } from "@teamspeak.js/structures/classes/VirtualServer";
+import { VirtualServerManager } from "@teamspeak.js/managers/virtualServer/VirtualServerManager";
+import { ServerGroupManager } from "@teamspeak.js/managers/serverGroup/ServerGroupManager";
 
 // ADD DOCS
 export class QueryClient extends EventEmitter {
     // ADD DOCS
     public readonly options: IClientOptions;
 
-    // ADD DOCS
-    public readonly eventManager: EventManager;
-
-    // ADD DOCS
-    public channels: ChannelManager;
-
-    // ADD DOCS
-    public clients: ClientManager;
+    private _eventManager: EventManager;
+    private _servers: VirtualServerManager;
+    private _serverGroups: ServerGroupManager;
+    private _clients: ClientManager;
+    private _channels: ChannelManager;
+    private _activeVirtualServerId: VirtualServerResolvable = -1;
 
     private priorizeNextCommand: boolean = false;
     private webSocketManager: WebSocketManager;
-    // private serverDatabaseIdMap: Record<string, number> = {};
     private context: Context = {
         selectType: SelectType.NONE,
         selected: 0,
@@ -54,12 +45,14 @@ export class QueryClient extends EventEmitter {
 
         this.options = Options.buildClientOptions(options);
 
-        this.eventManager = new EventManager(this);
+        this._eventManager = new EventManager(this);
 
         this.webSocketManager = new WebSocketManager(this, this.options.webSocketManagerOptions);
 
-        this.channels = new ChannelManager(this);
-        this.clients = new ClientManager(this);
+        this._servers = new VirtualServerManager(this);
+        this._serverGroups = new ServerGroupManager(this);
+        this._clients = new ClientManager(this);
+        this._channels = new ChannelManager(this);
 
         this.attachEvents();
 
@@ -67,6 +60,27 @@ export class QueryClient extends EventEmitter {
             this.connect().catch(() => null);
         }
     }
+
+    // ADD DOCS
+    public get eventManager(): EventManager { return this._eventManager; }
+
+    // ADD DOCS
+    public get servers(): VirtualServerManager { return this._servers; }
+
+    // ADD DOCS
+    public get serverGroups(): ServerGroupManager { return this._serverGroups; }
+
+    // ADD DOCS
+    public get clients(): ClientManager { return this._clients; }
+
+    // ADD DOCS
+    public get channels(): ChannelManager { return this._channels; }
+
+    // ADD DOCS
+    public get activeVirtualServerId(): VirtualServerResolvable { return this._activeVirtualServerId; }
+
+    // ADD DOCS
+    public get activeVirtualServer(): VirtualServer | undefined { return this.servers.resolve(this.activeVirtualServerId) ?? undefined; }
 
     // ADD DOCS
     private attachEvents() {
@@ -110,6 +124,8 @@ export class QueryClient extends EventEmitter {
 
             return Promise.all(executions)
                 .then(async () => {
+                    await this.servers.fetch(undefined, { cache: true, force: true });
+                    await this.serverGroups.fetch(undefined, { cache: true, force: true });
                     await this.clients.fetch(undefined, { cache: true, force: true });
                     
                     if (this.options.preCacheChannels === true) 
@@ -239,10 +255,6 @@ export class QueryClient extends EventEmitter {
             Promise.all(commands).catch(e => this.emit("error", e));
         });
 
-        // xTODO: This is just here for debug, remove once done
-        // this.webSocketManager.on("cliententerview", data =>
-        //     super.emit(QueryClientEvents.Debug, "cliententerview", data)
-        // );
         this.webSocketManager.on("clientleftview", data => super.emit(QueryClientEvents.Debug, "clientleftview", data));
         this.webSocketManager.on("tokenused", data => super.emit(QueryClientEvents.Debug, "tokenused", data));
         this.webSocketManager.on("serveredited", data => super.emit(QueryClientEvents.Debug, "serveredited", data));
@@ -261,7 +273,10 @@ export class QueryClient extends EventEmitter {
      */
     // ADD DOCS
     private login(username: string, password: string) {
-        return this.execute(new LoginCommand(username, password))
+        return this.execute(new QueryCommand("login", {
+            ["client_login_name"]: username,
+            ["client_login_password"]: password
+        }))
             .then(this.updateContextResolve({ login: { username, password } }))
             .catch(this.updateContextReject({ login: undefined }));
     }
@@ -275,17 +290,18 @@ export class QueryClient extends EventEmitter {
      * @param event the event on which should be subscribed
      * @param id the channel id, only required when subscribing to the "channel" event
      */
-    // ADD DOCS
     private registerEvent(event: string, id?: string) {
-        return this.execute(new ServerNotifyRegisterCommand(event, id)).then(this.updateContextResolve({ events: [{ event, id }] }));
+        const options: { [key: string]: any } = { ["event"]: event };
+        if (id !== undefined) {
+            options["id"] = id;
+        }
+
+        return this.execute(new QueryCommand("servernotifyregister", options)).then(this.updateContextResolve({ events: [{ event, id }] }));
     }
 
-    /**
-     * Subscribes to an Event.
-     */
     // ADD DOCS
     private unregisterEvent() {
-        return this.execute(new ServerNotifyUnregisterCommand()).then(this.updateContextResolve({ events: [] }));
+        return this.execute(new QueryCommand("servernotifyunregister")).then(this.updateContextResolve({ events: [] }));
     }
 
     /**
@@ -293,7 +309,6 @@ export class QueryClient extends EventEmitter {
      * @param event event name which was subscribed to
      * @param id context to check
      */
-    // ADD DOCS
     private isSubscribedToEvent(event: string, id?: string) {
         return this.context.events.some(ev => {
             if (ev.event === event) {
@@ -306,7 +321,6 @@ export class QueryClient extends EventEmitter {
     /**
      * Priorizes the next command, this commands will be first in execution
      */
-    // ADD DOCS
     private prioritize() {
         this.priorizeNextCommand = true;
         return this;
@@ -317,9 +331,8 @@ export class QueryClient extends EventEmitter {
      * @param port the port the server runs on
      * @param clientNickname set nickname when selecting a server
      */
-    // ADD DOCS
     private useByPort(port: number, clientNickname?: string) {
-        return this.execute(new UseCommand(undefined, port, true))
+        return this.execute(new QueryCommand("use", { ["port"]: port }, [ "-virtual" ]))
             .then(
                 this.updateContextResolve({
                     selectType: SelectType.PORT,
@@ -333,7 +346,7 @@ export class QueryClient extends EventEmitter {
     
     // ADD DOCS
     private useBySid(serverId: number, clientNickname?: string) {
-        return this.execute(new UseCommand(serverId, undefined, true))
+        return this.execute(new QueryCommand("use", { ["sid"]: serverId }, [ "-virtual" ]))
             .then(
                 this.updateContextResolve({
                     selectType: SelectType.SID,
@@ -349,7 +362,6 @@ export class QueryClient extends EventEmitter {
      * updates the context with new data
      * @param data the data to update the context with
      */
-    // ADD DOCS
     private updateContext(data: Partial<Context>) {
         if (!Array.isArray(data.events)) {
             data.events = [];
@@ -367,9 +379,9 @@ export class QueryClient extends EventEmitter {
      * and returns the first parameter
      * @param context context data to update
      */
-    // ADD DOCS
     private updateContextResolve<T>(context: Partial<Context>) {
         return (res: T) => {
+            this._activeVirtualServerId = context.selected ?? -1;
             this.updateContext(context);
             return res;
         };
@@ -380,27 +392,12 @@ export class QueryClient extends EventEmitter {
      * and throws the first parameter which is an error
      * @param context context data to update
      */
-    // ADD DOCS
     private updateContextReject<T extends Error>(context: Partial<Context>) {
         return (err: T) => {
             this.updateContext(context);
             throw err;
         };
     }
-
-    // public tryGetDatabaseId(serverId: number): number | null {
-    //     return this.serverDatabaseIdMap[`id_${serverId}`] ?? null;
-    // }
-
-    // public updateDatabaseId(serverId: number, databaseId: number | null): void {
-    //     if (databaseId === null) {
-    //         delete this.serverDatabaseIdMap[`id_${serverId}`];
-    //         return;
-    //     }
-
-    //     this.serverDatabaseIdMap[`id_${serverId}`] = databaseId;
-    //     return;
-    // }
 
     // ADD DOCS
     public connect(): Promise<QueryClient> {
@@ -439,7 +436,6 @@ export class QueryClient extends EventEmitter {
     /**
      * Forcefully closes the socket connection
      */
-    // ADD DOCS
     public forceQuit(): void {
         return this.webSocketManager.forceQuit();
     }
@@ -451,7 +447,6 @@ export class QueryClient extends EventEmitter {
      * ts3.execute("clientlist", ["-ip"])
      * ts3.execute("use", [9987], { clientnickname: "test" })
      */
-    // ADD DOCS
     public execute<T = any>(command: QueryCommand): Promise<T> {
         if (this.priorizeNextCommand) {
             this.priorizeNextCommand = false;
@@ -460,93 +455,4 @@ export class QueryClient extends EventEmitter {
             return <any>this.webSocketManager.execute(command);
         }
     }
-
-    // Actual useable stuff now
-
-    // ADD DOCS
-    // public async getServerQueryConnectionInfo(): Promise<ServerQueryConnection> {
-    //     return this.execute<ServerQueryConnection>(new WhoAmICommand()).then(data => {
-    //         return new ServerQueryConnection(this, data);
-    //     });
-    // }
-
-    // // ADD DOCS
-    // public async getServerVersionInfo(): Promise<ServerVersionInformation> {
-    //     return this.execute<ServerVersionInformation>(new VersionCommand()).then(data => {
-    //         return new ServerVersionInformation(this, data);
-    //     });
-    // }
-
-    // // ADD DOCS
-    // public async getServerInstace(): Promise<ServerInstance> {
-    //     // Because Teamspeak is a bitch and has 2 commands to gather server instance info,
-    //     // run them back to back and compile the data
-    //     return this.execute<ServerInstance>(new HostInfoCommand()).then(hostData => {
-    //         return this.execute<ServerInstance>(new InstanceInfoCommand()).then(instanceData => {
-    //             return new ServerInstance(this, { ...hostData, ...instanceData });
-    //         });
-    //     });
-    // }
-
-    // // ADD DOCS
-    // public async getClientByServerId(clientServerId: number): Promise<Client> {
-    //     return this.execute<Client>(new ClientInfoCommand(clientServerId)).then(data => {
-    //         return new Client(this, data);
-    //     });
-    // }
-
-    // // ADD DOCS
-    // public async getClientByDbId(clientDbId: number): Promise<Client> {
-    //     return this.execute<Client>(new ClientDbInfoCommand(clientDbId)).then(data => {
-    //         return new Client(this, data);
-    //     });
-    // }
-
-    // // ADD DOCS
-    public async getAllClients(flags: ClientListCommandFlags[] = []): Promise<Client[]> {
-        return this.execute<Client[]>(new ClientListCommand(flags)).then(data => {
-            const result: Client[] = [];
-            for (let i = 0; i < data.length; i++) {
-                const elem = data[i];
-                result.push(new Client(this, elem));
-            }
-            return result;
-        });
-    }
-
-    // // ADD DOCS
-    // public async getServerGroups(): Promise<ServerGroup[]> {
-    //     return this.execute<any[]>(new ServerGroupListCommand()).then(data => {
-    //         return data.map(elem => new ServerGroup(this, elem));
-    //     });
-    // }
-
-    // // ADD DOCS
-    // public async getServerGroupById(serverGroupId: number): Promise<ServerGroup | undefined> {
-    //     const allGroups = await this.getServerGroups();
-    //     return allGroups.find(group => group.id === serverGroupId);
-    // }
-
-    // // ADD DOCS
-    // public async getServerGroupByIds(serverGroupIds: number[]): Promise<ServerGroup[] | undefined> {
-    //     const allGroups = await this.getServerGroups();
-    //     if (serverGroupIds === undefined) {
-    //         return undefined;
-    //     }
-    //     return allGroups.filter(group => group.id !== null && serverGroupIds.includes(group.id));
-    // }
-
-    // // ADD DOCS
-    // public async getServerGroupPerms(serverGroupId: number): Promise<Permission[]> {
-    //     return this.execute<any[]>(new ServerGroupPermListCommand(serverGroupId)).then(data => {
-    //         return data.map(elem => new Permission(this, elem));
-    //     });
-    // }
-
-    // // ADD DOCS
-    // public async getChannelById(channelId: number): Promise<Channel> {
-    //     return this.execute<Channel>(new ChannelInfoCommand(channelId)).then(data => {
-    //         return new Channel(this, { ...data, id: channelId });
-    //     });
-    // }
 }

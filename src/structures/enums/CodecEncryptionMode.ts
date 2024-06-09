@@ -1,11 +1,10 @@
-// ADD DOCS
 export enum CodecEncryptionMode {
-    // ADD DOCS
+    // configure per channel
     Individual = 0,
 
-    // ADD DOCS
+    // globally disabled
     Disabled = 1,
 
-    // ADD DOCS
+    // globally enabled
     Enabled = 2
 }

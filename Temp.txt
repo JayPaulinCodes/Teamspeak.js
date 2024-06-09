@@ -5,12 +5,17 @@ Managers:
         - clients (ChannelClientManager)
 
     - channelGroup (ChannelGroupManager)
+        - permissions (ChannelGroupPermissionManager)
 
     - client (ClientManager)
+        - channelGroup (ClientChannelGroupManager)
         - serverGroups (ClientServerGroupManager)
         - complaints (ClientComplaintManager)
 
     - complaint (ComplaintManager)
+
+    - permission (PermissionManager)
     
     - serverGroup (ServerGroupManager)
+        - permissions (ServerGroupPermissionManager)
     

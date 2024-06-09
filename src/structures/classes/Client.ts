@@ -1,27 +1,15 @@
 import { Base } from "@teamspeak.js/structures/classes/Base";
-import { Channel } from "@teamspeak.js/structures/classes/Channel";
-import { ServerGroupResolvable } from "@teamspeak.js/structures/typings/ServerGroupResolvable";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
-import {
-    BanAddCommand,
-    BanClientCommand,
-    ClientDbEditCommand,
-    ClientEditCommand,
-    ClientKickCommand,
-    ClientMoveCommand,
-    ClientPokeCommand
-} from "@teamspeak.js/websocket/queryCommands/commands";
-import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
-import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
+import { ServerGroupResolvable } from "@teamspeak.js/structures/classes/ServerGroup";
+import { ClientServerGroupManager } from "@teamspeak.js/managers/client/ClientServerGroupManager";
 
-// ADD DOCS
+export type ClientResolvable = Client | string;
+
 export class Client extends Base {
-    /**
-     * Primary Identifier
-     */
+    private _serverGroups: ClientServerGroupManager;
+
     private _uniqueId: string;
-    private _serverId: number | null = null;
+    private _serverId?: number;
     private _databaseId?: number;
     private _myTeamspeakId?: string;
     private _ip?: string;
@@ -32,11 +20,11 @@ export class Client extends Base {
     private _version?: string;
     private _platform?: string;
     private _connected: boolean = false;
-    private _currentChannelId: number | null = null;
-    private _channelGroupId: number | null = null;
-    private _serverGroups: ServerGroupResolvable[] = [];
+    private _currentChannelId?: number;
+    private _channelGroupId?: number;
+    private _serverGroupIds: ServerGroupResolvable[] = [];
     private _isAway: boolean = false;
-    private _awayMessage?: string = undefined;
+    private _awayMessage?: string;
     private _isTalking: boolean = false;
     private _inputMuted: boolean = false;
     private _outputMuted: boolean = false;
@@ -46,40 +34,12 @@ export class Client extends Base {
     // ADD DOCS
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
-
+        
         this._uniqueId = data[fromQuery ? "clientUniqueIdentifier" : "uniqueId"];
 
         this._patch(data, fromQuery);
-    }
 
-    /**
-     * Primary Identifier
-     */
-    public get uniqueId(): string { return this._uniqueId; }
-    public get serverId(): number | null { return this._serverId; }
-    public get databaseId(): number | undefined { return this._databaseId; }
-    public get myTeamspeakId(): string | undefined { return this._myTeamspeakId; }
-    public get ip(): string | undefined { return this._ip; }
-    public get createdTimestamp(): number | undefined { return this._createdTimestamp; }
-    public get lastConnectedTimestamp(): number | undefined { return this._lastConnectedTimestamp; }
-    public get nickname(): string | undefined { return this._nickname; }
-    public get description(): string | undefined { return this._description; }
-    public get version(): string | undefined { return this._version; }
-    public get platform(): string | undefined { return this._platform; }
-    public get connected(): boolean { return this._connected; }
-    public get currentChannelId(): number | null { return this._currentChannelId; }
-    public get channelGroupId(): number | null { return this._channelGroupId; }
-    public get serverGroups(): ServerGroupResolvable[] { return this._serverGroups; }
-    public get isAway(): boolean { return this._isAway; }
-    public get awayMessage(): string | undefined { return this._awayMessage; }
-    public get isTalking(): boolean { return this._isTalking; }
-    public get inputMuted(): boolean { return this._inputMuted; }
-    public get outputMuted(): boolean { return this._outputMuted; }
-    public get isRecording(): boolean { return this._isRecording; }
-    public get isOnline(): boolean { return this._isOnline; }
-
-    public get currentChannel(): Channel | null {
-        return this._currentChannelId === null ? null : this._queryClient.channels.resolve(this._currentChannelId);
+        this._serverGroups = new ClientServerGroupManager(queryClient, this);
     }
 
     public _patch(data: any, fromQuery: boolean = true, updating: boolean = true) {
@@ -87,7 +47,7 @@ export class Client extends Base {
         if (key in data) {
             this._serverId = data[key];
         } else if (!updating) {
-            this._serverId = null;
+            this._serverId = undefined;
         }
 
         key = fromQuery ? "clientDatabaseId" : "databaseId";
@@ -143,7 +103,7 @@ export class Client extends Base {
         if (key in data) {
             this._currentChannelId = data[key];
         } else if (!updating) {
-            this._currentChannelId = null;
+            this._currentChannelId = undefined;
         }
         this._connected = this._currentChannelId !== null;
 
@@ -165,14 +125,14 @@ export class Client extends Base {
         if (key in data) {
             this._channelGroupId = data[key];
         } else if (!updating) {
-            this._channelGroupId = null;
+            this._channelGroupId = undefined;
         }
 
-        key = fromQuery ? "clientServergroups" : "serverGroups";
+        key = fromQuery ? "clientServergroups" : "serverGroupIds";
         if (key in data) {
-            this._serverGroups = data[key];
+            this._serverGroupIds = data[key];
         } else if (!updating) {
-            this._serverGroups = [];
+            this._serverGroupIds = [];
         }
 
         key = fromQuery ? "clientAway" : "isAway";
@@ -216,126 +176,102 @@ export class Client extends Base {
         } else if (!updating) {
             this._isRecording = false;
         }
+    }
+    
+    // ADD DOCS
+    public get serverGroups(): ClientServerGroupManager { return this._serverGroups; }
 
-        this._isOnline = this._platform !== undefined && this._ip !== undefined;
+    // ADD DOCS
+    public get id(): string { return this.uniqueId; }
+
+    // ADD DOCS
+    public get uniqueId(): string { return this._uniqueId; }
+
+    // ADD DOCS
+    public get serverId(): number | undefined { return this._serverId; }
+    
+    // ADD DOCS
+    public get databaseId(): number | undefined { return this._databaseId; }
+    
+    // ADD DOCS
+    public get myTeamspeakId(): string | undefined { return this._myTeamspeakId; }
+    
+    // ADD DOCS
+    public get ip(): string | undefined { return this._ip; }
+    
+    // ADD DOCS
+    public get createdTimestamp(): number | undefined { return this._createdTimestamp; }
+    
+    // ADD DOCS
+    public get lastConnectedTimestamp(): number | undefined { return this._lastConnectedTimestamp; }
+    
+    // ADD DOCS
+    public get nickname(): string | undefined { return this._nickname; }
+    
+    // ADD DOCS
+    public get description(): string | undefined { return this._description; }
+    
+    // ADD DOCS
+    public get version(): string | undefined { return this._version; }
+    
+    // ADD DOCS
+    public get platform(): string | undefined { return this._platform; }
+    
+    // ADD DOCS
+    public get connected(): boolean { return this._connected; }
+    
+    // ADD DOCS
+    public get currentChannelId(): number | undefined { return this._currentChannelId; }
+    
+    // ADD DOCS
+    public get channelGroupId(): number | undefined { return this._channelGroupId; }
+    
+    // ADD DOCS
+    public get serverGroupIds(): ServerGroupResolvable[] { return this._serverGroupIds; }
+    
+    // ADD DOCS
+    public get isAway(): boolean { return this._isAway; }
+    
+    // ADD DOCS
+    public get awayMessage(): string | undefined { return this._awayMessage; }
+    
+    // ADD DOCS
+    public get isTalking(): boolean { return this._isTalking; }
+    
+    // ADD DOCS
+    public get inputMuted(): boolean { return this._inputMuted; }
+    
+    // ADD DOCS
+    public get outputMuted(): boolean { return this._outputMuted; }
+    
+    // ADD DOCS
+    public get isRecording(): boolean { return this._isRecording; }
+    
+    // ADD DOCS
+    public get isOnline(): boolean { return this._isOnline; }
+
+    // ADD DOCS
+    public async setNickname(nickname: string): Promise<void> {
+        // TODO: Implementation
     }
 
-    // TODO: Update
-    public override toJSON() {
-        return {
-            ...super.toJSON(),
-            currentChannel: this.currentChannel?.toJSON()
-        };
+    // ADD DOCS
+    public async setIsTalker(isTalker: boolean): Promise<void> {
+        // TODO: Implementation
     }
 
-    public override toString(): string {
-        return `${this._nickname} (${this._uniqueId} | ${this._ip})`;
-    }
-
-    /**
-     * Bans a client from the server
-     * @param options An object containing the reason and duration
-     */
-    public async ban(reason?: string): Promise<void> {
-        if (!this._isOnline || this._serverId === null) {
-            await this._queryClient.execute<{ banid: string }>(
-                new BanAddCommand({
-                    uniqueId: this._uniqueId,
-                    reason: reason
-                })
-            );
-        } else {
-            await this._queryClient.execute<{ banid: string }>(new BanClientCommand(this._serverId, reason));
-        }
-    }
-
-    /**
-     * Temporarily bans a client from the server
-     * @param options An object containing the reason and duration
-     */
-    public async tempban(duration: number, reason?: string): Promise<void> {
-        if (!this._isOnline || this._serverId === null) {
-            await this._queryClient.execute<{ banid: string }>(
-                new BanAddCommand({
-                    uniqueId: this._uniqueId,
-                    reason: reason,
-                    duration: duration
-                })
-            );
-        } else {
-            await this._queryClient.execute<{ banid: string }>(new BanClientCommand(this._serverId, reason, duration));
-        }
-    }
-
-    /**
-     * Kicks a client from the server
-     * @param reason (Optional) The reason to kick the client
-     */
-    public async kickFromServer(reason?: string): Promise<void> {
-        if (!this._isOnline || this._serverId === null) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientServerKick");
-        } else {
-            await this._queryClient.execute(new ClientKickCommand(this._serverId, 5, reason));
-        }
-    }
-
-    /**
-     * Kicks a client from their current channel back to the default channel
-     * @param reason (Optional) The reason to kick the client
-     */
-    public async kickFromChannel(reason?: string): Promise<void> {
-        if (!this._isOnline || this._serverId === null) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientChannelKick");
-        } else {
-            await this._queryClient.execute(new ClientKickCommand(this._serverId, 4, reason));
-        }
-    }
-
-    /**
-     * Pokes the client
-     * @param message The message to poke the client with
-     */
-    public async poke(message: string): Promise<void> {
-        if (!this._isOnline || this._serverId === null) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientPoke");
-        } else {
-            await this._queryClient.execute(new ClientPokeCommand(this._serverId, message));
-        }
-    }
-
-    /**
-     * Set the description of the client
-     * @param description The client's description
-     */
+    // ADD DOCS
     public async setDescription(description: string): Promise<void> {
-        if (!this._isOnline || this._serverId === null) {
-            if (this._databaseId === undefined) throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientSetDescription");
-
-            await this._queryClient.execute(
-                new ClientDbEditCommand(this._databaseId, {
-                    clientDescription: description
-                })
-            );
-        } else {
-            await this._queryClient.execute(
-                new ClientEditCommand(this._serverId, {
-                    clientDescription: description
-                })
-            );
-        }
+        // TODO: Implementation
     }
 
-    /**
-     * Move the client to a specific channel
-     * @param channel The channel to move the client to
-     */
-    public async move(channel: TsIdentifier | Object): Promise<void> {
-        if (!this._isOnline || this._serverId === null) throw new TeamspeakJsError(TeamspeakJsErrorCodes.ClientNotOnline, "clientMove");
-        const resolvedChannel = this._queryClient.channels.resolve(channel);
+    // ADD DOCS
+    public async setIsChannelCommander(isTalker: boolean): Promise<void> {
+        // TODO: Implementation
+    }
 
-        // TODO: Throw a more meaningful error here
-        if (resolvedChannel === null) throw new Error("AHH Cant find the channel from the provided parameter.");
-
-        await this._queryClient.execute(new ClientMoveCommand(this._serverId, resolvedChannel.id));
+    // ADD DOCS
+    public async setIconId(iconId: number): Promise<void> {
+        // TODO: Implementation
     }
 }

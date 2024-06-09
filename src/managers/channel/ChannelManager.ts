@@ -1,9 +1,9 @@
 import { Collection } from "@discordjs/collection";
 import { CachedManager } from "@teamspeak.js/managers/CachedManager";
-import { Channel } from "@teamspeak.js/structures/classes/Channel";
+import { Channel, ChannelResolvable } from "@teamspeak.js/structures/classes/Channel";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
-import { ChannelInfoCommand, ChannelListCommand } from "@teamspeak.js/websocket/queryCommands/commands";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
 
 export class ChannelManager extends CachedManager<Channel> {
     constructor(client: QueryClient, prefill: Collection<TsIdentifier, Channel> | undefined = undefined) {
@@ -24,14 +24,14 @@ export class ChannelManager extends CachedManager<Channel> {
             return clone;
         }
 
-        const entry = this.holds ? new this.holds(this.client, data, false) : data;
+        const entry = this.holds ? new this.holds(this.queryClient, data, false) : data;
         if (useCache) {
             this.cache.set(data.id, entry);
         }
         return entry;
     }
 
-    public resolve(idOrInstance: TsIdentifier | Object): Channel | null {
+    public resolve(idOrInstance: ChannelResolvable): Channel | null {
         if (idOrInstance instanceof this.holds) {
             return idOrInstance;
         }
@@ -43,7 +43,7 @@ export class ChannelManager extends CachedManager<Channel> {
         return null;
     }
 
-    public resolveId(idOrInstance: TsIdentifier | Channel): TsIdentifier | null {
+    public resolveId(idOrInstance: ChannelResolvable): TsIdentifier | null {
         if (idOrInstance instanceof this.holds) {
             return idOrInstance.id;
         }
@@ -59,7 +59,7 @@ export class ChannelManager extends CachedManager<Channel> {
         channelId: number | undefined = undefined,
         options: { cache: boolean; force: boolean } = { cache: true, force: false }
     ): Promise<Channel | Collection<TsIdentifier, Channel> | undefined> {
-            this.client.debug("ChannelManager.fetch", {
+            this.queryClient.debug("ChannelManager.fetch", {
                 channelId,
                 options,
             });
@@ -69,19 +69,26 @@ export class ChannelManager extends CachedManager<Channel> {
         // If we aren't forcing the query check try to find it in the cache
         if (!options.force && channelId !== undefined) {
             const existingItem = this.cache.get(channelId);
-            this.client.debug("ChannelManager.fetch.existingItem", existingItem);
+            this.queryClient.debug("ChannelManager.fetch.existingItem", existingItem);
             if (existingItem !== undefined) return existingItem;
         }
 
         if (channelId === undefined) {
             // Query for the channels
-            const channelsData = await this.client.execute<Channel[]>(new ChannelListCommand()).then(data => {
-                return data.map(elem => new Channel(this.client, elem));
+            const channelsData = await this.queryClient.execute<Channel[]>(new QueryCommand("channellist", undefined, [
+                "-topic",
+                "-flags",
+                "-voice",
+                "-limits",
+                "-icon",
+                "-secondsempty",
+            ])).then(data => {
+                return data.map(elem => new Channel(this.queryClient, elem));
             });
 
             for (let i = 0; i < channelsData.length; i++) {
                 const elem = channelsData[i];
-                await this.client.execute(new ChannelInfoCommand(elem.id)).then(data => {
+                await this.queryClient.execute(new QueryCommand("channelinfo", { cid: elem.id })).then(data => {
                     channelsData[i]._patch(data);
                 });
             }
@@ -98,11 +105,11 @@ export class ChannelManager extends CachedManager<Channel> {
             return colData;
         } else {
             // Query for the channel
-            const channelData = await this.client.execute<Channel>(new ChannelInfoCommand(channelId)).then((data: any) => {
+            const channelData = await this.queryClient.execute<Channel>(new QueryCommand("channelinfo", { cid: channelId })).then((data: any) => {
                 data["cid"] = channelId;
-                return new Channel(this.client, data);
+                return new Channel(this.queryClient, data);
             });
-            this.client.debug("ChannelManager.fetch.channelData", channelData);
+            this.queryClient.debug("ChannelManager.fetch.channelData", channelData);
 
             // If we are using a cache we might as well update it it now that we have the data
             if (options.cache) {

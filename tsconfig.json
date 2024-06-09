@@ -9,7 +9,7 @@
         "noImplicitOverride": true,
         "noImplicitThis": true,
         "noImplicitReturns": true,
-        "noUnusedParameters": true,
+        // "noUnusedParameters": true,
         "strict": true,
         "strictNullChecks": true,
         "useUnknownInCatchVariables": true, // https://www.typescriptlang.org/tsconfig#useUnknownInCatchVariables

@@ -1,5 +1,5 @@
 import { Collection } from "@discordjs/collection";
-import { Base } from "@teamspeak.js/structures/Base";
+import { Base } from "@teamspeak.js/structures/classes/Base";
 import { BaseManager } from "@teamspeak.js/managers/BaseManager";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
@@ -8,8 +8,8 @@ import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
 export abstract class DataManager<HeldType extends Base> extends BaseManager {
     protected readonly holds: new (...args: any) => HeldType;
 
-    constructor(client: QueryClient, holds: new (...args: any) => HeldType) {
-        super(client);
+    constructor(queryClient: QueryClient, holds: new (...args: any) => HeldType) {
+        super(queryClient);
 
         this.holds = holds;
     }

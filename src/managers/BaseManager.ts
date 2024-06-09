@@ -3,9 +3,9 @@ import { QueryClient } from "@teamspeak.js/client/QueryClient";
 // ADD DOCS
 export abstract class BaseManager {
     // ADD DOCS
-    public readonly client: QueryClient;
+    public readonly queryClient: QueryClient;
 
-    constructor(client: QueryClient) {
-        this.client = client;
+    constructor(queryClient: QueryClient) {
+        this.queryClient = queryClient;
     }
 }
