@@ -52,5 +52,5 @@ export abstract class PermissionManager extends CachedManager<Permission> {
         return null;
     }
 
-    abstract fetch(id: number | undefined, options: { cache: boolean; force: boolean }): Promise<Permission | Collection<TsIdentifier, Permission> | undefined>;
+    abstract fetch(id: number | undefined, options: { cache?: boolean; force?: boolean }): Promise<Permission | Collection<TsIdentifier, Permission> | undefined>;
 }

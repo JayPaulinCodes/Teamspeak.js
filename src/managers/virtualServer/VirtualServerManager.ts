@@ -55,7 +55,7 @@ export class VirtualServerManager extends CachedManager<VirtualServer> {
 
     public async fetch(
         id: number | undefined = undefined,
-        options: { cache: boolean; force: boolean } = { cache: true, force: false }
+        options: { cache?: boolean; force?: boolean } = { cache: true, force: false }
     ): Promise<VirtualServer | Collection<TsIdentifier, VirtualServer> | undefined> {
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;

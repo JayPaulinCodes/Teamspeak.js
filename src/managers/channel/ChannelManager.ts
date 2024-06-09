@@ -57,7 +57,7 @@ export class ChannelManager extends CachedManager<Channel> {
 
     public async fetch(
         channelId: number | undefined = undefined,
-        options: { cache: boolean; force: boolean } = { cache: true, force: false }
+        options: { cache?: boolean; force?: boolean } = { cache: true, force: false }
     ): Promise<Channel | Collection<TsIdentifier, Channel> | undefined> {
             this.queryClient.debug("ChannelManager.fetch", {
                 channelId,

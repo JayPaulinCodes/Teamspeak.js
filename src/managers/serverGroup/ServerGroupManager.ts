@@ -55,7 +55,7 @@ export class ServerGroupManager extends CachedManager<ServerGroup> {
 
     public async fetch(
         id: number | undefined = undefined,
-        options: { cache: boolean; force: boolean } = { cache: true, force: false }
+        options: { cache?: boolean; force?: boolean } = { cache: true, force: false }
     ): Promise<ServerGroup | Collection<TsIdentifier, ServerGroup> | undefined> {
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;

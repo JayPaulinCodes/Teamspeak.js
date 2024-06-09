@@ -65,7 +65,7 @@ export class ClientManager extends CachedManager<Client> {
 
     public async fetch(
         clientId: string | number | undefined = undefined,
-        options: { cache: boolean; force: boolean } = { cache: true, force: false }
+        options: { cache?: boolean; force?: boolean } = { cache: true, force: false }
     ): Promise<Client | Collection<TsIdentifier, Client> | undefined> {
         options.cache = options.cache ?? true;
         options.force = options.force ?? false;
