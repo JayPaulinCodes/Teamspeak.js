@@ -219,7 +219,6 @@ export class QueryClient extends EventEmitter {
                 case QueryClientEvents.ChannelTopicUpdated:
                 case QueryClientEvents.ChannelTypeUpdated:
                 case QueryClientEvents.DefaultChannelUpdated:
-                case QueryClientEvents.ChannelPasswordRemoved:
                 case QueryClientEvents.ChannelOrderUpdated:
                 case QueryClientEvents.ChannelNeededTalkPowerUpdated:
                 case QueryClientEvents.ChannelCodecUpdated:
