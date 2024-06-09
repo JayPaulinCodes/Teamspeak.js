@@ -274,4 +274,8 @@ export class Client extends Base {
     public async setIconId(iconId: number): Promise<void> {
         // TODO: Implementation
     }
+
+    public override toString(): string {
+        return `${this.nickname} (${this.uniqueId} | ${this.ip})`;
+    }
 }

@@ -207,4 +207,8 @@ export class Channel extends Base {
     public async setFamilyMaxClients(maxClients: number): Promise<void> {
         // TODO: Implementation
     }
+
+    public override toString(): string {
+        return `${this.name} (${this.id})`;
+    }
 }

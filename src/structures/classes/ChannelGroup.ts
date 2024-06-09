@@ -49,4 +49,8 @@ export class ChannelGroup extends Base {
     
     // ADD DOCS
     public get iconId(): number | undefined { return this._iconId; }
+
+    public override toString(): string {
+        return `${this.name} (${this.id})`;
+    }
 }

@@ -1190,4 +1190,8 @@ export class VirtualServer extends Base {
     public async setStatus(TBD: string): Promise<void> {
         // TODO: Implementation
     }
+
+    public override toString(): string {
+        return `${this.name} (${this.id})`;
+    }
 }

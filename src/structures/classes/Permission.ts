@@ -66,4 +66,8 @@ export class Permission extends Base {
             permskip: this.skip ?? false,
         }
     }
+
+    public override toString(): string {
+        return `${this.sid} (${this.id})`;
+    }
 }
