@@ -34,5 +34,13 @@ export type EventFunction = {
     ["clientKicked"]: (target: Client, invoker: Client, channel: Channel, reson: string) => void;
     ["clientBanned"]: (target: Client, invoker: Client, channel: Channel, reson: string, duration: number) => void;
     ["clientDisconnected"]: (client: Client, channel: Channel, reson: string) => void;
-
+    ["channelIconUpdated"]: (invoker: Client, channel: Channel, newIconId: number) => void;
+    ["channelNameUpdated"]: (invoker: Client, channel: Channel, newName: string) => void;
+    ["channelTopicUpdated"]: (invoker: Client, channel: Channel, newTopic: string) => void;
+    ["channelOrderUpdated"]: (invoker: Client, channel: Channel, newOrder: number) => void;
+    ["channelNeededTalkPowerUpdated"]: (invoker: Client, channel: Channel, newNeededTalkPower: number) => void;
+    ["channelCodecUpdated"]: (invoker: Client, channel: Channel, newCodec: number) => void;
+    ["channelCodecQualityUpdated"]: (invoker: Client, channel: Channel, newCodecQuality: number) => void;
+    ["channelMaxClientsUpdated"]: (invoker: Client, channel: Channel, newMaxClients: number) => void;
+    ["channelDescriptionUpdated"]: (invoker: Client, channel: Channel, newDescription: string) => void;
 }

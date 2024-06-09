@@ -179,9 +179,6 @@ export enum QueryClientEvents {
     DefaultChannelUpdated = "defaultChannelUpdated",
 
     // ADD DOCS
-    ChannelPasswordRemoved = "channelPasswordRemoved",
-
-    // ADD DOCS
     ChannelOrderUpdated = "channelOrderUpdated",
 
     // ADD DOCS

@@ -289,9 +289,53 @@ export class WebSocketManager extends EventEmitter {
                         break;
 
                     case "notifychanneldescriptionchanged":
+                        if ("cid" in notifyData) {
+                            this.queryClient.eventManager["ChannelDescriptionUpdated"].handle(notifyData);
+                        }
                         break;
 
                     case "notifychanneledited":
+                        if ("reasonid" in notifyData) {
+                            switch (notifyData.reasonid) {
+                                case 10:
+                                    if ("cid" in notifyData && "invokerId" in notifyData) {
+                                        if ("channelIconId" in notifyData) {
+                                            this.queryClient.eventManager["ChannelIconUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelName" in notifyData) {
+                                            this.queryClient.eventManager["ChannelNameUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelTopic" in notifyData) {
+                                            this.queryClient.eventManager["ChannelTopicUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelOrder" in notifyData) {
+                                            this.queryClient.eventManager["ChannelOrderUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelNeededTalkPower" in notifyData) {
+                                            this.queryClient.eventManager["ChannelNeededTalkPowerUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelCodec" in notifyData) {
+                                            this.queryClient.eventManager["ChannelCodecUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelCodecQuality" in notifyData) {
+                                            this.queryClient.eventManager["ChannelCodecQualityUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelMaxclients" in notifyData) {
+                                            this.queryClient.eventManager["ChannelMaxClientsUpdated"].handle(notifyData);
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                         break;
 
                     case "notifychannelmoved":
