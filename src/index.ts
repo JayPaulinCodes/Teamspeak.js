@@ -16,10 +16,7 @@ export * from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
 export * from "@teamspeak.js/errors/TeamspeakJsErrorMessages";
 
 // Structures
-export * from "@teamspeak.js/structures/enums/VirtualServerStatus";
-export * from "@teamspeak.js/structures/Base";
-export * from "@teamspeak.js/structures/ServerInstance";
-export * from "@teamspeak.js/structures/ServerQueryConnection";
+export * from "@teamspeak.js/structures/classes/Base";
 export * from "@teamspeak.js/structures/ServerVersionInformation";
 
 // Utils
@@ -37,7 +34,6 @@ export * from "@teamspeak.js/websocket/interfaces/IQueryProtocolOptions";
 export * from "@teamspeak.js/websocket/interfaces/IQueueItem";
 export * from "@teamspeak.js/websocket/interfaces/ISocketOptions";
 export * from "@teamspeak.js/websocket/interfaces/IWebSocketManagerOptions";
-export * from "@teamspeak.js/websocket/queryCommands/commands/index";
 export * from "@teamspeak.js/websocket/queryCommands/interfaces/QueryCommandTermination";
 export * from "@teamspeak.js/websocket/queryCommands/parser/QueryCommandParser";
 export * from "@teamspeak.js/websocket/queryCommands/typings/QueryCommandOptions";

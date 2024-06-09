@@ -1,18 +1,9 @@
 import { Collection } from "@discordjs/collection";
 import { CachedManager } from "@teamspeak.js/managers/CachedManager";
-import { Client } from "@teamspeak.js/structures/Client";
-import { ClientListCommandFlags } from "@teamspeak.js/websocket/enums/ClientListCommandFlags";
+import { Client } from "@teamspeak.js/structures/classes/Client";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
-import {
-    ClientDbInfoCommand,
-    ClientDbListCommand,
-    ClientGetDbIdFromUIdCommand,
-    ClientGetIdsCommand,
-    ClientGetUIdFromClIdCommand,
-    ClientInfoCommand,
-    ClientListCommand
-} from "@teamspeak.js/websocket/queryCommands/commands";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
 
 export class ClientManager extends CachedManager<Client> {
     constructor(client: QueryClient, prefill: Collection<TsIdentifier, Client> | undefined = undefined) {
@@ -34,7 +25,7 @@ export class ClientManager extends CachedManager<Client> {
             return clone;
         }
 
-        const entry = this.holds ? new this.holds(this.client, data, false) : data;
+        const entry = this.holds ? new this.holds(this.queryClient, data, false) : data;
         if (useCache) {
             this.cache.set(data.uniqueId, entry);
         }
@@ -93,26 +84,34 @@ export class ClientManager extends CachedManager<Client> {
 
         if (clientId === undefined) {
             // Query for the clients
-            const totalCount = await this.client.execute<any[]>(new ClientDbListCommand(undefined, true)).then(data => {
+            const totalCount = await this.queryClient.execute<any[]>(new QueryCommand("clientdblist", undefined, [ "-count" ])).then(data => {
                 return data[0]?.count ?? 0;
             });
 
             let offset = 0;
             let clientsData: Client[] = [];
             do {
-                const newData = await this.client.execute<any[]>(new ClientDbListCommand(offset)).then(data => {
+                const newData = await this.queryClient.execute<any[]>(new QueryCommand("clientdblist", { start: offset })).then(data => {
                     offset += data.length;
-                    return data.map(elem => new Client(this.client, elem));
+                    return data.map(elem => new Client(this.queryClient, elem));
                 });
                 clientsData = clientsData.concat(newData);
             } while (offset < totalCount);
 
-            const onlineClients = await this.client
-                .execute<
-                    any[]
-                >(new ClientListCommand([ClientListCommandFlags.INCLUDE_UNIQUE_ID, ClientListCommandFlags.INLCUDE_AWAY_DATA, ClientListCommandFlags.INCLUED_VOICE_DATA, ClientListCommandFlags.INCLUED_TIMES_DATA, ClientListCommandFlags.INCLUED_GROUPS_DATA, ClientListCommandFlags.INCLUED_INFO_DATA, ClientListCommandFlags.INCLUED_COUNTRY_DATA, ClientListCommandFlags.INCLUED_IP, ClientListCommandFlags.INCLUED_BADGES_DATA]))
+            const onlineClients = await this.queryClient
+                .execute<any[]>(new QueryCommand("clientlist", undefined, [
+                    "-uid",
+                    "-away",
+                    "-voice",
+                    "-times",
+                    "-groups",
+                    "-info",
+                    "-country",
+                    "-ip",
+                    "-badges",
+                ]))
                 .then(data => {
-                    return Array.isArray(data) ? data.map(elem => new Client(this.client, elem)) : [data];
+                    return Array.isArray(data) ? data.map(elem => new Client(this.queryClient, elem)) : [data];
                 });
 
             onlineClients.forEach(elem => {
@@ -136,7 +135,7 @@ export class ClientManager extends CachedManager<Client> {
             let clientUniqueId: string | undefined = undefined;
             // If the id provided is a number assume it to be the server id and convert to unique id
             if (typeof clientId === "number") {
-                await this.client.execute(new ClientGetUIdFromClIdCommand(clientId)).then(data => {
+                await this.queryClient.execute(new QueryCommand("clientgetuidfromclid", { clid: clientId })).then(data => {
                     clientUniqueId = data?.cluid ?? undefined;
                 });
             }
@@ -146,7 +145,7 @@ export class ClientManager extends CachedManager<Client> {
             }
 
             // Convert the unique id into a db id
-            const clientDbId = await this.client.execute(new ClientGetDbIdFromUIdCommand(clientUniqueId)).then(data => {
+            const clientDbId = await this.queryClient.execute(new QueryCommand("clientgetdbidfromuid", { cluid: clientUniqueId })).then(data => {
                 return data?.cldbid;
             });
 
@@ -155,16 +154,16 @@ export class ClientManager extends CachedManager<Client> {
             }
 
             // Query for the client
-            const clientData = await this.client.execute(new ClientDbInfoCommand(clientDbId)).then(data => {
-                return new Client(this.client, data);
+            const clientData = await this.queryClient.execute(new QueryCommand("clientdbinfo", { cldbid: clientDbId })).then(data => {
+                return new Client(this.queryClient, data);
             });
 
-            await this.client.execute(new ClientGetIdsCommand(clientUniqueId)).then(data => {
+            await this.queryClient.execute(new QueryCommand("getclientids", { cluid: clientUniqueId })).then(data => {
                 clientData._patch(data);
             });
 
-            if (clientData.serverId !== null) {
-                await this.client.execute(new ClientInfoCommand(clientData.serverId)).then(data => {
+            if (clientData.serverId !== undefined) {
+                await this.queryClient.execute(new QueryCommand("clientinfo", { clid: clientData.serverId })).then(data => {
                     clientData._patch(data);
                 });
             }

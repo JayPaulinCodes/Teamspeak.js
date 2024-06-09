@@ -1,11 +1,16 @@
-// ADD DOCS
 export enum HostBannerMode {
-    // ADD DOCS
+    /**
+     * do not adjust
+     */
     NoAdjust = 0,
-
-    // ADD DOCS
+    
+    /**
+     * adjust but ignore aspect ratio (like TeamSpeak 2)
+     */
     IgnoreAspect = 1,
-
-    // ADD DOCS
-    KeepAspect = 2
+    
+    /**
+     * adjust and keep aspect ratio
+     */
+    KeepAspect = 2,
 }

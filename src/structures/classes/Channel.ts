@@ -1,160 +1,210 @@
 import { Base } from "@teamspeak.js/structures/classes/Base";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { ChannelClientManager } from "@teamspeak.js/managers/channel/ChannelClientManager";
 
-// ADD DOCS
+export type ChannelResolvable = Channel | number;
+
 export class Channel extends Base {
-    /**
-     * Primary Identifier
-     */
-    public id: number;
-    public uniqueId?: string;
-    public parentId: number | null = null;
-    public name?: string;
-    public description?: string;
-    public topic?: string;
-    public order?: number;
-    public iconId?: number;
-    public neededTalkPower?: number;
-    public hasPassword?: boolean;
-    public password?: string;
-    public maxClients?: number;
-    public familyMaxClients?: number;
+    private _clients: ChannelClientManager;
+
+    private _id: number;
+    private _uniqueId?: string;
+    private _parentId?: number;
+    private _name?: string;
+    private _description?: string;
+    private _topic?: string;
+    private _order?: number;
+    private _iconId?: number;
+    private _neededTalkPower?: number;
+    private _hasPassword?: boolean;
+    private _password?: string;
+    private _maxClients?: number;
+    private _familyMaxClients?: number;
 
     // ADD DOCS
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
+        
+        this._id = data[fromQuery ? "virtualserverId" : "id"];
 
-        this.id = data[fromQuery ? "cid" : "id"];
-
-        this._patch(data, fromQuery, false);
-    }
-
-    public get parent(): Channel | null {
-        return this.parentId === null ? null : this._queryClient.channels.resolve(this.parentId);
+        this._patch(data, fromQuery);
+    
+        this._clients = new ChannelClientManager(this._queryClient, this);
     }
 
     public _patch(data: any, fromQuery: boolean = true, updating: boolean = true) {
         let key = fromQuery ? "channelUniqueIdentifier" : "uniqueId";
         if (key in data) {
-            this["uniqueId"] = data[key];
+            this._uniqueId = data[key];
         }
 
         key = fromQuery ? "pid" : "parentId";
         if (key in data) {
-            this["parentId"] = data[key];
+            this._parentId = data[key];
         } else if (!updating) {
-            this["parentId"] = null;
+            this._parentId = undefined;
         }
 
         key = fromQuery ? "channelName" : "name";
         if (key in data) {
-            this["name"] = data[key];
+            this._name = data[key];
         } else if (!updating) {
-            this["name"] = undefined;
+            this._name = undefined;
         }
 
         key = fromQuery ? "channelDescription" : "description";
         if (key in data) {
-            this["description"] = data[key];
+            this._description = data[key];
         } else if (!updating) {
-            this["description"] = undefined;
+            this._description = undefined;
         }
 
         key = fromQuery ? "topic" : "topic";
         if (key in data) {
-            this["topic"] = data[key];
+            this._topic = data[key];
         } else if (!updating) {
-            this["topic"] = undefined;
+            this._topic = undefined;
         }
 
         key = fromQuery ? "channelOrder" : "order";
         if (key in data) {
-            this["order"] = data[key];
+            this._order = data[key];
         } else if (!updating) {
-            this["order"] = undefined;
+            this._order = undefined;
         }
 
         key = fromQuery ? "channelIconId" : "iconId";
         if (key in data) {
-            this["iconId"] = data[key];
+            this._iconId = data[key];
         } else if (!updating) {
-            this["iconId"] = undefined;
+            this._iconId = undefined;
         }
 
         key = fromQuery ? "channelNeededTalkPower" : "neededTalkPower";
         if (key in data) {
-            this["neededTalkPower"] = data[key];
+            this._neededTalkPower = data[key];
         } else if (!updating) {
-            this["neededTalkPower"] = undefined;
+            this._neededTalkPower = undefined;
         }
 
         key = fromQuery ? "channelFlagPassword" : "hasPassword";
         if (key in data) {
-            this["hasPassword"] = data[key];
+            this._hasPassword = data[key];
         } else if (!updating) {
-            this["hasPassword"] = undefined;
+            this._hasPassword = undefined;
         }
 
         key = fromQuery ? "channelPassword" : "password";
         if (key in data) {
-            this["password"] = data[key];
+            this._password = data[key];
         } else if (!updating) {
-            this["password"] = undefined;
+            this._password = undefined;
         }
 
         key = fromQuery ? "channelMaxclients" : "maxClients";
         if (key in data) {
-            this["maxClients"] = data[key];
+            this._maxClients = data[key];
         } else if (!updating) {
-            this["maxClients"] = undefined;
+            this._maxClients = undefined;
         }
 
         key = fromQuery ? "channelMaxfamilyclients" : "familyMaxClients";
         if (key in data) {
-            this["familyMaxClients"] = data[key];
+            this._familyMaxClients = data[key];
         } else if (!updating) {
-            this["familyMaxClients"] = undefined;
+            this._familyMaxClients = undefined;
         }
-
-        // const x = {
-        //     pid: "0",
-        //     channelName: "Default Channe",
-        //     channelTopic: "topicc",
-        //     channelDescription: "This is the default channelssdada",
-        //     channelPassword: "DJ9fLHqwFJP+5VgQhSfLSJtBrtk=",
-        //     channelCodec: 4,
-        //     channelCodecQuality: 6,
-        //     channelMaxclients: -1,
-        //     channelMaxfamilyclients: -1,
-        //     channelOrder: 0,
-        //     channelFlagPermanent: true,
-        //     channelFlagSemiPermanent: false,
-        //     channelFlagDefault: false,
-        //     channelFlagPassword: true,
-        //     channelCodecLatencyFactor: 1,
-        //     channelCodecIsUnencrypted: 0,
-        //     channelSecuritySalt: undefined,
-        //     channelDeleteDelay: 0,
-        //     channelUniqueIdentifier: "7aead8cb-29d7-4f8f-b612-adfdd612555b",
-        //     channelFlagMaxclientsUnlimited: true,
-        //     channelFlagMaxfamilyclientsUnlimited: true,
-        //     channelFlagMaxfamilyclientsInherited: false,
-        //     channelFilepath: "files/virtualserver_1/channel_1",
-        //     channelNeededTalkPower: 1,
-        //     channelForcedSilence: 0,
-        //     channelNamePhonetic: "test",
-        //     channelIconId: 0,
-        //     channelBannerGfxUrl: undefined,
-        //     channelBannerMode: 0,
-        //     secondsEmpty: 6
-        // };
     }
 
-    public override toJSON() {
-        return super.toJSON();
+    // ADD DOCS
+    public get clients(): ChannelClientManager { return this._clients; }
+
+    // ADD DOCS
+    public get id(): number { return this._id; }
+
+    // ADD DOCS
+    public get uniqueId(): string | undefined { return this._uniqueId; }
+
+    // ADD DOCS
+    public get parentId(): number | undefined { return this._parentId; }
+
+    // ADD DOCS
+    public get name(): string | undefined { return this._name; }
+
+    // ADD DOCS
+    public get description(): string | undefined { return this._description; }
+
+    // ADD DOCS
+    public get topic(): string | undefined { return this._topic; }
+
+    // ADD DOCS
+    public get order(): number | undefined { return this._order; }
+
+    // ADD DOCS
+    public get iconId(): number | undefined { return this._iconId; }
+
+    // ADD DOCS
+    public get neededTalkPower(): number | undefined { return this._neededTalkPower; }
+
+    // ADD DOCS
+    public get hasPassword(): boolean | undefined { return this._hasPassword; }
+
+    // ADD DOCS
+    public get password(): string | undefined { return this._password; }
+
+    // ADD DOCS
+    public get maxClients(): number | undefined { return this._maxClients; }
+
+    // ADD DOCS
+    public get familyMaxClients(): number | undefined { return this._familyMaxClients; }
+
+    // ADD DOCS
+    public async setParent(channel: ChannelResolvable): Promise<void> {
+        // TODO: Implementation
     }
 
-    public override toString(): string {
-        return `'${this.name}' (${this.id})`;
+    // ADD DOCS
+    public async setName(name: string): Promise<void> {
+        // TODO: Implementation
+    }
+
+    // ADD DOCS
+    public async setDescription(description: string): Promise<void> {
+        // TODO: Implementation
+    }
+
+    // ADD DOCS
+    public async setTopic(topic: string): Promise<void> {
+        // TODO: Implementation
+    }
+
+    // ADD DOCS
+    public async setOrder(order: number): Promise<void> {
+        // TODO: Implementation
+    }
+
+    // ADD DOCS
+    public async setIconId(iconId: number): Promise<void> {
+        // TODO: Implementation
+    }
+
+    // ADD DOCS
+    public async setNeededTalkPower(neededPower: number): Promise<void> {
+        // TODO: Implementation
+    }
+
+    // ADD DOCS
+    public async setPassword(password: string): Promise<void> {
+        // TODO: Implementation
+    }
+
+    // ADD DOCS
+    public async setMaxClients(maxClients: number): Promise<void> {
+        // TODO: Implementation
+    }
+
+    // ADD DOCS
+    public async setFamilyMaxClients(maxClients: number): Promise<void> {
+        // TODO: Implementation
     }
 }
