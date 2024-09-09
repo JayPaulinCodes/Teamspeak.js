@@ -11,7 +11,6 @@ export class ServerGroup extends Base {
     private _name?: string;
     private _iconId?: number;
 
-    // ADD DOCS
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
         

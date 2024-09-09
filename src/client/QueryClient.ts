@@ -134,12 +134,23 @@ export class QueryClient extends EventEmitter {
 
             return Promise.all(executions)
                 .then(async () => {
+                    this.emit(QueryClientEvents.Startup, "Starting virtual server cache");
                     await this.servers.fetch(undefined, { cache: true, force: true });
+                    this.emit(QueryClientEvents.Startup, "Finished virtual server cache");
+
+                    this.emit(QueryClientEvents.Startup, "Starting server group cache");
                     await this.serverGroups.fetch(undefined, { cache: true, force: true });
-                    await this.clients.fetch(undefined, { cache: true, force: true });
+                    this.emit(QueryClientEvents.Startup, "Finished server group cache");
                     
-                    if (this.options.preCacheChannels === true) 
+                    this.emit(QueryClientEvents.Startup, "Starting client cache");
+                    await this.clients.fetch(undefined, { cache: true, force: true });
+                    this.emit(QueryClientEvents.Startup, "Finished client cache");
+                    
+                    if (this.options.preCacheChannels === true) {
+                        this.emit(QueryClientEvents.Startup, "Starting channel cache");
                         await this.channels.fetch(undefined, { cache: true, force: true });
+                        this.emit(QueryClientEvents.Startup, "Finished channel cache");
+                    }
 
                     super.emit(QueryClientEvents.Ready);
                 })

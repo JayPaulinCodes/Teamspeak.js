@@ -43,8 +43,26 @@ export class ClientServerGroupManager extends DataManager<ServerGroup> {
     }
     
     // ADD DOCS
-    public async add(group: ServerGroupResolvable | ServerGroupResolvable[], reason: string | undefined): Promise<Client> {
+    public async add(group: ServerGroupResolvable | ServerGroupResolvable[], reason?: string): Promise<Client> {
         if (this.client.databaseId === undefined) { return this.client; }
+
+        // If the client has no groups listed, double check to verify
+        if (this.client.serverGroupIds.length === 0) {
+            if (this.client.databaseId === undefined) {
+                const clientDbId = await this.queryClient.execute(new QueryCommand("clientgetdbidfromuid", { cluid: this.client.id })).then(data => {
+                    return data?.cldbid;
+                });
+
+                this.client._patch({ cldbid: clientDbId }, true, true);
+            }
+
+            const clientDbId = this.client.databaseId as number;
+            const serverGroups = await this.queryClient.execute<any[]>(new QueryCommand("servergroupsbyclientid", { cldbid: clientDbId })).then(data => {
+                return data?.map(entry => entry?.sgid);
+            });
+
+            this.client._patch({ clientServergroups: serverGroups }, true, true);
+        }
 
         const targetGroups = Array.isArray(group) ? group : [ group ];
         const resolvedGroupIds = targetGroups.map(group => this.queryClient.serverGroups.resolveId(group))
@@ -67,8 +85,26 @@ export class ClientServerGroupManager extends DataManager<ServerGroup> {
     }
     
     // ADD DOCS
-    public async remove(group: ServerGroupResolvable | ServerGroupResolvable[], reason: string | undefined): Promise<Client> {
+    public async remove(group: ServerGroupResolvable | ServerGroupResolvable[], reason?: string): Promise<Client> {
         if (this.client.databaseId === undefined) { return this.client; }
+
+        // If the client has no groups listed, double check to verify
+        if (this.client.serverGroupIds.length === 0) {
+            if (this.client.databaseId === undefined) {
+                const clientDbId = await this.queryClient.execute(new QueryCommand("clientgetdbidfromuid", { cluid: this.client.id })).then(data => {
+                    return data?.cldbid;
+                });
+
+                this.client._patch({ cldbid: clientDbId }, true, true);
+            }
+
+            const clientDbId = this.client.databaseId as number;
+            const serverGroups = await this.queryClient.execute<any[]>(new QueryCommand("servergroupsbyclientid", { cldbid: clientDbId })).then(data => {
+                return data?.map(entry => entry?.sgid);
+            });
+
+            this.client._patch({ clientServergroups: serverGroups }, true, true);
+        }
 
         const targetGroups = Array.isArray(group) ? group : [ group ];
         const resolvedGroupIds = targetGroups.map(group => this.queryClient.serverGroups.resolveId(group))
@@ -91,8 +127,26 @@ export class ClientServerGroupManager extends DataManager<ServerGroup> {
     }
     
     // ADD DOCS
-    public async set(groups: ServerGroupResolvable | ServerGroupResolvable[], reason: string | undefined): Promise<Client> {
+    public async set(groups: ServerGroupResolvable | ServerGroupResolvable[], reason?: string): Promise<Client> {
         if (this.client.databaseId === undefined) { return this.client; }
+
+        // If the client has no groups listed, double check to verify
+        if (this.client.serverGroupIds.length === 0) {
+            if (this.client.databaseId === undefined) {
+                const clientDbId = await this.queryClient.execute(new QueryCommand("clientgetdbidfromuid", { cluid: this.client.id })).then(data => {
+                    return data?.cldbid;
+                });
+
+                this.client._patch({ cldbid: clientDbId }, true, true);
+            }
+
+            const clientDbId = this.client.databaseId as number;
+            const serverGroups = await this.queryClient.execute<any[]>(new QueryCommand("servergroupsbyclientid", { cldbid: clientDbId })).then(data => {
+                return data?.map(entry => entry?.sgid);
+            });
+
+            this.client._patch({ clientServergroups: serverGroups }, true, true);
+        }
 
         const targetGroups = Array.isArray(groups) ? groups : [ groups ];
         const targetGroupIds = targetGroups.map(group => this.queryClient.serverGroups.resolveId(group)).filter(notNull);

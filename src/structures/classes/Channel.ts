@@ -1,6 +1,10 @@
 import { Base } from "@teamspeak.js/structures/classes/Base";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { ChannelClientManager } from "@teamspeak.js/managers/channel/ChannelClientManager";
+import { CannotResolveChannelId } from "@teamspeak.js/errors/channel/CannotResolveChannelId";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
+import { StringEmptyError } from "@teamspeak.js/errors/general/StringEmptyError";
+import { NoParentChannelError } from "@teamspeak.js/errors/channel/NoParentChannelError";
 
 export type ChannelResolvable = Channel | number;
 
@@ -21,7 +25,6 @@ export class Channel extends Base {
     private _maxClients?: number;
     private _familyMaxClients?: number;
 
-    // ADD DOCS
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
         
@@ -158,54 +161,101 @@ export class Channel extends Base {
     // ADD DOCS
     public get familyMaxClients(): number | undefined { return this._familyMaxClients; }
 
-    // ADD DOCS
+    /**
+     * Moves the channel under the specified channel
+     * @param {ChannelResolvable} channel The channel to move under 
+     */
     public async setParent(channel: ChannelResolvable): Promise<void> {
-        // TODO: Implementation
+        const channelId = this._queryClient.channels.resolveId(channel);
+        if (channelId === null) {
+            throw new CannotResolveChannelId(channel);
+        }
+
+        await this._queryClient.execute(new QueryCommand("channelmove", {
+            cid: this.id,
+            cpid: channelId
+        }));
     }
 
     // ADD DOCS
     public async setName(name: string): Promise<void> {
-        // TODO: Implementation
+        if (name.length === 0) {
+            throw new StringEmptyError("name");
+        }
+
+        await this._queryClient.execute(new QueryCommand("channeledit", {
+            cid: this.id,
+            channelName: name
+        }));
     }
 
     // ADD DOCS
     public async setDescription(description: string): Promise<void> {
-        // TODO: Implementation
+        await this._queryClient.execute(new QueryCommand("channeledit", {
+            cid: this.id,
+            channelDescription: description
+        }));
     }
 
     // ADD DOCS
     public async setTopic(topic: string): Promise<void> {
-        // TODO: Implementation
+        await this._queryClient.execute(new QueryCommand("channeledit", {
+            cid: this.id,
+            channelTopic: topic
+        }));
     }
 
     // ADD DOCS
     public async setOrder(order: number): Promise<void> {
-        // TODO: Implementation
+        if (this.parentId === undefined) {
+            throw new NoParentChannelError(this.id);
+        }
+
+        await this._queryClient.execute(new QueryCommand("channelmove", {
+            cid: this.id,
+            cpid: this.parentId,
+            order: order
+        }));
     }
 
     // ADD DOCS
     public async setIconId(iconId: number): Promise<void> {
-        // TODO: Implementation
+        await this._queryClient.execute(new QueryCommand("channeledit", {
+            cid: this.id,
+            channelIconId: iconId
+        }));
     }
 
     // ADD DOCS
     public async setNeededTalkPower(neededPower: number): Promise<void> {
-        // TODO: Implementation
+        await this._queryClient.execute(new QueryCommand("channeledit", {
+            cid: this.id,
+            channelNeededTalkPower: neededPower
+        }));
     }
 
     // ADD DOCS
     public async setPassword(password: string): Promise<void> {
-        // TODO: Implementation
+        await this._queryClient.execute(new QueryCommand("channeledit", {
+            cid: this.id,
+            channelPassword: password
+        }));
     }
 
     // ADD DOCS
     public async setMaxClients(maxClients: number): Promise<void> {
-        // TODO: Implementation
+        await this._queryClient.execute(new QueryCommand("channeledit", {
+            cid: this.id,
+            channelMaxclients: maxClients
+        }));
     }
 
     // ADD DOCS
     public async setFamilyMaxClients(maxClients: number): Promise<void> {
-        // TODO: Implementation
+        await this._queryClient.execute(new QueryCommand("channeledit", {
+            cid: this.id,
+            channelMaxfamilyclients: maxClients
+        }));
     }
 
     public override toString(): string {

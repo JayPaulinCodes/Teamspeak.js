@@ -1,6 +1,5 @@
 export * from "@teamspeak.js/client/events/ChannelCodecQualityUpdatedEvent";
 export * from "@teamspeak.js/client/events/ChannelCodecUpdatedEvent";
-export * from "@teamspeak.js/client/events/ChannelDescriptionUpdatedEvent";
 export * from "@teamspeak.js/client/events/ChannelIconUpdatedEvent";
 export * from "@teamspeak.js/client/events/ChannelMaxClientsUpdatedEvent";
 export * from "@teamspeak.js/client/events/ChannelNameUpdatedEvent";

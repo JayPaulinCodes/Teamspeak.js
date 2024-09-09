@@ -3,6 +3,7 @@ import { Base } from "@teamspeak.js/structures/classes/Base";
 import { BaseManager } from "@teamspeak.js/managers/BaseManager";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { TsIdentifier } from "@teamspeak.js/structures/typings/TsIdentifier";
+import { NotImplementedError } from "@teamspeak.js/errors/client/NotImplementedError";
 
 // ADD DOCS
 export abstract class DataManager<HeldType extends Base> extends BaseManager {
@@ -15,8 +16,7 @@ export abstract class DataManager<HeldType extends Base> extends BaseManager {
     }
 
     public get cache(): Collection<TsIdentifier, HeldType> {
-        // TODO: Make into tsjs error
-        throw new Error("Not Implemented");
+        throw new NotImplementedError("DataManager.cache", false);
     }
 
     public abstract resolve(idOrInstance: TsIdentifier | Object): HeldType | null;

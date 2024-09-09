@@ -8,7 +8,6 @@ export class EventManager {
 
     readonly ChannelCodecQualityUpdated: Event;
     readonly ChannelCodecUpdated: Event;
-    readonly ChannelDescriptionUpdated: Event;
     readonly ChannelIconUpdated: Event;
     readonly ChannelMaxClientsUpdated: Event;
     readonly ChannelNameUpdated: Event;
@@ -45,7 +44,6 @@ export class EventManager {
 
         this.ChannelCodecQualityUpdated = new Events.ChannelCodecQualityUpdatedEvent(this.queryClient);
         this.ChannelCodecUpdated = new Events.ChannelCodecUpdatedEvent(this.queryClient);
-        this.ChannelDescriptionUpdated = new Events.ChannelDescriptionUpdatedEvent(this.queryClient);
         this.ChannelNameUpdated = new Events.ChannelNameUpdatedEvent(this.queryClient);
         this.ChannelNeededTalkPowerUpdated = new Events.ChannelNeededTalkPowerUpdatedEvent(this.queryClient);
         this.ChannelIconUpdated = new Events.ChannelIconUpdatedEvent(this.queryClient);

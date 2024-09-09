@@ -43,7 +43,7 @@ export class ChannelManager extends CachedManager<Channel> {
         return null;
     }
 
-    public resolveId(idOrInstance: ChannelResolvable): TsIdentifier | null {
+    public resolveId(idOrInstance: ChannelResolvable): number | null {
         if (idOrInstance instanceof this.holds) {
             return idOrInstance.id;
         }

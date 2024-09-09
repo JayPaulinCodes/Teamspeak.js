@@ -1,4 +1,5 @@
 import { Event } from "@teamspeak.js/client/events/Event";
+import { Channel } from "@teamspeak.js/structures/classes/Channel";
 import { QueryClientEvents } from "@teamspeak.js/utils/enums/QueryClientEvents";
 
 // ADD DOCS
@@ -7,9 +8,9 @@ export class ChannelNameUpdatedEvent extends Event {
         const queryClient = this.queryClient;
 
         const invokingClient = await queryClient.clients.fetch(data.invokeruid);
-        const channel = await queryClient.channels.fetch(data.cid, { force: true });
-        const newName = data.channelName;
+        const oldChannel = (await queryClient.channels.fetch(data.cid, { force: false }) as Channel | undefined)?._clone() ?? undefined;
+        const newChannel = await queryClient.channels.fetch(data.cid, { force: true });
 
-        queryClient.emit(QueryClientEvents.ChannelNameUpdated, invokingClient, channel, newName);
+        queryClient.emit(QueryClientEvents.ChannelNameUpdated, invokingClient, oldChannel, newChannel);
     }
 }

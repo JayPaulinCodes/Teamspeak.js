@@ -12,7 +12,6 @@ export * from "@teamspeak.js/client/QueryClient";
 
 // Errors
 export * from "@teamspeak.js/errors/TeamspeakJsError";
-export * from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
 export * from "@teamspeak.js/errors/TeamspeakJsErrorMessages";
 
 // Structures

@@ -1,7 +1,13 @@
 import { Base } from "@teamspeak.js/structures/classes/Base";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { ServerGroupResolvable } from "@teamspeak.js/structures/classes/ServerGroup";
+import { ChannelResolvable } from "@teamspeak.js/structures/classes/Channel";
 import { ClientServerGroupManager } from "@teamspeak.js/managers/client/ClientServerGroupManager";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
+import { ClientNotOnlineError } from "@teamspeak.js/errors/client/ClientNotOnlineError";
+import { ClientOnlineWithoutServerIdError } from "@teamspeak.js/errors/client/ClientOnlineWithoutServerIdError";
+import { CannotResolveChannelId } from "@teamspeak.js/errors/channel/CannotResolveChannelId";
+import { ClientMissingDatabaseIdError } from "@teamspeak.js/errors/client/ClientMissingDatabaseIdError";
 
 export type ClientResolvable = Client | string;
 
@@ -29,9 +35,7 @@ export class Client extends Base {
     private _inputMuted: boolean = false;
     private _outputMuted: boolean = false;
     private _isRecording: boolean = false;
-    private _isOnline: boolean = false;
 
-    // ADD DOCS
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
         
@@ -50,7 +54,7 @@ export class Client extends Base {
             this._serverId = undefined;
         }
 
-        key = fromQuery ? "clientDatabaseId" : "databaseId";
+        key = fromQuery ? ("clientDatabaseId" in data ? "clientDatabaseId" : "cldbid") : "databaseId";
         if (key in data) {
             this._databaseId = data[key];
         } else if (!updating) {
@@ -178,22 +182,53 @@ export class Client extends Base {
         }
     }
     
-    // ADD DOCS
+    /**
+     * A manager for the server groups belonging to this client
+     * @type {ClientServerGroupManager}
+     */
     public get serverGroups(): ClientServerGroupManager { return this._serverGroups; }
 
-    // ADD DOCS
+    /**
+     * Provides a TeamSpeak formated URL for the client
+     * @type {string}
+     */
+    public get url(): string { return `[URL=client://${this.serverId ?? 99999}/${this.uniqueId}~${encodeURIComponent(this.nickname ?? "")}]${this.nickname}[/URL]`; }
+
+    /**
+     * The client's unique id
+     * @type {string}
+     */
     public get id(): string { return this.uniqueId; }
 
-    // ADD DOCS
+    /**
+     * The client's unique id
+     * @type {string}
+     */
     public get uniqueId(): string { return this._uniqueId; }
 
-    // ADD DOCS
+    /**
+     * The server identifier assigned to the client, also known as clid (client id).
+     * 
+     * While the client is offline, undefined is returned.
+     * @type {number|undefined}
+     */
     public get serverId(): number | undefined { return this._serverId; }
     
-    // ADD DOCS
+    // DOCS: Add better details on when undefined is returned
+    /**
+     * The database id assigned to the client.
+     * 
+     * May return undefined in some cases.
+     * @type {number|undefined}
+     */
     public get databaseId(): number | undefined { return this._databaseId; }
     
-    // ADD DOCS
+    /**
+     * The MyTeamSpeak identifier linked to the client.
+     * 
+     * Returns `undefined` if the client doesn't have a MyTeamSpeak associated
+     * @type {string|undefined}
+     */
     public get myTeamspeakId(): string | undefined { return this._myTeamspeakId; }
     
     // ADD DOCS
@@ -248,31 +283,141 @@ export class Client extends Base {
     public get isRecording(): boolean { return this._isRecording; }
     
     // ADD DOCS
-    public get isOnline(): boolean { return this._isOnline; }
+    public get isOnline(): boolean { return this.serverId !== undefined; }
 
-    // ADD DOCS
-    public async setNickname(nickname: string): Promise<void> {
-        // TODO: Implementation
+    /**
+     * Pokes the client with the specified message
+     * @param {string} message The message to poke the client with
+     */
+    public async poke(message: string): Promise<void> {
+        if (!this.isOnline) {
+            throw new ClientNotOnlineError("clientPoke");
+        }
+
+        if (this.serverId === undefined) {
+            throw new ClientOnlineWithoutServerIdError(this.id);
+        }
+
+        await this._queryClient.execute(new QueryCommand("clientpoke", { clid: this.serverId, msg: message }));
     }
 
-    // ADD DOCS
+    /**
+     * Sets the client as a talker
+     * @param {boolean} isTalker Whether the client is or isn't a talker
+     */
     public async setIsTalker(isTalker: boolean): Promise<void> {
-        // TODO: Implementation
+        if (this.isOnline) {
+            if (this.serverId === undefined) {
+                throw new ClientOnlineWithoutServerIdError(this.id);
+            }
+
+            await this._queryClient.execute(new QueryCommand("clientedit", { clid: this.serverId, clientIsTalker: isTalker }));
+            return;
+        } else {
+            if (this.databaseId === undefined) {
+                throw new ClientMissingDatabaseIdError("clientSetIsTalker");
+            }
+
+            await this._queryClient.execute(new QueryCommand("clientedit", { cldbid: this.databaseId, clientIsTalker: isTalker }));
+            return;
+        }
     }
 
-    // ADD DOCS
+    /**
+     * Sets the client's description
+     * @param {string} description Description to set on the client
+     */
     public async setDescription(description: string): Promise<void> {
-        // TODO: Implementation
+        if (this.isOnline) {
+            if (this.serverId === undefined) {
+                throw new ClientOnlineWithoutServerIdError(this.id);
+            }
+
+            await this._queryClient.execute(new QueryCommand("clientedit", { clid: this.serverId, clientDescription: description }));
+        } else {
+            if (this.databaseId === undefined) {
+                throw new ClientMissingDatabaseIdError("clientSetDescription");
+            }
+
+            await this._queryClient.execute(new QueryCommand("clientedit", { cldbid: this.databaseId, clientDescription: description }));
+        }
     }
 
-    // ADD DOCS
-    public async setIsChannelCommander(isTalker: boolean): Promise<void> {
-        // TODO: Implementation
+    /**
+     * Moves the client to the specified channel
+     * @param {ChannelResolvable} channel The channel to move to 
+     * @param {string|undefined} [password] The password for the channel
+     */
+    public async move(channel: ChannelResolvable, password?: string): Promise<void> {
+        if (!this.isOnline) {
+            throw new ClientNotOnlineError("clientMove");
+        }
+
+        if (this.serverId === undefined) {
+            throw new ClientOnlineWithoutServerIdError(this.id);
+        }
+
+        const channelId = this._queryClient.channels.resolveId(channel);
+        if (channelId === null) {
+            throw new CannotResolveChannelId(channel);
+        }
+
+        const params: { clid: number, cid: number, cpw?: string } = { clid: this.serverId, cid: channelId };
+        if (password !== undefined) {
+            params.cpw = password;
+        }
+
+        await this._queryClient.execute(new QueryCommand("clientmove", params));
     }
 
-    // ADD DOCS
-    public async setIconId(iconId: number): Promise<void> {
-        // TODO: Implementation
+    /**
+     * Kicks the client from the channel
+     * @param {string} [reason] Reason for kick 
+     */
+    public async kickFromChannel(reason?: string): Promise<void> {
+        if (!this.isOnline) {
+            throw new ClientNotOnlineError("clientKickFromChannel");
+        }
+
+        if (this.serverId === undefined) {
+            throw new ClientOnlineWithoutServerIdError(this.id);
+        }
+
+        if (reason !== undefined && reason.length > 40) {
+            reason = reason.substring(0, 40);
+        }
+
+        const params: { clid: number, reasonid: 4, reasonmsg?: string } = { clid: this.serverId, reasonid: 4 };
+        if (reason !== undefined) {
+            params.reasonmsg = reason;
+        }
+
+        await this._queryClient.execute(new QueryCommand("clientkick", params));
+    }
+
+    /**
+     * Kicks the client from the server
+     * @param {string} [reason] Reason for kick 
+     */
+    public async kickFromServer(reason?: string): Promise<void> {
+        if (!this.isOnline) {
+            throw new ClientNotOnlineError("kickFromServer");
+        }
+
+        if (this.serverId === undefined) {
+            throw new ClientOnlineWithoutServerIdError(this.id);
+        }
+
+        if (reason !== undefined && reason.length > 40) {
+            reason = reason.substring(0, 40);
+        }
+
+        const params: { clid: number, reasonid: 5, reasonmsg?: string } = { clid: this.serverId, reasonid: 5 };
+        if (reason !== undefined) {
+            params.reasonmsg = reason;
+        }
+
+        await this._queryClient.execute(new QueryCommand("clientkick", params));
     }
 
     public override toString(): string {

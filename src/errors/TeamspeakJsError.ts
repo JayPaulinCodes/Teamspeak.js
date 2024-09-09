@@ -1,40 +1,33 @@
-import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
-import { TeamspeakJsErrorMessages } from "@teamspeak.js/errors/TeamspeakJsErrorMessages";
+import { TeamspeakJsErrorCode, TeamspeakJsErrorMessages } from "@teamspeak.js/errors/TeamspeakJsErrorMessages";
 
-function makeErrorClass(BaseClass: any) {
-    return class TeamspeakJsError extends BaseClass {
-        code: string;
+export class TeamspeakJsError extends Error {
+    public readonly code: string;
 
-        constructor(code: string, ...args: any[]) {
-            super(TeamspeakJsError.message(code, args));
-            this.code = code;
-            Error.captureStackTrace?.(this, TeamspeakJsError);
+    constructor(code: TeamspeakJsErrorCode, ...args: any[]) {
+        super(TeamspeakJsError.message(code, args));
+        this.code = code;
+        Error.captureStackTrace?.(this, TeamspeakJsError);
+    }
+
+    public override get name() {
+        return `${super.name} [${this.code}]`;
+    }
+
+    public static message(code: TeamspeakJsErrorCode, args: any[]) {
+        const errorMessage: string | Function | undefined = TeamspeakJsErrorMessages[code];
+        if (!errorMessage) {
+            throw new Error(`No message associated with error code: ${code}.`);
         }
 
-        get name() {
-            return `${super.name} [${this.code}]`;
+        if (typeof errorMessage === "function") {
+            return errorMessage(...args);
         }
 
-        static message(code: string, args: any[]) {
-            if (!(code in TeamspeakJsErrorCodes)) {
-                throw new Error("Error code must be a valid TeamspeakJsErrorCodes");
-            }
-
-            const errorMessage: string | Function | undefined = TeamspeakJsErrorMessages[code];
-            if (!errorMessage) {
-                throw new Error(`No message associated with error code: ${code}.`);
-            }
-
-            if (typeof errorMessage === "function") {
-                return errorMessage(...args);
-            }
-            if (!args?.length) {
-                return errorMessage;
-            }
-            args.unshift(errorMessage);
-            return String(...args);
+        if (!args?.length) {
+            return errorMessage;
         }
-    };
+
+        args.unshift(errorMessage);
+        return String(...args);
+    }
 }
-
-export const TeamspeakJsError = makeErrorClass(Error);

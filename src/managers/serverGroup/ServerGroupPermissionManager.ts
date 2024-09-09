@@ -63,7 +63,7 @@ export class ServerGroupPermissionManager extends PermissionManager {
     }
     
     // ADD DOCS
-    public async remove(permission: PermissionResolvable | PermissionResolvable[], reason: string | undefined): Promise<ServerGroup> {
+    public async remove(permission: PermissionResolvable | PermissionResolvable[], reason?: string): Promise<ServerGroup> {
         const targetPerms = Array.isArray(permission) ? permission : [ permission ];
         const resolvedPermIds = targetPerms.map(perm => this.resolveId(perm)).filter(notNull);
         
@@ -78,7 +78,7 @@ export class ServerGroupPermissionManager extends PermissionManager {
     }
     
     // ADD DOCS
-    public async set(permission: Permission | Permission[], reason: string | undefined): Promise<ServerGroup> {
+    public async set(permission: Permission | Permission[], reason?: string): Promise<ServerGroup> {
         const targetPerms = Array.isArray(permission) ? permission : [ permission ];
         const filteredPerms = targetPerms.map(perm => perm.toQueryJSON()).filter(notNull);
         const filledPerms = filteredPerms.map(perm => {

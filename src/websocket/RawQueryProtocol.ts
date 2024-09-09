@@ -6,7 +6,7 @@ import { ISocketOptions } from "@teamspeak.js/websocket/interfaces/ISocketOption
 import { QueryProtocolEvents } from "@teamspeak.js/utils/enums/QueryProtocolEvents";
 import { SocketEvents } from "@teamspeak.js/utils/enums/SocketEvents";
 import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
+import { WebSocketTimeoutError } from "@teamspeak.js/errors/socket/WebSocketTimeoutError";
 
 export class RawQueryProtocol extends EventEmitter implements IQueryProtocol {
     readonly queryProtocolOptions: IQueryProtocolOptions;
@@ -105,7 +105,7 @@ export class RawQueryProtocol extends EventEmitter implements IQueryProtocol {
             this.destroy();
 
             // Trigger the error event with a custom error
-            this.emit(QueryProtocolEvents.Error, new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketTimeout));
+            this.emit(QueryProtocolEvents.Error, new WebSocketTimeoutError());
         });
     }
 }

@@ -23,6 +23,11 @@ export enum QueryClientEvents {
     Ready = "ready",
 
     /**
+     * Emited as the client completes the startup process
+     */
+    Startup = "startup",
+
+    /**
      * Emited Teamspeak server query throws a flooding error
      */
     Flooding = "flooding",

@@ -6,6 +6,7 @@ import { ServerGroupResolvable } from "@teamspeak.js/structures/classes/ServerGr
 import { ChannelGroupResolvable } from "@teamspeak.js/structures/classes/ChannelGroup";
 import { HostBannerMode } from "../enums/HostBannerMode";
 import { CodecEncryptionMode } from "../enums/CodecEncryptionMode";
+import { NotImplementedError } from "@teamspeak.js/errors/client/NotImplementedError";
 
 export type VirtualServerResolvable = VirtualServer | number;
 
@@ -89,7 +90,6 @@ export class VirtualServer extends Base {
     private _minIosVersion?: string;
     private _status?: string;
 
-    // ADD DOCS
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
         
@@ -905,6 +905,7 @@ export class VirtualServer extends Base {
      */
     public async setName(name: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setName", true);
     }
 
     /**
@@ -913,6 +914,7 @@ export class VirtualServer extends Base {
      */
     public async setWelcomeMessage(message: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setWelcomeMessage", true);
     }
 
     /**
@@ -921,6 +923,7 @@ export class VirtualServer extends Base {
      */
     public async setMaxClients(maxClients: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setMaxClients", true);
     }
 
     /**
@@ -929,6 +932,7 @@ export class VirtualServer extends Base {
      */
     public async setPassword(password: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setPassword", true);
     }
 
     /**
@@ -937,6 +941,7 @@ export class VirtualServer extends Base {
      */
     public async setHostMessage(message: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostMessage", true);
     }
 
     /**
@@ -945,6 +950,7 @@ export class VirtualServer extends Base {
      */
     public async setHostMessageMode(mode: HostMessageMode): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostMessageMode", true);
     }
 
     /**
@@ -953,6 +959,7 @@ export class VirtualServer extends Base {
      */
     public async setDefaultServerGroup(group: ServerGroupResolvable): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setDefaultServerGroup", true);
     }
 
     /**
@@ -961,6 +968,7 @@ export class VirtualServer extends Base {
      */
     public async setDefaultChannelGroup(group: ChannelGroupResolvable): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setDefaultChannelGroup", true);
     }
 
     /**
@@ -969,6 +977,7 @@ export class VirtualServer extends Base {
      */
     public async setDefaultChannelAdminGroup(group: ChannelGroupResolvable): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setDefaultChannelAdminGroup", true);
     }
 
     /**
@@ -977,6 +986,7 @@ export class VirtualServer extends Base {
      */
     public async setMaxDownloadTotalBandwidth(bytesPerSecond: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setMaxDownloadTotalBandwidth", true);
     }
 
     /**
@@ -985,6 +995,7 @@ export class VirtualServer extends Base {
      */
     public async setMaxUploadTotalBandwidth(bytesPerSecond: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setMaxUploadTotalBandwidth", true);
     }
 
     /**
@@ -993,6 +1004,7 @@ export class VirtualServer extends Base {
      */
     public async setHostBannerUrl(url: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostBannerUrl", true);
     }
 
     /**
@@ -1001,6 +1013,7 @@ export class VirtualServer extends Base {
      */
     public async setHostBannerGfxUrl(url: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostBannerGfxUrl", true);
     }
 
     /**
@@ -1009,186 +1022,223 @@ export class VirtualServer extends Base {
      */
     public async setHostBannerGfxInterval(interval: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostBannerGfxInterval", true);
     }
 
     // DOCUMENT: Add docs
     public async setComplainAutoBanCount(count: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setComplainAutoBanCount", true);
     }
 
     // DOCUMENT: Add docs
     public async setComplainAutoBanTime(time: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setComplainAutoBanTime", true);
     }
 
     // DOCUMENT: Add docs
     public async setComplainRemoveTime(time: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setComplainRemoveTime", true);
     }
 
     // DOCUMENT: Add docs
     public async setMinClientsInChannelBeforeForcedSilence(count: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setMinClientsInChannelBeforeForcedSilence", true);
     }
 
     // DOCUMENT: Add docs
     public async setPrioritySpeakerDimmModificator(modifier: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setPrioritySpeakerDimmModificator", true);
     }
 
     // DOCUMENT: Add docs
     public async setAntiFloodPointsTickReduce(points: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setAntiFloodPointsTickReduce", true);
     }
 
     // DOCUMENT: Add docs
     public async setAntiFloodPointsNeededCommandBlock(points: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setAntiFloodPointsNeededCommandBlock", true);
     }
 
     // DOCUMENT: Add docs
     public async setAntiFloodPointsNeededPluginBlock(points: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setAntiFloodPointsNeededPluginBlock", true);
     }
 
     // DOCUMENT: Add docs
     public async setAntiFloodPointsNeededIpBlock(points: number): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setAntiFloodPointsNeededIpBlock", true);
     }
 
     // DOCUMENT: Add docs
     public async setHostbannerMode(HostBannerMode: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostbannerMode", true);
     }
 
     // DOCUMENT: Add docs
     public async setNickname(nickname: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setNickname", true);
     }
 
     // DOCUMENT: Add docs
     public async setCodecEncryptionMode(mode: CodecEncryptionMode): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setCodecEncryptionMode", true);
     }
 
     // DOCUMENT: Add docs
     public async setHostButtonTooltip(tooltip: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostButtonTooltip", true);
     }
 
     // DOCUMENT: Add docs
     public async setHostButtonUrl(url: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostButtonUrl", true);
     }
 
     // DOCUMENT: Add docs
     public async setHostButtonGfxUrl(url: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setHostButtonGfxUrl", true);
     }
 
     // DOCUMENT: Add docs
     public async setDownloadQuota(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setDownloadQuota", true);
     }
 
     // DOCUMENT: Add docs
     public async setUploadQuota(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setUploadQuota", true);
     }
 
     // DOCUMENT: Add docs
     public async setPort(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setPort", true);
     }
 
     // DOCUMENT: Add docs
     public async setAutostart(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setAutostart", true);
     }
 
     // DOCUMENT: Add docs
     public async setMachineId(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setMachineId", true);
     }
 
     // DOCUMENT: Add docs
     public async setNeededIdentitySecurityLevel(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setNeededIdentitySecurityLevel", true);
     }
 
     // DOCUMENT: Add docs
     public async setLogClient(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setLogClient", true);
     }
 
     // DOCUMENT: Add docs
     public async setLogQuery(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setLogQuery", true);
     }
 
     // DOCUMENT: Add docs
     public async setLogChannel(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setLogChannel", true);
     }
 
     // DOCUMENT: Add docs
     public async setLogPermissions(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setLogPermissions", true);
     }
 
     // DOCUMENT: Add docs
     public async setLogServer(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setLogServer", true);
     }
 
     // DOCUMENT: Add docs
     public async setLogFiletransfer(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setLogFiletransfer", true);
     }
 
     // DOCUMENT: Add docs
     public async setMinClientVersion(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setMinClientVersion", true);
     }
 
     // DOCUMENT: Add docs
     public async setNamePhonetic(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setNamePhonetic", true);
     }
 
     // DOCUMENT: Add docs
     public async setIconId(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setIconId", true);
     }
 
     // DOCUMENT: Add docs
     public async setReservedSlots(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setReservedSlots", true);
     }
 
     // DOCUMENT: Add docs
     public async setWeblistEnabled(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setWeblistEnabled", true);
     }
 
     // DOCUMENT: Add docs
     public async setChannelTempDeleteDelayDefault(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setChannelTempDeleteDelayDefault", true);
     }
 
     // DOCUMENT: Add docs
     public async setMinAndroidVersion(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setMinAndroidVersion", true);
     }
 
     // DOCUMENT: Add docs
     public async setMinIosVersion(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setMinIosVersion", true);
     }
 
     // DOCUMENT: Add docs
     public async setStatus(TBD: string): Promise<void> {
         // TODO: Implementation
+        throw new NotImplementedError("VirtualServer.setStatus", true);
     }
 
     public override toString(): string {

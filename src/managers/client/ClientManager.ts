@@ -10,7 +10,6 @@ export class ClientManager extends CachedManager<Client> {
         super(client, Client, prefill);
     }
 
-
     protected add(data: Client, useCache: boolean = true): Client {
         const existingItem = this.cache.get(data.uniqueId);
 
@@ -89,32 +88,13 @@ export class ClientManager extends CachedManager<Client> {
             });
 
             let offset = 0;
-            const clientsData: Client[] = [];
+            let clientsData: Client[] = [];
             do {
                 const newData = await this.queryClient.execute<any[]>(new QueryCommand("clientdblist", { start: offset })).then(data => {
                     offset += data.length;
                     return data.map(elem => new Client(this.queryClient, elem));
                 });
-
-                for (let i = 0; i < newData.length; i++) {
-                    const client = newData[i];
-                    
-                    const clientDbId = await this.queryClient.execute(new QueryCommand("clientgetdbidfromuid", { cluid: client.uniqueId })).then(data => {
-                        return data?.cldbid;
-                    });
-
-                    client._patch({ cldbid: clientDbId }, true, true);
-
-                    if (clientDbId !== undefined) {
-                        await this.queryClient.execute<any[]>(new QueryCommand("clientdbinfo", { cldbid: clientDbId })).then(data => {
-                            return client._patch(data, true, true);
-                        });
-                    }
-
-                    clientsData.push(client);
-                }
-
-                // clientsData = clientsData.concat(newData);
+                clientsData = clientsData.concat(newData);
             } while (offset < totalCount);
 
             const onlineClients = await this.queryClient

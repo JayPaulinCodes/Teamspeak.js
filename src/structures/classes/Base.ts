@@ -13,8 +13,7 @@ export abstract class Base {
         return flatten(this, props);
     }
 
-    // ADD DOCS
-    public _clone() {
+    public _clone(): this {
         return Object.assign(Object.create(this), this);
     }
 

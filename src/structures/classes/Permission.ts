@@ -11,7 +11,6 @@ export class Permission extends Base {
     private _negated?: boolean;
     private _skip?: boolean;
 
-    // ADD DOCS
     constructor(queryClient: QueryClient, data: any, fromQuery: boolean = true) {
         super(queryClient);
         

@@ -63,7 +63,7 @@ export class ChannelGroupPermissionManager extends PermissionManager {
     }
     
     // ADD DOCS
-    public async remove(permission: PermissionResolvable | PermissionResolvable[], reason: string | undefined): Promise<ChannelGroup> {
+    public async remove(permission: PermissionResolvable | PermissionResolvable[], reason?: string): Promise<ChannelGroup> {
         const targetPerms = Array.isArray(permission) ? permission : [ permission ];
         const resolvedPermIds = targetPerms.map(perm => this.resolveId(perm)).filter(notNull);
         
@@ -78,7 +78,7 @@ export class ChannelGroupPermissionManager extends PermissionManager {
     }
     
     // ADD DOCS
-    public async set(permission: Permission | Permission[], reason: string | undefined): Promise<ChannelGroup> {
+    public async set(permission: Permission | Permission[], reason?: string): Promise<ChannelGroup> {
         const targetPerms = Array.isArray(permission) ? permission : [ permission ];
         const filteredPerms = targetPerms.map(perm => perm.toQueryJSON()).filter(notNull);
         const filledPerms = filteredPerms.map(perm => {

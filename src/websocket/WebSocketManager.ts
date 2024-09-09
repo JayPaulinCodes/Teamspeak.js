@@ -9,8 +9,10 @@ import { RawQueryProtocol } from "@teamspeak.js/websocket/RawQueryProtocol";
 import { QueryClient } from "@teamspeak.js/client/QueryClient";
 import { QueryProtocolEvents } from "@teamspeak.js/utils/enums/QueryProtocolEvents";
 import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "@teamspeak.js/errors/TeamspeakJsErrorCodes";
 import { WebSocketManagerEvents } from "@teamspeak.js/utils/enums/WebSocketManagerEvents";
+import { InvalidOptionError } from "@teamspeak.js/errors/general/InvalidOptionError";
+import { WebSocketConnectionExistsError } from "@teamspeak.js/errors/socket/WebSocketConnectionExistsError";
+import { WebSocketNonExistantError } from "@teamspeak.js/errors/socket/WebSocketNonExistantError";
 
 export class WebSocketManager extends EventEmitter {
     private static initialIgnoreLines = 2;
@@ -63,14 +65,14 @@ export class WebSocketManager extends EventEmitter {
             case QueryProtocol.RAW:
                 return new RawQueryProtocol(options.socketOptions, options.queryProtocolOptions);
             default:
-                throw new TeamspeakJsError(TeamspeakJsErrorCodes.InvalidOption, "protocol", "'raw'", options.queryProtocolOptions?.protocol);
+                throw new InvalidOptionError("protocol", "'raw'", options.queryProtocolOptions?.protocol);
         }
     }
 
     connect() {
         if (this.webSocket) {
             if (this.connected) {
-                throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketConnectionExists);
+                throw new WebSocketConnectionExistsError();
             } else {
                 if (this.currentQueueItem) {
                     this.queue.unshift(this.currentQueueItem);
@@ -89,13 +91,13 @@ export class WebSocketManager extends EventEmitter {
 
     attachEvents() {
         if (this.webSocket === undefined) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+            throw new WebSocketNonExistantError();
         }
 
         // Connect event
         this.webSocket.on(QueryProtocolEvents.Connect, () => {
             if (this.webSocket === undefined) {
-                throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+                throw new WebSocketNonExistantError();
             }
             this.connected = true;
 
@@ -289,9 +291,6 @@ export class WebSocketManager extends EventEmitter {
                         break;
 
                     case "notifychanneldescriptionchanged":
-                        if ("cid" in notifyData) {
-                            this.queryClient.eventManager["ChannelDescriptionUpdated"].handle(notifyData);
-                        }
                         break;
 
                     case "notifychanneledited":
@@ -397,7 +396,7 @@ export class WebSocketManager extends EventEmitter {
      */
     forceQuit() {
         if (this.webSocket === undefined) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+            throw new WebSocketNonExistantError();
         }
         this.pauseQueue(true);
         return this.webSocket.destroy();
@@ -409,7 +408,7 @@ export class WebSocketManager extends EventEmitter {
      */
     private send(data: string) {
         if (this.webSocket === undefined) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+            throw new WebSocketNonExistantError();
         }
         this.debug(data, "WebSocketManager.send");
         this.lastCommandTimestamp = Date.now();
@@ -432,7 +431,7 @@ export class WebSocketManager extends EventEmitter {
 
         this.keepAliveTimeout = setTimeout(() => {
             if (this.webSocket === undefined) {
-                throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+                throw new WebSocketNonExistantError();
             }
             this.debug("Sent keep alive", "WebSocketManager.keepAlive");
             this.lastCommandTimestamp = Date.now();
