@@ -1,15 +1,13 @@
-import { QueryClientEvents } from "../../utils/enums/QueryClientEvents";
-import { Event } from "./Event";
+import { Event } from "@teamspeak.js/client/events/Event";
+import { QueryClientEvents } from "@teamspeak.js/utils/enums/QueryClientEvents";
 
 // ADD DOCS
 export class ClientConnectionDroppedEvent extends Event {
     override async handle(data: any) {
         const queryClient = this.queryClient;
 
-        const dbId: number | null = this.queryClient.tryGetDatabaseId(data.clid);
-        if (dbId === null) return;
-        const client = await queryClient.getClientByDbId(dbId);
-        const channel = await queryClient.getChannelById(data.cfid);
+        const client = await queryClient.clients.fetch(data.clid);
+        const channel = await queryClient.channels.fetch(data.cfid);
         const reason = data.reasonmsg;
 
         queryClient.emit(QueryClientEvents.ClientConnectionDropped, client, channel, reason);

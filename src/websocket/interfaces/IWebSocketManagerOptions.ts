@@ -1,5 +1,5 @@
-import { IQueryProtocolOptions } from "./IQueryProtocolOptions";
-import { ISocketOptions } from "./ISocketOptions";
+import { IQueryProtocolOptions } from "@teamspeak.js/websocket/interfaces/IQueryProtocolOptions";
+import { ISocketOptions } from "@teamspeak.js/websocket/interfaces/ISocketOptions";
 
 export interface IWebSocketManagerOptions {
     queryProtocolOptions: IQueryProtocolOptions;

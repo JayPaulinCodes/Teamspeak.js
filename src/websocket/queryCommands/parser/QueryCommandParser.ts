@@ -1,3 +1,7 @@
+/* eslint line-comment-position: "off" */
+
+import { ComplexQueryOptionElem } from "@teamspeak.js/websocket/queryCommands/interfaces/ComplexQueryOptionElem";
+
 // ADD DOCS
 export class QueryCommandParser {
     private static readonly snakeCaseIdentifier = "_";
@@ -92,10 +96,7 @@ export class QueryCommandParser {
      * @param k the key which should get looked up
      * @param v the value which should get parsed
      */
-    static parseValue(
-        key: string,
-        value: string | undefined
-    ): boolean | string | string[] | number | number[] | undefined {
+    static parseValue(key: string, value: string | undefined): boolean | string | string[] | number | number[] | undefined {
         if (value === undefined) {
             return undefined;
         }
@@ -182,7 +183,7 @@ export class QueryCommandParser {
      * @param {string|string[]} value the value or an array of values
      * @return the parsed String which is readable by the TeamSpeak Query
      */
-    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[]): string {
+    static origEscapeKeyValue(key: string, value: boolean | string | string[] | number | number[]): string {
         key = QueryCommandParser.toSnakeCase(key);
         if (typeof value === "boolean") {
             value = value ? "1" : "0";
@@ -190,11 +191,54 @@ export class QueryCommandParser {
             value = `${value}`;
         }
         if (Array.isArray(value)) {
-            return value
-                .map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`)
-                .join("|");
+            return value.map(v => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(v.toString())}`).join("|");
         } else {
             return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
+        }
+    }
+
+    /**
+     * escapes a key value pair
+     * @param {string} key the key used
+     * @param {string|string[]} value the value or an array of values
+     * @return the parsed String which is readable by the TeamSpeak Query
+     */
+    // HACK: This entire function is basically a hack it feels like, there has to be a better way to process this but hey, it works
+    static escapeKeyValue(key: string, value: boolean | string | string[] | number | number[] | ComplexQueryOptionElem[][]): string {
+        const valueType = Array.isArray(value) ? (Array.isArray(value[0]) ? typeof value[0][0] + "[]" : typeof value) : typeof value;
+        key = QueryCommandParser.toSnakeCase(key);
+
+        switch (valueType) {
+            case "string":
+            case "number":
+                value = `${value}`;
+                return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
+
+            case "boolean":
+                value = value ? "1" : "0";
+                return `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(value)}`;
+
+            case "string[]":
+                const strValue: string[] = <string[]>value;
+                return strValue.map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`).join("|");
+
+            case "number[]":
+                const numValue: number[] = <number[]>value;
+                return numValue.map(elem => `${QueryCommandParser.escape(key)}=${QueryCommandParser.escape(elem.toString())}`).join("|");
+
+            case "object[]":
+                const objValue: ComplexQueryOptionElem[][] = <ComplexQueryOptionElem[][]>value;
+                return objValue
+                    .map(elem =>
+                        elem
+                            .map(_elem => `${QueryCommandParser.escape(_elem.key.toString())}=${QueryCommandParser.escape(_elem.value.toString())}`)
+                            .join(" ")
+                    )
+                    .join("|");
+
+            default:
+                // TODO: Fix the bellow to use a proper tsjs error
+                throw Error("Oh shit, something went horibly wrong...");
         }
     }
 
@@ -377,7 +421,7 @@ export class QueryCommandParser {
         clientMyteamspeakAvatar: QueryCommandParser.parseString,
         clientSignedBadges: QueryCommandParser.parseString,
         clientLastip: QueryCommandParser.parseString,
-        cid: QueryCommandParser.parseString,
+        cid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         pid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         cpid: QueryCommandParser.parseString,
         order: QueryCommandParser.parseNumber,
@@ -430,11 +474,11 @@ export class QueryCommandParser {
         s: QueryCommandParser.parseNumber,
         reasonid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         reasonmsg: QueryCommandParser.parseString,
-        ctid: QueryCommandParser.parseString,
-        cfid: QueryCommandParser.parseString,
+        ctid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
+        cfid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         targetmode: QueryCommandParser.parseNumber,
         target: QueryCommandParser.parseNumber,
-        invokerid: QueryCommandParser.parseString,
+        invokerid: QueryCommandParser.parseNumber, // Was string - QueryCommandParser.parseString
         invokername: QueryCommandParser.parseString,
         invokeruid: QueryCommandParser.parseString,
         hash: QueryCommandParser.parseString,

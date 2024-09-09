@@ -1,4 +1,4 @@
-import { IQueryProtocol } from "../../websocket/interfaces/IQueryProtocol";
+/* eslint line-comment-position: "off" */
 
 /**
  * Enum for the events emitted by {@link IQueryProtocol} classes
@@ -21,6 +21,11 @@ export enum QueryClientEvents {
      * Emited when the client is ready
      */
     Ready = "ready",
+
+    /**
+     * Emited as the client completes the startup process
+     */
+    Startup = "startup",
 
     /**
      * Emited Teamspeak server query throws a flooding error
@@ -177,9 +182,6 @@ export enum QueryClientEvents {
 
     // ADD DOCS
     DefaultChannelUpdated = "defaultChannelUpdated",
-
-    // ADD DOCS
-    ChannelPasswordRemoved = "channelPasswordRemoved",
 
     // ADD DOCS
     ChannelOrderUpdated = "channelOrderUpdated",

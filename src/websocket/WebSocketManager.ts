@@ -1,19 +1,18 @@
 import { EventEmitter } from "node:events";
-import { IWebSocketManagerOptions } from "./interfaces/IWebSocketManagerOptions";
-import { ISocketOptions } from "./interfaces/ISocketOptions";
-import { IQueryProtocol } from "./interfaces/IQueryProtocol";
-import { QueryProtocol } from "./enums/QueryProtocol";
-import { TeamspeakJsError } from "../errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "../errors/TeamspeakJsErrorCodes";
-import { RawQueryProtocol } from "./RawQueryProtocol";
-import { QueryProtocolEvents } from "../utils/enums/QueryProtocolEvents";
-import { WebSocketManagerEvents } from "../utils/enums/WebSocketManagerEvents";
-import { IQueueItem } from "./interfaces/IQueueItem";
-import { QueryCommandOptions } from "./queryCommands/typings/QueryCommandOptions";
-import { HelpCommand } from "./queryCommands/commands/HelpCommand";
-import { QueryCommand } from "./queryCommands/QueryCommand";
-import { QueryCommandParser } from "./queryCommands/parser/QueryCommandParser";
-import { QueryClient } from "../client/QueryClient";
+import { IQueryProtocol } from "@teamspeak.js/websocket/interfaces/IQueryProtocol";
+import { IQueueItem } from "@teamspeak.js/websocket/interfaces/IQueueItem";
+import { IWebSocketManagerOptions } from "@teamspeak.js/websocket/interfaces/IWebSocketManagerOptions";
+import { QueryCommand } from "@teamspeak.js/websocket/queryCommands/QueryCommand";
+import { QueryCommandParser } from "@teamspeak.js/websocket/queryCommands/parser/QueryCommandParser";
+import { QueryProtocol } from "@teamspeak.js/websocket/enums/QueryProtocol";
+import { RawQueryProtocol } from "@teamspeak.js/websocket/RawQueryProtocol";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
+import { QueryProtocolEvents } from "@teamspeak.js/utils/enums/QueryProtocolEvents";
+import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
+import { WebSocketManagerEvents } from "@teamspeak.js/utils/enums/WebSocketManagerEvents";
+import { InvalidOptionError } from "@teamspeak.js/errors/general/InvalidOptionError";
+import { WebSocketConnectionExistsError } from "@teamspeak.js/errors/socket/WebSocketConnectionExistsError";
+import { WebSocketNonExistantError } from "@teamspeak.js/errors/socket/WebSocketNonExistantError";
 
 export class WebSocketManager extends EventEmitter {
     private static initialIgnoreLines = 2;
@@ -66,19 +65,14 @@ export class WebSocketManager extends EventEmitter {
             case QueryProtocol.RAW:
                 return new RawQueryProtocol(options.socketOptions, options.queryProtocolOptions);
             default:
-                throw new TeamspeakJsError(
-                    TeamspeakJsErrorCodes.InvalidOption,
-                    "protocol",
-                    "'raw'",
-                    options.queryProtocolOptions?.protocol
-                );
+                throw new InvalidOptionError("protocol", "'raw'", options.queryProtocolOptions?.protocol);
         }
     }
 
     connect() {
         if (this.webSocket) {
             if (this.connected) {
-                throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketConnectionExists);
+                throw new WebSocketConnectionExistsError();
             } else {
                 if (this.currentQueueItem) {
                     this.queue.unshift(this.currentQueueItem);
@@ -97,13 +91,13 @@ export class WebSocketManager extends EventEmitter {
 
     attachEvents() {
         if (this.webSocket === undefined) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+            throw new WebSocketNonExistantError();
         }
 
         // Connect event
         this.webSocket.on(QueryProtocolEvents.Connect, () => {
             if (this.webSocket === undefined) {
-                throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+                throw new WebSocketNonExistantError();
             }
             this.connected = true;
 
@@ -144,15 +138,10 @@ export class WebSocketManager extends EventEmitter {
                     // Check if the error was a flooding error
                     if (error.id === "524") {
                         // Emit the flooding event
-                        this.emit(
-                            WebSocketManagerEvents.Flooding,
-                            this.currentQueueItem.command.getCommandTermination()
-                        );
+                        this.emit(WebSocketManagerEvents.Flooding, this.currentQueueItem.command.getCommandTermination());
 
                         // Wait the required amount of time specified in the error
-                        const match = this.currentQueueItem.command
-                            .getCommandTermination()!
-                            .extraMsg?.match(/(\d*) second/i);
+                        const match = this.currentQueueItem.command.getCommandTermination()!.extraMsg?.match(/(\d*) second/i);
                         const waitTimeout = match ? parseInt(match[1], 10) : 1;
 
                         clearTimeout(this.floodTimeout);
@@ -305,6 +294,47 @@ export class WebSocketManager extends EventEmitter {
                         break;
 
                     case "notifychanneledited":
+                        if ("reasonid" in notifyData) {
+                            switch (notifyData.reasonid) {
+                                case 10:
+                                    if ("cid" in notifyData && "invokeruid" in notifyData) {
+                                        if ("channelIconId" in notifyData) {
+                                            this.queryClient.eventManager["ChannelIconUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelName" in notifyData) {
+                                            this.queryClient.eventManager["ChannelNameUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelTopic" in notifyData) {
+                                            this.queryClient.eventManager["ChannelTopicUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelOrder" in notifyData) {
+                                            this.queryClient.eventManager["ChannelOrderUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelNeededTalkPower" in notifyData) {
+                                            this.queryClient.eventManager["ChannelNeededTalkPowerUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelCodec" in notifyData) {
+                                            this.queryClient.eventManager["ChannelCodecUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelCodecQuality" in notifyData) {
+                                            this.queryClient.eventManager["ChannelCodecQualityUpdated"].handle(notifyData);
+                                        }
+                                        
+                                        if ("channelMaxclients" in notifyData) {
+                                            this.queryClient.eventManager["ChannelMaxClientsUpdated"].handle(notifyData);
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                         break;
 
                     case "notifychannelmoved":
@@ -366,7 +396,7 @@ export class WebSocketManager extends EventEmitter {
      */
     forceQuit() {
         if (this.webSocket === undefined) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+            throw new WebSocketNonExistantError();
         }
         this.pauseQueue(true);
         return this.webSocket.destroy();
@@ -378,7 +408,7 @@ export class WebSocketManager extends EventEmitter {
      */
     private send(data: string) {
         if (this.webSocket === undefined) {
-            throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+            throw new WebSocketNonExistantError();
         }
         this.debug(data, "WebSocketManager.send");
         this.lastCommandTimestamp = Date.now();
@@ -401,7 +431,7 @@ export class WebSocketManager extends EventEmitter {
 
         this.keepAliveTimeout = setTimeout(() => {
             if (this.webSocket === undefined) {
-                throw new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketNonExistant);
+                throw new WebSocketNonExistantError();
             }
             this.debug("Sent keep alive", "WebSocketManager.keepAlive");
             this.lastCommandTimestamp = Date.now();

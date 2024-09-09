@@ -1,10 +1,19 @@
-import * as Events from "./index";
-import { QueryClient } from "../QueryClient";
-import { Event } from "./Event";
+import * as Events from "@teamspeak.js/client/events/index";
+import { Event } from "@teamspeak.js/client/events/Event";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class EventManager {
     readonly queryClient: QueryClient;
+
+    readonly ChannelCodecQualityUpdated: Event;
+    readonly ChannelCodecUpdated: Event;
+    readonly ChannelIconUpdated: Event;
+    readonly ChannelMaxClientsUpdated: Event;
+    readonly ChannelNameUpdated: Event;
+    readonly ChannelNeededTalkPowerUpdated: Event;
+    readonly ChannelOrderUpdated: Event;
+    readonly ChannelTopicUpdated: Event;
     readonly ClientBanned: Event;
     readonly ClientConnected: Event;
     readonly ClientConnectionDropped: Event;
@@ -33,6 +42,14 @@ export class EventManager {
     constructor(queryClient: QueryClient) {
         this.queryClient = queryClient;
 
+        this.ChannelCodecQualityUpdated = new Events.ChannelCodecQualityUpdatedEvent(this.queryClient);
+        this.ChannelCodecUpdated = new Events.ChannelCodecUpdatedEvent(this.queryClient);
+        this.ChannelNameUpdated = new Events.ChannelNameUpdatedEvent(this.queryClient);
+        this.ChannelNeededTalkPowerUpdated = new Events.ChannelNeededTalkPowerUpdatedEvent(this.queryClient);
+        this.ChannelIconUpdated = new Events.ChannelIconUpdatedEvent(this.queryClient);
+        this.ChannelMaxClientsUpdated = new Events.ChannelMaxClientsUpdatedEvent(this.queryClient);
+        this.ChannelOrderUpdated = new Events.ChannelTopicUpdatedEvent(this.queryClient);
+        this.ChannelTopicUpdated = new Events.ChannelTopicUpdatedEvent(this.queryClient);
         this.ClientBanned = new Events.ClientBannedEvent(this.queryClient);
         this.ClientConnected = new Events.ClientConnectedEvent(this.queryClient);
         this.ClientConnectionDropped = new Events.ClientConnectionDroppedEvent(this.queryClient);
@@ -54,11 +71,7 @@ export class EventManager {
         this.ServerHostButtonUrlUpdated = new Events.ServerHostButtonUrlUpdatedEvent(this.queryClient);
         this.ServerHostButtonIconUrlUpdated = new Events.ServerHostButtonIconUrlUpdatedEvent(this.queryClient);
         this.ServerPhoneticNameUpdated = new Events.ServerPhoneticNameUpdatedEvent(this.queryClient);
-        this.ServerPrioritySpeakerDimModificatorUpdated = new Events.ServerPrioritySpeakerDimModificatorUpdatedEvent(
-            this.queryClient
-        );
-        this.ServerTempChannelDeleteDelayUpdated = new Events.ServerTempChannelDeleteDelayUpdatedEvent(
-            this.queryClient
-        );
+        this.ServerPrioritySpeakerDimModificatorUpdated = new Events.ServerPrioritySpeakerDimModificatorUpdatedEvent(this.queryClient);
+        this.ServerTempChannelDeleteDelayUpdated = new Events.ServerTempChannelDeleteDelayUpdatedEvent(this.queryClient);
     }
 }

@@ -1,0 +1,104 @@
+# name: Version Bump
+
+# on:
+#   push:
+#     branches:
+#       - "develop"
+#     paths:
+#       - "**"
+#       - "!package.json"
+
+# jobs:
+#   bump-version:
+#     name: Bump package version
+#     runs-on:
+#       - self-hosted
+#       - Linux
+
+#     steps:
+#       - name: Checkout Repo
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: "20.x"
+#           registry-url: "https://registry.npmjs.org"
+
+#       - name: Bump package version
+#         run: node .github/actions/bump-package-version.js
+
+#       - name: Push package.json
+#         uses: EndBug/add-and-commit@v9
+#         with:
+#           message: "chore(npm): Bumped package version"
+#           committer_name: GitHub Actions
+#           committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+#           add: "package.json"
+
+#   create-release:
+#     name: Create release
+#     runs-on:
+#       - self-hosted
+#       - Linux
+#     needs: [ bump-version ]
+
+#     steps:
+#       - name: Checkout Repo
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: "20.x"
+#           registry-url: "https://registry.npmjs.org"
+
+#       - name: Load package.json into the env
+#         run: |
+#           echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+#           cat ./package.json >> $GITHUB_ENV
+#           echo 'EOF' >> $GITHUB_ENV
+      
+#       - name: Install dependencies
+#         run: npm ci
+
+#       - name: Build project
+#         run: npm run build
+
+#       - name: Package project
+#         run: npm pack
+
+#       - name: Make release
+#         uses: "marvinpinto/action-automatic-releases@latest"
+#         with:
+#           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#           automatic_release_tag: "${{ fromJson(env.PACKAGE_JSON).version }}"
+#           prerelease: true
+#           title: "v${{ fromJson(env.PACKAGE_JSON).version }}"
+#           files: |
+#             devjacob-teamspeak.js-${{ fromJson(env.PACKAGE_JSON).version }}.tgz
+
+#   publish-package:
+#     name: Publish package
+#     runs-on:
+#       - self-hosted
+#       - Linux
+#     needs: [ bump-version ]
+
+#     steps:
+#       - name: Checkout Repo
+#         uses: actions/checkout@v4
+
+#       - name: Setup Node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: "20.x"
+#           registry-url: "https://registry.npmjs.org"
+      
+#       - name: Install dependencies
+#         run: npm ci
+
+#       - run: npm run publish:beta
+#         env:
+#           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        

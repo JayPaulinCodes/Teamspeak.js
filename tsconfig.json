@@ -1,4 +1,5 @@
 {
+    "include": [ "src/**/*.ts" ],
     "compilerOptions": {
         // Type Checking
         "alwaysStrict": true,
@@ -8,7 +9,7 @@
         "noImplicitOverride": true,
         "noImplicitThis": true,
         "noImplicitReturns": true,
-        "noUnusedParameters": true,
+        // "noUnusedParameters": true,
         "strict": true,
         "strictNullChecks": true,
         "useUnknownInCatchVariables": true, // https://www.typescriptlang.org/tsconfig#useUnknownInCatchVariables
@@ -16,9 +17,18 @@
         // Modules
         "module": "commonjs",
         "moduleResolution": "node",
-        "baseUrl": "./src",
+        "baseUrl": "src",
+        "paths": {
+            "@teamspeak.js/client/*": [ "client/*" ],
+            "@teamspeak.js/errors/*": [ "errors/*" ],
+            "@teamspeak.js/managers/*": [ "managers/*" ],
+            "@teamspeak.js/structures/*": [ "structures/*" ],
+            "@teamspeak.js/utils/*": [ "utils/*" ],
+            "@teamspeak.js/websocket/*": [ "websocket/*" ]
+        },
 
         // Emit
+        "declaration": true,
         "outDir": "./lib",
 
         // JS Support
@@ -46,7 +56,5 @@
         // Command Line
 
         // Watch Options
-    },
-
-    "include": ["./src"]
+    }
 }

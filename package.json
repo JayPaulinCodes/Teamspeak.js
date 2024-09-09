@@ -1,26 +1,28 @@
 {
-    "name": "teamspeak.js",
-    "version": "0.1.0",
+    "name": "@devjacob/teamspeak.js",
+    "version": "0.1.2-beta11",
     "description": "A package for connecting and interacting with Teamspeak3 servers using Server Query",
-    "authors": [
-        "SparrowStudios",
-        "Jacob Paulin"
-    ],
-    "license": "Mozilla Public License Version 2.0",
+    "author": "Jacob Paulin",
+    "license": "MPL-2.0",
     "main": "lib/index.js",
-    "homepage": "https://github.com/SparrowStudios/Teamspeak.js#readme",
+    "prettier": "@devjacob/shared-configs/.prettierrc.json",
+    "homepage": "https://github.com/JayPaulinCodes/Teamspeak.js#readme",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SparrowStudios/Teamspeak.js.git"
+        "url": "git+https://github.com/JayPaulinCodes/Teamspeak.js.git"
     },
     "scripts": {
-        "build": "tsc",
-        "lint": "prettier --check .",
-        "format": "prettier --write .",
-        "prep": "npm run build && npm run docs",
+        "format:check": "prettier src -c",
+        "format:write": "prettier src -w",
+        "lint": "eslint ./src --ext .ts",
+        "lint:fix": "eslint ./src --fix --ext .ts",
+        "build": "tsc -b --force && tscpaths",
+        "prepublish:stable": "npm run build",
+        "publish:stable": "npm publish --access=public --tag stable",
+        "prepublish:beta": "npm run build",
+        "publish:beta": "npm publish --access=public --tag beta",
         "poc": "npm run build && node devPoc/index.js",
-        "poc-no-build": "node devPoc/index.js",
-        "docs": "typedoc --options typedoc.json"
+        "poc-no-build": "node devPoc/index.js"
     },
     "keywords": [
         "ts",
@@ -31,13 +33,21 @@
         "Teamspeak3 Server Query",
         "Server Query"
     ],
+    "dependencies": {
+        "@discordjs/collection": "^2.0.0"
+    },
     "devDependencies": {
+        "@devjacob/shared-configs": "^1.0.2",
+        "@devjacob/tscpaths": "^0.1.8",
         "@types/node": "^20.9.0",
+        "@typescript-eslint/eslint-plugin": "^6.19.1",
+        "@typescript-eslint/parser": "^6.19.1",
+        "eslint": "^8.56.0",
+        "eslint-plugin-unused-imports": "^3.0.0",
         "prettier": "^3.1.0",
-        "typedoc": "^0.25.3",
-        "typedoc-github-wiki-theme": "^1.1.0",
-        "typedoc-plugin-coverage": "^2.2.0",
-        "typedoc-plugin-markdown": "^3.17.1",
         "typescript": "^5.2.2"
+    },
+    "engines": {
+        "node": ">=18"
     }
 }

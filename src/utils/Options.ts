@@ -1,8 +1,8 @@
-import { IQueryProtocolOptions } from "websocket/interfaces/IQueryProtocolOptions";
-import { ISocketOptions } from "../websocket/interfaces/ISocketOptions";
-import { IWebSocketManagerOptions } from "../websocket/interfaces/IWebSocketManagerOptions";
-import { QueryProtocol } from "../websocket/enums/QueryProtocol";
-import { IClientOptions } from "client/interfaces/IClientOptions";
+import { IClientOptions } from "@teamspeak.js/client/interfaces/IClientOptions";
+import { IQueryProtocolOptions } from "@teamspeak.js/websocket/interfaces/IQueryProtocolOptions";
+import { ISocketOptions } from "@teamspeak.js/websocket/interfaces/ISocketOptions";
+import { IWebSocketManagerOptions } from "@teamspeak.js/websocket/interfaces/IWebSocketManagerOptions";
+import { QueryProtocol } from "@teamspeak.js/websocket/enums/QueryProtocol";
 
 /**
  * Utility class to aid in the constructing of varrious options
@@ -29,7 +29,7 @@ export class Options {
 
     // ADD DOCS
     static buildWebSocketManagerOptions(options?: Partial<IWebSocketManagerOptions>): IWebSocketManagerOptions {
-        var newOptions = {
+        const newOptions = {
             socketOptions: Options.buildSocketOptions(),
             queryProtocolOptions: Options.buildQueryProtocolOptions(),
             autoConnect: false,
@@ -46,8 +46,9 @@ export class Options {
 
     // ADD DOCS
     static buildClientOptions(options?: Partial<IClientOptions>): IClientOptions {
-        var newOptions = {
+        const newOptions = {
             webSocketManagerOptions: Options.buildWebSocketManagerOptions(),
+            preCacheChannels: true,
             ...options
         };
 

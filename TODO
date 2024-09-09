@@ -1,0 +1,6 @@
+Events:
+    - channelTypeUpdated (Needs updates to channel class)
+    - defaultChannelUpdated (Needs updates to channel class)
+    - channelCodecEncryptedUpdated (Needs updates to channel class)
+    - channelPhoneticNameUpdated (Needs updates to channel class)
+    - channelFamilyMaxClientsUpdated (Needs updates to channel class)

@@ -1,5 +1,3 @@
-import { WebSocketManager } from "../../websocket/WebSocketManager";
-
 /**
  * Enum for the events emitted by {@link WebSocketManager} classes
  */

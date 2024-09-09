@@ -1,5 +1,5 @@
-import { QueryClient } from "../client/QueryClient";
-import { Base } from "./Base";
+import { Base } from "@teamspeak.js/structures/classes/Base";
+import { QueryClient } from "@teamspeak.js/client/QueryClient";
 
 // ADD DOCS
 export class ServerVersionInformation extends Base {
@@ -11,12 +11,17 @@ export class ServerVersionInformation extends Base {
     constructor(queryClient: QueryClient, data: any) {
         super(queryClient);
 
-        this.patch(data);
+        this._patch(data);
     }
 
-    protected override patch(data: any) {
+    public _patch(data: any, fromQuery: boolean = true) {
+        fromQuery = fromQuery;
         this.version = data.version;
         this.build = data.build;
         this.platform = data.platform;
+    }
+
+    public override toJSON() {
+        return super.toJSON();
     }
 }

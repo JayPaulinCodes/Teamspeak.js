@@ -1,9 +1,9 @@
-import { QueryCommandTermination } from "./interfaces/QueryCommandTermination";
-import { QueryCommandParser } from "./parser/QueryCommandParser";
-import { QueryCommandOptions } from "./typings/QueryCommandOptions";
+import { QueryCommandOptions } from "@teamspeak.js/websocket/queryCommands/typings/QueryCommandOptions";
+import { QueryCommandParser } from "@teamspeak.js/websocket/queryCommands/parser/QueryCommandParser";
+import { QueryCommandTermination } from "@teamspeak.js/websocket/queryCommands/interfaces/QueryCommandTermination";
 
 // ADD DOCS
-export abstract class QueryCommand {
+export class QueryCommand {
     private rawCommand: string;
     private options: QueryCommandOptions = {};
     private flags: string[] = [];
@@ -71,7 +71,10 @@ export abstract class QueryCommand {
 
     // ADD DOCS
     setCommandTermination(data: string) {
-        this.commandTermination = <QueryCommandTermination>QueryCommandParser.parse(data)[0];
+        const parsedData = QueryCommandParser.parse(data);
+        this.commandTermination = Array.isArray(parsedData) 
+            ? <QueryCommandTermination>parsedData[0]
+            : <QueryCommandTermination>parsedData;
         return this;
     }
 
@@ -101,7 +104,7 @@ export abstract class QueryCommand {
     buildOptions() {
         return (
             Object.keys(this.options)
-                .filter(key => this.options[key] != null && this.options[key] != undefined)
+                .filter(key => this.options[key] !== null && this.options[key] !== undefined)
                 // .filter((key) => typeof this.options[key] !== "number" || !isNaN(this.options[key]))
                 .map(key => QueryCommandParser.escapeKeyValue(key, this.options[key]))
                 .join(" ")

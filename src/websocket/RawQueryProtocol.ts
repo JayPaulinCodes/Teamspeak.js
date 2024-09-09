@@ -1,12 +1,12 @@
 import EventEmitter from "node:events";
 import { Socket, connect } from "node:net";
-import { IQueryProtocol } from "./interfaces/IQueryProtocol";
-import { ISocketOptions } from "./interfaces/ISocketOptions";
-import { SocketEvents } from "../utils/enums/SocketEvents";
-import { QueryProtocolEvents } from "../utils/enums/QueryProtocolEvents";
-import { TeamspeakJsError } from "../errors/TeamspeakJsError";
-import { TeamspeakJsErrorCodes } from "../errors/TeamspeakJsErrorCodes";
-import { IQueryProtocolOptions } from "./interfaces/IQueryProtocolOptions";
+import { IQueryProtocol } from "@teamspeak.js/websocket/interfaces/IQueryProtocol";
+import { IQueryProtocolOptions } from "@teamspeak.js/websocket/interfaces/IQueryProtocolOptions";
+import { ISocketOptions } from "@teamspeak.js/websocket/interfaces/ISocketOptions";
+import { QueryProtocolEvents } from "@teamspeak.js/utils/enums/QueryProtocolEvents";
+import { SocketEvents } from "@teamspeak.js/utils/enums/SocketEvents";
+import { TeamspeakJsError } from "@teamspeak.js/errors/TeamspeakJsError";
+import { WebSocketTimeoutError } from "@teamspeak.js/errors/socket/WebSocketTimeoutError";
 
 export class RawQueryProtocol extends EventEmitter implements IQueryProtocol {
     readonly queryProtocolOptions: IQueryProtocolOptions;
@@ -105,7 +105,7 @@ export class RawQueryProtocol extends EventEmitter implements IQueryProtocol {
             this.destroy();
 
             // Trigger the error event with a custom error
-            this.emit(QueryProtocolEvents.Error, new TeamspeakJsError(TeamspeakJsErrorCodes.WebSocketTimeout));
+            this.emit(QueryProtocolEvents.Error, new WebSocketTimeoutError());
         });
     }
 }
